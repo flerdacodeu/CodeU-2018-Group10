@@ -1,4 +1,4 @@
-public class SinglyLinkedList<T>{
+public class SinglyLinkedList<T> {
   private int size = 0;
   private Node head;
 
@@ -9,16 +9,13 @@ public class SinglyLinkedList<T>{
   /**
    * Get element at specified index from the singly linked list.
    * Indexing from 0 (i.e. head is element zero).
+   *
    * @param elemIndex : index of desired element
    * @return value of the the kth element in the list
    */
   public T getElemAtIndex(int elemIndex) {
     if (elemIndex > size) {
-      try {
-        throw new Exception("Index out of bounds");
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+        return null;
     }
     Node currentNode = head;
     for (int i = 0; i < elemIndex && currentNode.getNext() != null; i++) {
@@ -29,9 +26,10 @@ public class SinglyLinkedList<T>{
 
   /**
    * Finds the kth to last element of the list
+   *
    * @param nrFromEnd: desired index from end of list.
-   *                 nrFromEnd of 0 corresponds to the last element in the list,
-   *                 nrFromEnd of 1 corresponds to the second to last element etc.
+   *                   nrFromEnd of 0 corresponds to the last element in the list,
+   *                   nrFromEnd of 1 corresponds to the second to last element etc.
    * @return value of the nrFromEnd element
    */
   public T getKthElemFromTail(int nrFromEnd) {
@@ -41,10 +39,11 @@ public class SinglyLinkedList<T>{
   /**
    * Insert new value into the list.
    * Adds new element to the end of the list.
+   *
    * @param value: to insert
    */
   public void insert(T value) {
-    Node newNode = new Node(value);
+    final Node newNode = new Node(value);
     if (head != null) {
       Node currentNode = head;
       while (currentNode.getNext() != null) {
@@ -54,16 +53,16 @@ public class SinglyLinkedList<T>{
     } else {
       head = newNode;
     }
-    size ++;
+    size++;
   }
 
+
+  /**
+   * Singly linked list consists of a chain of connected Nodes.
+   */
   private class Node {
     private T value;
     private Node next;
-
-    private Node() {
-      this.value = value;
-    }
 
     private Node(T value) {
       this.value = value;
@@ -73,9 +72,6 @@ public class SinglyLinkedList<T>{
       return value;
     }
 
-    private void setValue(T value) {
-      this.value = value;
-    }
 
     public Node getNext() {
       return next;

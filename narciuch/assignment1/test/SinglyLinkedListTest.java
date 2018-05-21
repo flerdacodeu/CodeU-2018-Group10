@@ -30,6 +30,7 @@ public class SinglyLinkedListTest {
     assertTrue(list.getElemAtIndex(0) == 0);
     assertTrue(list.getElemAtIndex(1) == 1);
     assertTrue(list.getElemAtIndex(3) == 3);
+    assertTrue(list.getElemAtIndex(11) == null);
 
     //From tail
     assertTrue(list.getKthElemFromTail(0) == 3);
