@@ -8,11 +8,7 @@ import java.util.StringTokenizer;
 
 public class Anagram {
     private static final String PUNCTUATION_MARKS = " ,?!.:";
-    private Map<Character, Integer> characterCountMap;
 
-    public Anagram() {
-        characterCountMap = new HashMap<>();
-    }
     /**
      * Checks if each word from the first string is an anagram of one of the words
      * from the second one. Strings are considered to be anagrams this way.
@@ -31,16 +27,20 @@ public class Anagram {
         if (stringTokenizerFirst.countTokens() != stringTokenizerSecond.countTokens()) {
             return false;
         }
+        Map<Character, Integer> characterCountMap = new HashMap<>();
         List<String> firstStringWords = new ArrayList<>();
         while (stringTokenizerFirst.hasMoreTokens()) {
             firstStringWords.add(stringTokenizerFirst.nextToken());
         }
+        List<String> unusedAnagramWords = new ArrayList<>(firstStringWords);
         while (stringTokenizerSecond.hasMoreTokens()) {
             String wordFromSecondString = stringTokenizerSecond.nextToken();
             boolean isAnagram = false;
             for (String wordFromFirstString : firstStringWords) {
-                if (areWordsAnagrams(wordFromFirstString, wordFromSecondString)) {
+                if (areWordsAnagrams(wordFromFirstString, wordFromSecondString, characterCountMap) &&
+                        unusedAnagramWords.contains(wordFromFirstString)) {
                     isAnagram = true;
+                    unusedAnagramWords.remove(wordFromFirstString);
                     break;
                 }
             }
@@ -51,15 +51,11 @@ public class Anagram {
         return true;
     }
 
-    private boolean areWordsAnagrams(String first, String second) {
+    private boolean areWordsAnagrams(String first, String second, Map<Character, Integer> characterCountMap) {
         characterCountMap.clear();
         for (char c : first.toCharArray()) {
-            Integer count = characterCountMap.getOrDefault(c, -1);
-            if (count != -1) {
-                characterCountMap.put(c, count + 1);
-            } else {
-                characterCountMap.put(c, 1);
-            }
+            Integer count = characterCountMap.getOrDefault(c, 0);
+            characterCountMap.put(c, count + 1);
         }
         for (char c : second.toCharArray()) {
             Integer count = characterCountMap.get(c);
