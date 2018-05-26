@@ -27,7 +27,6 @@ public class Anagram {
         if (stringTokenizerFirst.countTokens() != stringTokenizerSecond.countTokens()) {
             return false;
         }
-        Map<Character, Integer> characterCountMap = new HashMap<>();
         List<String> firstStringWords = new ArrayList<>();
         while (stringTokenizerFirst.hasMoreTokens()) {
             firstStringWords.add(stringTokenizerFirst.nextToken());
@@ -37,7 +36,7 @@ public class Anagram {
             String wordFromSecondString = stringTokenizerSecond.nextToken();
             boolean isAnagram = false;
             for (String wordFromFirstString : firstStringWords) {
-                if (areWordsAnagrams(wordFromFirstString, wordFromSecondString, characterCountMap) &&
+                if (areWordsAnagrams(wordFromFirstString, wordFromSecondString) &&
                         unusedAnagramWords.contains(wordFromFirstString)) {
                     isAnagram = true;
                     unusedAnagramWords.remove(wordFromFirstString);
@@ -51,20 +50,20 @@ public class Anagram {
         return true;
     }
 
-    private boolean areWordsAnagrams(String first, String second, Map<Character, Integer> characterCountMap) {
-        characterCountMap.clear();
+    private boolean areWordsAnagrams(String first, String second) {
+        Map<Character, Integer> characterCountMap = new HashMap<>();
         for (char c : first.toCharArray()) {
-            Integer count = characterCountMap.getOrDefault(c, 0);
+            int count = characterCountMap.getOrDefault(c, 0);
             characterCountMap.put(c, count + 1);
         }
         for (char c : second.toCharArray()) {
-            Integer count = characterCountMap.get(c);
-            if (count == null || count == 0) {
+            int count = characterCountMap.getOrDefault(c, 0);
+            if (count == 0) {
                 return false;
             }
             characterCountMap.put(c, characterCountMap.get(c) - 1);
         }
-        for (Integer value : characterCountMap.values()) {
+        for (int value : characterCountMap.values()) {
             if (value != 0) {
                 return false;
             }
