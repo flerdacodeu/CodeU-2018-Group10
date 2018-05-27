@@ -6,14 +6,17 @@ public class Anagram {
    * Used in isAnagram() and isAnagramSentence()
    * to ignore all characters not in a-z / A-Z / space.
    */
-  private static final String replaceRegex = "[^a-zA-z ]";
+  private static final String CHARS_TO_REMOVE = "[^a-zA-Z ]";
 
   /**
    * Determines if two strings are anagrams of each other,
    * i.e. they are made of the same letters in a different order.
-   * By default, this method is case sensitive.
-   * Input strings are unchanged.
-   * Ignores symbols as specified in the replaceRegex
+   *
+   * <p>By default, this method is case sensitive.
+   *
+   * <p>Input strings are unchanged.
+   *
+   * <p>Ignores symbols as specified in the CHARS_TO_REMOVE
    *
    * @param string1 : First string
    * @param string2 : Possible anagram of the first string
@@ -21,9 +24,9 @@ public class Anagram {
    */
   public boolean isAnagram(String string1, String string2) {
 
-    //Remove desired characters as specified in replaceRegex
-    String str1 = string1.replaceAll(replaceRegex, "");
-    String str2 = string2.replaceAll(replaceRegex, "");
+    //Remove desired characters as specified in CHARS_TO_REMOVE
+    String str1 = string1.replaceAll(CHARS_TO_REMOVE, "");
+    String str2 = string2.replaceAll(CHARS_TO_REMOVE, "");
 
     //Quick length check. Anagrams must have the same length.
     if (str1.length() != str2.length()) {
@@ -68,10 +71,13 @@ public class Anagram {
    * Determines if one sentence is an anagram of another,
    * i.e. each word in the resulting sentence is an anagram of one of the words
    * in the original sentence.
-   * The order of letters within each word can be shuffled as well as the order of the words.
+   *
+   * <p>The order of letters within each word can be shuffled as well as the order of the words.
    * Splits up sentences on space characters.
-   * Input strings are unchanged.
-   * Ignores characters as specified in replaceRegex.
+   *
+   * <p>Input strings are unchanged.
+   *
+   * <p>Ignores characters as specified in CHARS_TO_REMOVE.
    *
    * @param sentence1
    * @param sentence2, which we want to determine whether it is an anagram of sentence1.
@@ -93,7 +99,8 @@ public class Anagram {
 
   /**
    * Helper function for isAnagramSentence().
-   * Remove desired characters as specified in replaceRegex;
+   *
+   * <p>Remove desired characters as specified in CHARS_TO_REMOVE;
    * splits sentence into words;
    * sorts characters within each word;
    * finally sorts the entire word array.
@@ -103,8 +110,8 @@ public class Anagram {
    * which are the words in the sentence ordered internally then externally
    */
   private String[] preProcessSentence(String sentence) {
-    //Remove desired characters as specified in replaceRegex
-    String string = sentence.replaceAll(replaceRegex, "");
+    //Remove desired characters as specified in CHARS_TO_REMOVE
+    String string = sentence.replaceAll(CHARS_TO_REMOVE, "");
 
     //Split sentences on spaces into words
     String[] words = string.split("\\s+");
@@ -116,6 +123,8 @@ public class Anagram {
     }
 
     //Sort the entire word array
+    //This ensures we are comparing the desired possible word anagrams, even
+    //when the anagram sentence contains anagram words in a different order.
     Arrays.sort(words);
 
     return words;

@@ -25,6 +25,8 @@ public class AnagramTest {
   @Test
   public void correctlyIdentifiesSentenceAnagram() {
     assertTrue(anagram.isAnagramSentence("hello world", "ldwor llohe"));
+    assertTrue(anagram.isAnagramSentence("abc def", "cba fed"));
+    assertTrue(anagram.isAnagramSentence("abc def", "def abc"));
     assertTrue(anagram.isAnagramSentence("b a c", "a b c"));
     assertFalse(anagram.isAnagramSentence("apple pie", "pabble eye"));
   }
