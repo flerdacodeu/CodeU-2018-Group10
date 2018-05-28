@@ -11,28 +11,47 @@ public class KthElementLinkedList<T> {
         return head==null;
     }
 
-    // add new node to the end of the linkedList with the given data
+    /**
+     * add new node to the end of the linkedList with the given data
+     *
+     * @param data is assign to a new node, and the latter is added to the
+     *             end of the list
+     */
     public void add(T data)
     {
-        if (isEmpty()) head = new Node<>(data);
+        if (isEmpty()) {
+            head = new Node<>(data);
+        }
         else
         {
             Node lastNode = head;
-            while (lastNode.getNext() != null) lastNode = lastNode.getNext();
+            while (lastNode.getNext() != null) {
+                lastNode = lastNode.getNext();
+            }
             lastNode.setNext(new Node<>(data));
         }
     }
 
-    // find the kth to last element, and returns the data inside it
+
+    /**
+     * find the kth to last element, and returns the data inside it
+     *
+     * @param k - determines how many nodes from the end will the data be
+     * @return data of kth to the last node element
+     *
+     * Traversing with two pointers which point to nodes separated by k nodes,
+     * and returns the data of the first node when the latter reaches
+     * the end node of the list
+     */
     public T getKthLastElement(int k)
     {
-        // pointing to two nodes with k nodes separating between them
-        // advancing with both nodes to the next ones in the same pace,
-        // when reaching with currentNode to the end returning the kth back node
+
         Node currentNode = getHead();
         for(int i = 0 ; i < k ; i++)
         {
-            if (currentNode == null) return null;
+            if (currentNode == null) {
+                return null;
+            }
             currentNode = currentNode.getNext();
         }
 
