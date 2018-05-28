@@ -25,11 +25,7 @@ public class SinglyLinkedList<T> {
 		}
 
 		if (length < k) {
-			try {
-				throw new Exception("Index k is more than the length of the linked list");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			throw new IllegalArgumentException();
 		}
 
 		currentNode = getHead();
@@ -52,16 +48,12 @@ public class SinglyLinkedList<T> {
 		head = newNode;
 	}
 
-	private class Node<T> {
+	private static class Node<T> {
 
-		private T data;
+		private final T data;
 		private Node next;
 
-		private Node() {
-			this.data = data;
-		}
-
-		private Node(T data) {
+		public Node(T data) {
 			this.data = data;
 		}
 
@@ -69,16 +61,8 @@ public class SinglyLinkedList<T> {
 			return data;
 		}
 
-		private void setData(T data) {
-			this.data = data;
-		}
-
 		public Node getNext() {
 			return next;
-		}
-
-		private void setNext() {
-			this.next = next;
 		}
 	}
 
