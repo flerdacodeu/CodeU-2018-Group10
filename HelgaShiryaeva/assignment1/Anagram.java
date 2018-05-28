@@ -61,7 +61,7 @@ public class Anagram {
             if (count == 0) {
                 return false;
             }
-            characterCountMap.put(c, characterCountMap.get(c) - 1);
+            characterCountMap.put(c, count - 1);
         }
         for (int value : characterCountMap.values()) {
             if (value != 0) {
