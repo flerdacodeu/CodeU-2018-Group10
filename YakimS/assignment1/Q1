@@ -1,0 +1,71 @@
+public class Assignment1Q1
+{
+
+    public static void main(String[] args)
+    {
+        String s1 = "si Apepl Apepl ppppo";
+        String s2 = "ppeAl ppopp Apepl is";
+        System.out.println(isSentenceAnagram(s1, s2,true));
+        System.out.println(s1 + "      " + s2);
+    }
+
+    static boolean isSentenceAnagram(String sentence1, String sentence2, boolean isCaseSensitive)
+    {
+        String[] sent1 = sentence1.split(" ");
+        String[] sent2 = sentence2.split(" ");
+
+        if(sent1.length != sent2.length) return false;
+
+        boolean[] isSent2WordAnagramFound = new boolean[sent2.length];
+
+        for(int i = 0 ; i < sent1.length ; i++)
+        {
+            for(int j = 0 ; j < sent2.length ; j++)
+            {
+                if (isSent2WordAnagramFound[j]) continue;
+
+                if(isWordAnagram(sent1[i], sent2[j],isCaseSensitive))
+                {
+                    isSent2WordAnagramFound[j] = true;
+                    break;
+                }
+            }
+        }
+
+        for(int i = 0 ; i < isSent2WordAnagramFound.length ; i++)
+        {
+            if(!isSent2WordAnagramFound[i]) return false;
+        }
+        return true;
+    }
+
+
+    static boolean isWordAnagram(String s1, String s2, boolean isCaseSensitive)
+    {
+        if(s1.length() != s2.length() ) return false;
+
+        if(!isCaseSensitive)
+        {
+            s1 = s1.toLowerCase();
+            s2 = s2.toLowerCase();
+        }
+
+        Hashtable<Character, Integer> hashtable = new Hashtable<>();
+        for(int i = 0 ; i < s1.length() ; i++)
+        {
+            char c = s1.charAt(i);
+
+            if(hashtable.containsKey(c))    hashtable.put(c, hashtable.get(c)+1);
+            else hashtable.put(c, 1);
+        }
+
+        for(int i = 0 ; i < s2.length() ; i++)
+        {
+            char c = s2.charAt(i);
+            if (!hashtable.containsKey(c) || hashtable.get(c) == 0) return false;
+            else    hashtable.put(c, hashtable.get(c) -1);
+        }
+
+        return true;
+    }
+}
