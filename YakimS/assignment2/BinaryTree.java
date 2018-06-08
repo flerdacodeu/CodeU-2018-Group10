@@ -1,121 +1,68 @@
-package CodeUAss1Package;
-
-import javax.management.openmbean.KeyAlreadyExistsException;
-import java.util.*;
+package CodeUAss2Package;
 
 /**
  * This class contains the root to a binary tree that can have only
- * one node for each possible key.
+ * one node for each possible value.
  * @param <T> is the type of data stored in the tree nodes value
  */
 public class BinaryTree<T> {
 
-    private Node root;
-    private Set<Integer> keySet;
+    private TreeNode<T> root;
 
-    public BinaryTree() {
-        keySet = new HashSet<>();
+
+    public BinaryTree(TreeNode root)
+    {
+        this.root = root;
     }
 
     public void printBinaryTree()
     {
         printBinaryTree(this.root,0);
     }
-    private void printBinaryTree(Node root, int level){
+    private void printBinaryTree(TreeNode root, int level){
         if(root==null)
+        {
             return;
+        }
         printBinaryTree(root.getRightSon(), level+1);
-        if(level!=0){
+        if(level!=0)
+        {
             for(int i=0;i<level-1;i++)
+            {
                 System.out.print("|\t\t");
-            System.out.println("|-------"+root.getKey());
+            }
+            System.out.println("|-------"+root.getValue());
         }
         else
-            System.out.println(root.getKey());
+        {
+            System.out.println(root.getValue());
+        }
         printBinaryTree(root.getLeftSon(), level+1);
     }
 
-    /**
-     * This method add a node to a random valid place in the binary tree
-     * @param value - value of the added node
-     * @param key - key of the added node
-     * @throws KeyAlreadyExistsException if there is already a node with key as given in the parameter
-     */
-    public void add(T value, int key) throws KeyAlreadyExistsException
-    {
-        if(keySet.contains(key))
-        {
-            throw new KeyAlreadyExistsException();
-        }
-        else {
-            keySet.add(key);
-        }
-
-        Node nodeToAdd = new Node(key, value);
-        if(root == null)
-        {
-            root = nodeToAdd;
-            return;
-        }
-
-        /*
-        *   Moving down the tree, while choosing the path down (through right or left son)
-        *  randomly, till the current node is null, and then assign to the added node
-        *  to that null current node
-        */
-        Node currentNode = root;
-        Random random = new Random();
-        while(currentNode != null)
-        {
-            if (random.nextBoolean())
-            {
-                if (currentNode.getLeftSon() == null)
-                {
-                    currentNode.setLeftSon(nodeToAdd);
-                    return;
-                }
-                else
-                {
-                    currentNode = currentNode.getLeftSon();
-                }
-            }
-            else
-            {
-                if (currentNode.getRightSon() == null)
-                {
-                    currentNode.setRightSon(nodeToAdd);
-                    return;
-                }
-                else
-                {
-                    currentNode = currentNode.getRightSon();
-                }
-            }
-        }
-    }
 
     /**
-     * Prints all the ancestors key of the given key.
-     * If there is'nt such key in the tree, nothing will be printed.
+     * Prints all the ancestors value of the given value.
+     * If there is'nt such value in the tree, nothing will be printed.
      */
-    public void printAncestors(int key)
+    public void printAncestors(int value)
     {
-        printAncestors(key,root);
+        printAncestors(value,root);
     }
-    private boolean printAncestors(int key, Node root)
+    private boolean printAncestors(int value, TreeNode root)
     {
         if(root == null)
         {
             return false;
         }
-        else if(root.getKey() == key)
+        else if(root.getValue().equals(value))
         {
             return true;
         }
-        else if(printAncestors(key,root.getLeftSon()) ||
-                printAncestors(key,root.getRightSon()))
+        else if(printAncestors(value,root.getLeftSon()) ||
+                printAncestors(value,root.getRightSon()))
         {
-            System.out.print( root==this.root ? root.getKey() : root.getKey() + ", ");
+            System.out.print( root==this.root ? root.getValue() : root.getValue() + ", ");
             return true;
         }
         else {
@@ -124,108 +71,83 @@ public class BinaryTree<T> {
     }
 
     /**
-     * This function find the lowest common ancestor by finding the path to
-     * each given key, than return the last common number in both paths.
+     * This function find the lowest common ancestor by traversing up the tree
+     * of each given node till reaching a common ancestor, which is the lowest
      *
-     * @param key1 - first key to find common ancestor
-     * @param key2 - second key to find common ancestor
-     * @return lowest common ancestor of the two given keys. If the keys are equal than
-     *          the function will return the key number.
-     * @throws KeyNotFoundException if one or both of the keys are not in the tree
+     * @param value1 - first value to find common ancestor
+     * @param value2 - second value to find common ancestor
+     * @return lowest common ancestor of the two given values. If the values are equal than
+     *          the function will return the value number.
+     * @throws IllegalArgumentException if one or both of the values are not in the tree
      */
-    public int getLowestCommonAncestor(int key1, int key2) throws KeyNotFoundException {
+    public T getLowestCommonAncestor(T value1, T value2) throws IllegalArgumentException {
 
-        // create paths to the two keys given
-        List<Integer> firstKeyPath = getKeyPath(key1, root, new LinkedList<>());
-        List<Integer> secKeyPath = getKeyPath(key2, root, new LinkedList<>());
+        TreeNode<T> nodeInPathOfVal1 = findNodeByVal(value1, root);
+        TreeNode<T> nodeInPathOfVal2 = findNodeByVal(value2, root);
 
-        if(firstKeyPath == null || secKeyPath == null)
+        if(nodeInPathOfVal1 == null || nodeInPathOfVal2 == null)
         {
-            throw new KeyNotFoundException();
+            throw new IllegalArgumentException("Value not found");
+        }
+        else if(nodeInPathOfVal1.equals(nodeInPathOfVal2))
+        {
+            return nodeInPathOfVal1.getValue();
+        }
+        else if(nodeInPathOfVal1.equals(root) || nodeInPathOfVal2.equals(root))
+        {
+            return root.getValue();
         }
 
-        Collections.reverse(firstKeyPath);
-        Collections.reverse(secKeyPath);
-
-        // iterate throw the paths till they are stop intersecting - this will
-        // be where the lowest common ancestor at
-        int currentLowestCommonAncestor = root.key;
-        Iterator IteratorFirst = firstKeyPath.iterator();
-        Iterator IteratorSecond = secKeyPath.iterator();
-        while (IteratorFirst.hasNext() && IteratorSecond.hasNext()) {
-            int nextInFirstPath = (int) IteratorFirst.next();
-            int nextInSecondPath = (int) IteratorSecond.next();
-            if(nextInFirstPath == nextInSecondPath)
+        while (nodeInPathOfVal1.getLevel() != 0 && nodeInPathOfVal2.getLevel()!=0)
+        {
+            if(nodeInPathOfVal1.equals(nodeInPathOfVal2))
             {
-                currentLowestCommonAncestor = nextInFirstPath;
+                return nodeInPathOfVal1.getValue();
             }
-            else
+            else if(nodeInPathOfVal1.getLevel() < nodeInPathOfVal2.getLevel())
             {
-                break;
+                nodeInPathOfVal2 = nodeInPathOfVal2.getParent();
             }
-        }
-        return currentLowestCommonAncestor;
-    }
-    private LinkedList<Integer> getKeyPath(int key, Node root, LinkedList<Integer> linkedList)
-    {
-        if(root == null)
-        {
-            return null;
-        }
-        if(root.getKey() == key)
-        {
-            linkedList.add(root.getKey());
-            return linkedList;
-        }
-
-        LinkedList leftSonPath = getKeyPath(key,root.getLeftSon(), linkedList);
-        if (leftSonPath!= null) {
-            linkedList.add(root.getKey());
-            return leftSonPath;
-        }
-
-        LinkedList rightSonPath = getKeyPath(key,root.getRightSon(), linkedList);
-        if (rightSonPath!= null) {
-            linkedList.add(root.getKey());
-            return rightSonPath;
+            else if(nodeInPathOfVal1.getLevel() > nodeInPathOfVal2.getLevel())
+            {
+                nodeInPathOfVal1 = nodeInPathOfVal1.getParent();
+            }
+            else if (nodeInPathOfVal1.getLevel() == nodeInPathOfVal2.getLevel())
+            {
+                nodeInPathOfVal1 = nodeInPathOfVal1.getParent();
+                nodeInPathOfVal2 = nodeInPathOfVal2.getParent();
+            }
         }
 
         return null;
     }
 
-    private class Node
+    private TreeNode<T> findNodeByVal(T value1, TreeNode<T> root)
     {
-        private final int key;
-        private final T value;
-        private Node leftSon, rightSon;
-
-        public Node(int key, T value) {
-            this.key = key;
-            this.value = value;
+        if(root == null)
+        {
+            return null;
+        }
+        else if(root.getValue() == value1)
+        {
+            return root;
         }
 
-        public int getKey() {
-            return key;
+        TreeNode<T> resultFromLeft = findNodeByVal(value1,root.getLeftSon());
+
+        if (resultFromLeft != null)
+        {
+            return  resultFromLeft;
         }
 
-        public T getValue() {
-            return value;
+        TreeNode<T> resultFromRight = findNodeByVal(value1,root.getRightSon());
+        if(resultFromRight != null)
+        {
+            return resultFromRight;
         }
-
-        public Node getLeftSon() {
-            return leftSon;
-        }
-
-        public void setLeftSon(Node leftSon) {
-            this.leftSon = leftSon;
-        }
-
-        public Node getRightSon() {
-            return rightSon;
-        }
-
-        public void setRightSon(Node rightSon) {
-            this.rightSon = rightSon;
+        else
+        {
+            return null;
         }
     }
 }
