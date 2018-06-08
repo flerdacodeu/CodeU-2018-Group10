@@ -1,32 +1,48 @@
-package CodeUAss1Package;
+package CodeUAss2Package;
 
 public class Main {
 
-    public static void main(String[] args) throws KeyNotFoundException {
+    private static final int NUM_OF_NODES_TO_TEST = 10;
 
-        // creating and fill binary tree
-        BinaryTree<Integer> binaryTree = new BinaryTree<>();
-        final int NUM_OF_NODES = 12;
-        for(int i = 1 ; i <= NUM_OF_NODES ; i++)
+    public static void main(String[] args) {
+
+        TreeNode<Integer>[] testNodes = new TreeNode[10];
+        for(int i = 0 ; i < NUM_OF_NODES_TO_TEST ; i++)
         {
-            binaryTree.add(1,i);
+            testNodes[i] = new TreeNode<>(i);
         }
+
+        testNodes[0].setRightSon(testNodes[2]);
+        testNodes[0].setLeftSon(testNodes[1]);
+        testNodes[2].setRightSon(testNodes[3]);
+        testNodes[2].setLeftSon(testNodes[4]);
+        testNodes[4].setRightSon(testNodes[5]);
+        testNodes[5].setLeftSon(testNodes[6]);
+        testNodes[3].setRightSon(testNodes[7]);
+        testNodes[3].setLeftSon(testNodes[8]);
+        testNodes[6].setRightSon(testNodes[9]);
+
+
+        // initiate binary tree with nodes
+        BinaryTree<Integer> binaryTree = new BinaryTree<>(testNodes[0]);
+
 
         // print binary tree
         binaryTree.printBinaryTree();
 
         // test printAncestors
-        final int KEY_TO_PRINT_ANCESTOR_OF = 12;
-        System.out.print("\nprintAncestors of " + KEY_TO_PRINT_ANCESTOR_OF + " : ");
-        binaryTree.printAncestors(KEY_TO_PRINT_ANCESTOR_OF);
+        final int VALUE_TO_PRINT_ANCESTOR_OF = 9;
+        System.out.print("\nprintAncestors of " + VALUE_TO_PRINT_ANCESTOR_OF + " : ");
+        binaryTree.printAncestors(VALUE_TO_PRINT_ANCESTOR_OF);
 
         // test getLowestCommonAncestor
-        final int FIRST_KEY_TO_FIND_COMMON_ANCESTOR = 7;
-        final int SECOND_KEY_TO_FIND_COMMON_ANCESTOR = 11;
+        final int FIRST_VALUE_TO_FIND_COMMON_ANCESTOR = 0;
+        final int SECOND_VALUE_TO_FIND_COMMON_ANCESTOR = 7;
+
         System.out.println("\n\ngetLowestCommonAncestor of " +
-                FIRST_KEY_TO_FIND_COMMON_ANCESTOR + " & " +
-                SECOND_KEY_TO_FIND_COMMON_ANCESTOR + ": " +
-                binaryTree.getLowestCommonAncestor(FIRST_KEY_TO_FIND_COMMON_ANCESTOR,
-                                                    SECOND_KEY_TO_FIND_COMMON_ANCESTOR));
+                FIRST_VALUE_TO_FIND_COMMON_ANCESTOR + " & " +
+                SECOND_VALUE_TO_FIND_COMMON_ANCESTOR + ": " +
+                binaryTree.getLowestCommonAncestor(FIRST_VALUE_TO_FIND_COMMON_ANCESTOR,
+                                                    SECOND_VALUE_TO_FIND_COMMON_ANCESTOR));
     }
 }
