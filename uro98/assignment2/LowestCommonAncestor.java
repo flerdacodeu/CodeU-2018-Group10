@@ -10,56 +10,37 @@ public class LowestCommonAncestor {
    */
   public static <T> T lowestCommonAncestor(BinaryTree<T> tree, Node<T> node1, Node<T> node2) {
     
-    int depth1 = node1.depth;
-    int depth2 = node2.depth;
     Node<T> temp = node2;
     
     // For each ancestor of node1, look for an identical ancestor of node2
-    for (int i = depth1; i > 0; i--) {
-      node1 = node1.parent;
-      node2 = temp;
+    while (!node1.equals(tree.getRoot())) {
+      node1 = node1.getParent();
+      temp = node2;
       
-      for (int j = depth2; j > 0; j--) {
-        node2 = node2.parent;
+      while (!temp.equals(tree.getRoot())) {
+        temp = temp.getParent();
         
-        if (node1.data.equals(node2.data)) {
-          return node1.data;
+        if (node1.getData().equals(temp.getData())) {
+          return node1.getData();
         }
       }
     }
     
-    return tree.root.data;
+    return tree.getRoot().getData();
   }
 
   public static void main(String[] args) {
     BinaryTree<Integer> tree = new BinaryTree<Integer>();
     
-    tree.addRoot(7);
-    
-    Node<Integer> three = new Node<Integer>(3, 1);
-    Node<Integer> four = new Node<Integer>(4, 1);
-    Node<Integer> two = new Node<Integer>(2, 2);
-    Node<Integer> five = new Node<Integer>(5, 2);
-    Node<Integer> eight = new Node<Integer>(8, 2);
-    Node<Integer> one = new Node<Integer>(1, 3);
-    Node<Integer> six = new Node<Integer>(6, 3);
-    
-    tree.root.left = three;
-    tree.root.right = four;
-    three.left = two;
-    three.right = five;
-    four.right = eight;
-    two.left = one;
-    two.right = six;
-    
-    three.parent = tree.root;
-    four.parent = tree.root;
-    two.parent = three;
-    five.parent = three;
-    eight.parent = four;
-    one.parent = two;
-    six.parent = two;
-    
+    Node<Integer> root = tree.setRoot(7);
+    Node<Integer> three = root.addChild(3, Node.Side.LEFT);
+    Node<Integer> four = root.addChild(4, Node.Side.RIGHT);
+    Node<Integer> two = three.addChild(2, Node.Side.LEFT);
+    Node<Integer> five = three.addChild(5, Node.Side.RIGHT);
+    Node<Integer> eight = four.addChild(8, Node.Side.RIGHT);
+    Node<Integer> one = two.addChild(1, Node.Side.LEFT);
+    Node<Integer> six = two.addChild(6, Node.Side.RIGHT);
+
     System.out.println(lowestCommonAncestor(tree, six, five));
   }
 }
