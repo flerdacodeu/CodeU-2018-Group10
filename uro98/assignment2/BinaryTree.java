@@ -4,17 +4,24 @@
  */
 public class BinaryTree<T> {
   
-  Node<T> root;
-  
+  private Node<T> root;
+
   /**
-   * Set the root node to the value specified.
-   * @param data a generic value
+   * Sets the root node of the tree to the given value and returns the root.
+   * @param data
+   * @return the root node
+   * @throws IllegalStateException
    */
-  public void addRoot(T data) {
-    Node<T> newNode = new Node<T>(data, 0);
-    
-    if (root == null) {
-      root = newNode;
+  public Node<T> setRoot(T data) throws IllegalStateException {
+    if (root != null) {
+      throw new IllegalStateException("Root is already set.");
+    } else {
+      root = new Node<T>(data);
     }
+    return root;
+  }
+  
+  public Node<T> getRoot() {
+    return root;
   }
 }
