@@ -13,10 +13,13 @@ public class TreeAncestors<T> {
    * Returns a list of nodes that are parents, grandparents etc, of the node
    * with the value of 'key'.
    *
-   * @param key : The value of the node whos ancestors you want to find
+   * <p>Assumes uniqueness of keys to get the parent, grandparent, ..., root order.
+   * If the keys are not unique then returns all node ancestors of all instances.
+   *
+   * @param key  : The value of the node whos ancestors you want to find
    * @param node : The root of the tree in which you want to search for the ancestors
    * @return : List of nodes which are the ancestors of the node with value 'key'.
-   *           These are in the order of parent, grandparent, ..., root
+   * These are in the order of parent, grandparent, ..., root
    */
   public List<Node> getAncestors(T key, Node node) {
     if (node == null) {
@@ -32,13 +35,16 @@ public class TreeAncestors<T> {
    * Used to find the path from the root of a tree to a particular node
    * (i.e. the nodes ancestors)
    *
-   * @param key : The value of the desired node
+   * <p>Assumes uniqueness of keys.
+   * If the keys are not unique then returns all node ancestors of all instances.
+   *
+   * @param key  : The value of the desired node
    * @param node : Tree to search through
    * @param path : Indicates the visited nodes in the path from the original root directly to
    *             the current 'node'
    * @return true if the node with value 'key' was found in the tree 'node'
    */
-  public boolean getAncestorsHelper(T key, Node node, List<Node> path) {
+  private boolean getAncestorsHelper(T key, Node node, List<Node> path) {
     if (node == null) {
       return false;
     }
@@ -65,7 +71,7 @@ public class TreeAncestors<T> {
   public String printNodeList(List<Node> list) {
     StringBuilder result = new StringBuilder();
     for (Node node : list) {
-      result.append(node.getValue());
+      result.append(node.getValue() + " ");
     }
     System.out.println(result.toString());
     return result.toString();
@@ -82,7 +88,7 @@ public class TreeAncestors<T> {
    * 1 if either n1 or n2 are in the 'node' tree
    * 2 if both n1 and n2 are in the 'node' tree
    */
-  public int nrNodesFound(Node<T> n1, Node<T> n2, Node<T> node, int found) {
+  private int nrNodesFound(Node<T> n1, Node<T> n2, Node<T> node, int found) {
     if (node.getValue().equals(n1.getValue()) || node.getValue().equals(n2.getValue())) {
       found++;
     }
@@ -97,7 +103,7 @@ public class TreeAncestors<T> {
 
   /**
    * Find the lowest common ancestor(LCA) node of two nodes in a binary tree.
-   *
+   * <p>
    * <p>Tree is not necessarily a binary search tree.
    *
    * @param n1

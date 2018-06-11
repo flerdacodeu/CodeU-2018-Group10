@@ -7,23 +7,16 @@ import static junit.framework.TestCase.assertTrue;
 
 public class TreeAncestorsTest {
   TreeAncestors ancestorFinder = new TreeAncestors();
-  Node seven = new Node(7);
+  Node<Integer> seven = new Node(7);
 
-  private Node getTestTree() {
-    Node three = new Node(3);
-    Node four = new Node(4);
-    Node two = new Node(2);
-    Node five = new Node(5);
-    Node eight = new Node(8);
-    Node one = new Node(1);
-    Node six = new Node(6);
-    seven.setLeft(three);
-    seven.setRight(four);
-    four.setRight(eight);
-    three.setLeft(two);
-    three.setRight(five);
-    two.setLeft(one);
-    two.setRight(six);
+  private Node<Integer> getTestTree() {
+    Node<Integer> three = seven.addLeftChild(3);
+    Node<Integer> four = seven.addRightChild(4);
+    Node<Integer> two = three.addLeftChild(2);
+    Node<Integer> five = three.addRightChild(5);
+    Node<Integer> eight = four.addRightChild(8);
+    Node<Integer> one = two.addLeftChild(1);
+    Node<Integer> six = two.addRightChild(6);
     return seven;
   }
 
@@ -45,31 +38,56 @@ public class TreeAncestorsTest {
 
   @Test
   public void correctlyIdentifiesAncestors() {
-    Node three = new Node(3);
-    Node four = new Node(4);
-    Node two = new Node(2);
-    Node five = new Node(5);
-    Node eight = new Node(8);
-    Node one = new Node(1);
-    Node six = new Node(6);
-    seven.setLeft(three);
-    seven.setRight(four);
-    four.setRight(eight);
-    three.setLeft(two);
-    three.setRight(five);
-    two.setLeft(one);
-    two.setRight(six);
+    Node<Integer> three = seven.addLeftChild(3);
+    Node<Integer> four = seven.addRightChild(4);
+    Node<Integer> two = three.addLeftChild(2);
+    Node<Integer> five = three.addRightChild(5);
+    Node<Integer> eight = four.addRightChild(8);
+    Node<Integer> one = two.addLeftChild(1);
+    Node<Integer> six = two.addRightChild(6);
 
-    List<Node> sixAncestors = new ArrayList<>();
+    List<Node<Integer>> sixAncestors = new ArrayList<>();
     sixAncestors.add(two);
     sixAncestors.add(three);
     sixAncestors.add(seven);
     assertTrue(ancestorFinder.getAncestors(6, seven).equals(sixAncestors));
 
-    List<Node> threeAncestors = new ArrayList<>();
+    List<Node<Integer>> threeAncestors = new ArrayList<>();
     threeAncestors.add(seven);
     assertTrue(ancestorFinder.getAncestors(3, seven).equals(threeAncestors));
   }
+
+  @Test
+  public void returnsAncestorsOfAllInstancesIfNonUniqueKeys() {
+
+    //Two instances of the key '6'
+    Node<Integer> three = seven.addLeftChild(3);
+    Node<Integer> four = seven.addRightChild(4);
+    Node<Integer> two = three.addLeftChild(2);
+    Node<Integer> five = three.addRightChild(5);
+    Node<Integer> six2 = four.addRightChild(6);
+    Node<Integer> one = two.addLeftChild(1);
+    Node<Integer> six = two.addRightChild(6);
+
+    List<Node<Integer>> sixAncestors = new ArrayList<>();
+    sixAncestors.add(four);
+    sixAncestors.add(seven);
+    sixAncestors.add(two);
+    sixAncestors.add(three);
+    sixAncestors.add(seven);
+    assertTrue(ancestorFinder.getAncestors(6, seven).equals(sixAncestors));
+
+    //Three instances of the key '6'
+    Node<Integer> nine = four.addLeftChild(9);
+    Node<Integer> six3 = nine.addLeftChild(6);
+    assertTrue(ancestorFinder.getAncestors(6, seven).contains(nine));
+    assertTrue(ancestorFinder.getAncestors(6, seven).contains(four));
+    assertTrue(ancestorFinder.getAncestors(6, seven).contains(two));
+    assertTrue(ancestorFinder.getAncestors(6, seven).contains(three));
+    assertTrue(ancestorFinder.getAncestors(6, seven).contains(seven));
+
+  }
+
 
   @Test
   public void noCommonAncestorsInEmptyTree() {
