@@ -1,84 +1,83 @@
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Deque;
 import java.util.LinkedList;
+import java.util.List;
 
 public class PrintAncestors {
-  
+
   /**
-   * Print the ancestors of the node with the given key in a binary tree as a list.
-   * Uses left-to-right depth first search.
-   * An empty list is printed if the node is not found.
+   * Print the ancestors of the node with the given key in a binary tree as a
+   * list. Uses left-to-right depth first search. An empty list is printed if
+   * the node is not found.
+   * 
    * @param tree  a generic binary tree
    * @param key   the target value of a node
    */
   public static <T> void printAncestors(BinaryTree<T> tree, T key) {
-    LinkedList<T> ancestors = new LinkedList<T>();
-    LinkedList<Node<T>> frontier = new LinkedList<Node<T>>();
+    ArrayList<T> ancestors = new ArrayList<T>();
     
-    frontier.addFirst(tree.root);
-    
-    while (!frontier.isEmpty()) {
-      Node<T> node = frontier.pop();
-      
-      if (node.data.equals(key)) {
-        printList(ancestors);
-        return;
-      } else {
-        ancestors.addFirst(node.data);
-        
-        // Push the children of the node to the frontier stack, push the right child first to make DFS search left to right
-        if (node.right != null) {
-          frontier.addFirst(node.right);
-        }
-        if (node.left != null) {
-          frontier.addFirst(node.left);
-        }
-        
-        /* If the next node to be explored in the frontier is further up the tree, remove the nodes that aren't ancestors
-         * (ie the ones on the same level and below)
-         */
-        if (!frontier.isEmpty() && node.depth >= frontier.peek().depth) {
-          int depthDifference = node.depth - frontier.peek().depth;
-          for (int i = 0; i < depthDifference + 1; i++) {
-            ancestors.pop();
-          }
-        }
+    Node<T> result = depthFirstSearch(tree.getRoot(), key);
+    if (result != null) {
+      while (!result.equals(tree.getRoot())) {
+        result = result.getParent();
+        ancestors.add(result.getData());
       }
     }
     
-    // If the node is not found, print an empty list
-    ancestors.clear();
     printList(ancestors);
   }
   
   /**
+   * Recursively searches the binary tree from the given node for the node with the given key.
+   * @param root  the node to search from
+   * @param key   the key to search for
+   * @return      the node with the key or null
+   */
+  public static <T> Node<T> depthFirstSearch(Node<T> root, T key) {
+    
+    if (root.getData().equals(key)) {
+      return root;
+    } else {
+      if (root.getLeft() != null) {
+        Node<T> result = depthFirstSearch(root.getLeft(), key);
+        if (result != null) {
+          return result;
+        }
+      }
+      if (root.getRight() != null) {
+        Node<T> result = depthFirstSearch(root.getRight(), key);
+        if (result != null) {
+          return result;
+        }
+      }
+    }
+    
+    return null;
+  }
+
+  /**
    * Print out a generic LinkedList.
+   * 
    * @param list a LinkedList
    */
-  public static <T> void printList(LinkedList<T> list) {
+  public static <T> void printList(List<T> list) {
     System.out.println(Arrays.toString(list.toArray()));
   }
 
   public static void main(String[] args) {
     BinaryTree<Integer> tree = new BinaryTree<Integer>();
-    
-    tree.addRoot(7);
-    
-    Node<Integer> three = new Node<Integer>(3, 1);
-    Node<Integer> four = new Node<Integer>(4, 1);
-    Node<Integer> two = new Node<Integer>(2, 2);
-    Node<Integer> five = new Node<Integer>(5, 2);
-    Node<Integer> eight = new Node<Integer>(8, 2);
-    Node<Integer> one = new Node<Integer>(1, 3);
-    Node<Integer> six = new Node<Integer>(6, 3);
-    
-    tree.root.left = three;
-    tree.root.right = four;
-    three.left = two;
-    three.right = five;
-    four.right = eight;
-    two.left = one;
-    two.right = six;
-    
+
+    Node<Integer> root = tree.setRoot(7);
+    Node<Integer> three = root.addChild(3, Node.Side.LEFT);
+    Node<Integer> four = root.addChild(4, Node.Side.RIGHT);
+    Node<Integer> two = three.addChild(2, Node.Side.LEFT);
+    Node<Integer> five = three.addChild(5, Node.Side.RIGHT);
+    Node<Integer> eight = four.addChild(8, Node.Side.RIGHT);
+    Node<Integer> one = two.addChild(1, Node.Side.LEFT);
+    Node<Integer> six = two.addChild(6, Node.Side.RIGHT);
+
     printAncestors(tree, 6);
   }
 }
