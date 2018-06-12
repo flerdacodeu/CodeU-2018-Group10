@@ -6,7 +6,7 @@ import java.util.Set;
 public class BinaryTree<T> {
 
   private Node<T> root;
-  private Set<Node<T>> nodeSet;
+  private final Set<Node<T>> nodeSet;
 
   public BinaryTree() {
     nodeSet = new HashSet<>();
@@ -34,30 +34,31 @@ public class BinaryTree<T> {
    * 
    * @param key is a node which ancestors are printed
    * 
-   * @throws Exception if given key is not present in a tree
+   * @throws IllegalArgumentException if given key is not present in a tree
    */
-  public void printAncestors(Node<T> key) throws Exception {
+  public void printAncestors(Node<T> key) {
     if (nodeSet.contains(key)) {
-      containsKey(root, key);
+      printAncestorsIfNodeInSubtree(root, key);
     } else {
-      throw new Exception("Key is out of tree");
+      throw new IllegalArgumentException("Key is out of tree");
     }
   }
 
   /**
-   * Checks if a node is present in a subtree
+   * Checks if a node is present in a subtree and prints its ancestors
    * 
    * @param currentNode is the root of a subtree
-   * 
    * @param key is a node which ancestors will be printed
+   * 
+   * @return false if a node is not present in a subtree, otherwise return true
    */
-  private boolean containsKey(Node<T> currentNode, Node<T> key) {
+  private boolean printAncestorsIfNodeInSubtree(Node<T> currentNode, Node<T> key) {
     if (currentNode == null) {
       return false;
     } else if (currentNode.getValue().equals(key.getValue())) {
       return true;
-    } else if (containsKey(currentNode.getLeft(), key)
-        || containsKey(currentNode.getRight(), key)) {
+    } else if (printAncestorsIfNodeInSubtree(currentNode.getLeft(), key)
+        || printAncestorsIfNodeInSubtree(currentNode.getRight(), key)) {
       System.out.print(currentNode.getValue() + " ");
       return true;
     }
@@ -72,17 +73,17 @@ public class BinaryTree<T> {
    * 
    * @return node that is the lowest common ancestor of node1 and node2
    * 
-   * @throws Exception if either one or both nodes are not in the binary tree
+   * @throws IllegalArgumentException if either one or both nodes are not in the binary tree
    */
-  public Node<T> getLowestCA(Node<T> node1, Node<T> node2) throws Exception {
+  public Node<T> getLowestCA(Node<T> node1, Node<T> node2) {
     if (nodeSet.contains(node1) && nodeSet.contains(node2)) {
-      return getCA(root, node1, node2);
+      return getLowestCA(root, node1, node2);
     } else {
-      throw new Exception("Nodes are not in the tree");
+      throw new IllegalArgumentException("Nodes are not in the tree");
     }
   }
 
-  private Node<T> getCA(Node<T> currentNode, Node<T> node1, Node<T> node2) {
+  private Node<T> getLowestCA(Node<T> currentNode, Node<T> node1, Node<T> node2) {
     if (currentNode == null) {
       return null;
     }
@@ -90,8 +91,8 @@ public class BinaryTree<T> {
       return currentNode;
     }
 
-    Node<T> leftCA = getCA(currentNode.getLeft(), node1, node2);
-    Node<T> rightCA = getCA(currentNode.getRight(), node1, node2);
+    Node<T> leftCA = getLowestCA(currentNode.getLeft(), node1, node2);
+    Node<T> rightCA = getLowestCA(currentNode.getRight(), node1, node2);
 
     if (leftCA != null && rightCA != null) {
       return currentNode;
@@ -103,7 +104,7 @@ public class BinaryTree<T> {
   }
 
 
-  private static class Node<T> {
+  static class Node<T> {
 
     private T value;
     private Node<T> left;
@@ -123,36 +124,48 @@ public class BinaryTree<T> {
       return left;
     }
 
-    public void setLeft(Node left) {
-      this.left = left;
-    }
-
     public Node<T> getRight() {
       return right;
     }
 
-    public void setRight(Node right) {
-      this.right = right;
+    /**
+     * Adds node with given value as left child and returns newly created child Node object.
+     */
+    public Node<T> addLeft(T value) {
+      Node<T> child = new Node<>(value);
+      if (this.left == null) {
+        this.left = child;
+      } else {
+        throw new IllegalArgumentException("Left child already exists");
+      }
+      return child;
+    }
+
+    /**
+     * Adds node with given value as right child and returns newly created child Node object.
+     */
+    public Node<T> addRight(T value) {
+      Node<T> child = new Node<>(value);
+      if (this.right == null) {
+        this.right = child;
+      } else {
+        throw new IllegalArgumentException("Right child already exists");
+      }
+      return child;
     }
   }
 
   public static void main(String[] args) {
     try {
       Node<Integer> root = new Node<>(0);
-      Node<Integer> node1 = new Node<>(1);
-      Node<Integer> node2 = new Node<>(2);
-      Node<Integer> node3 = new Node<>(3);
-      Node<Integer> node4 = new Node<>(4);
-      Node<Integer> node5 = new Node<>(5);
-      Node<Integer> node6 = new Node<>(6);
+      Node<Integer> node1 = root.addLeft(1);
+      Node<Integer> node2 = root.addRight(2);
+      Node<Integer> node3 = node1.addLeft(3);
+      Node<Integer> node4 = node1.addRight(4);
+      Node<Integer> node5 = node2.addRight(5);
+      Node<Integer> node6 = node4.addRight(6);
       Node<Integer> node7 = new Node<>(5);
       BinaryTree<Integer> bTree = new BinaryTree<>();
-      root.setLeft(node1);
-      root.setRight(node2);
-      node1.setLeft(node3);
-      node1.setRight(node4);
-      node2.setRight(node5);
-      node4.setRight(node6);
       bTree.add(root);
       bTree.add(node1);
       bTree.add(node2);
@@ -168,7 +181,7 @@ public class BinaryTree<T> {
           + bTree.getLowestCA(node3, node4).getValue());
       bTree.printAncestors(node7);
 
-    } catch (Exception e) {
+    } catch (IllegalArgumentException e) {
       System.out.println(e.getMessage());
     }
 
