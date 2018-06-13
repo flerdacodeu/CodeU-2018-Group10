@@ -89,7 +89,7 @@ public class BinaryTree<T> {
         {
             throw new IllegalArgumentException("Value not found");
         }
-        else if(nodeInPathOfVal1.equals(nodeInPathOfVal2))
+        else if(nodeInPathOfVal1 == nodeInPathOfVal2)
         {
             return nodeInPathOfVal1.getValue();
         }
@@ -112,7 +112,7 @@ public class BinaryTree<T> {
             {
                 nodeInPathOfVal1 = nodeInPathOfVal1.getParent();
             }
-            else if (nodeInPathOfVal1.getLevel() == nodeInPathOfVal2.getLevel())
+            else
             {
                 nodeInPathOfVal1 = nodeInPathOfVal1.getParent();
                 nodeInPathOfVal2 = nodeInPathOfVal2.getParent();
@@ -122,25 +122,25 @@ public class BinaryTree<T> {
         return null;
     }
 
-    private TreeNode<T> findNodeByVal(T value1, TreeNode<T> root)
+    private TreeNode<T> findNodeByVal(T value, TreeNode<T> root)
     {
         if(root == null)
         {
             return null;
         }
-        else if(root.getValue() == value1)
+        else if(root.getValue().equals(value))
         {
             return root;
         }
 
-        TreeNode<T> resultFromLeft = findNodeByVal(value1,root.getLeftSon());
+        TreeNode<T> resultFromLeft = findNodeByVal(value,root.getLeftSon());
 
         if (resultFromLeft != null)
         {
             return  resultFromLeft;
         }
 
-        TreeNode<T> resultFromRight = findNodeByVal(value1,root.getRightSon());
+        TreeNode<T> resultFromRight = findNodeByVal(value,root.getRightSon());
         if(resultFromRight != null)
         {
             return resultFromRight;
