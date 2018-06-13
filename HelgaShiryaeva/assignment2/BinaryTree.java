@@ -6,8 +6,8 @@ import java.util.Set;
 
 /**
  * This class represents a Binary tree data structure
- * @param <T> is a type of values stored in nodes of a tree
  * All values stored in a binary tree are unique
+ * @param <T> is a type of values stored in nodes of a tree
  */
 public class BinaryTree<T> {
     private Node root;
@@ -23,6 +23,7 @@ public class BinaryTree<T> {
      * This method adds a new node in a binary tree
      * If the parent of a new node already has a child on
      * the requested side an old child would be replaced by a new one
+     * All values stored in a binary tree are unique
      * @param value is a value of a new node
      * @param parent is a parent of the node
      * @param side on which side of parent a new node should be added
@@ -30,6 +31,9 @@ public class BinaryTree<T> {
     public void add(T value, T parent, Side side) {
         if (value == null) {
             throw new NullPointerException("'null' value can't be inserted in a tree");
+        }
+        if (!values.contains(value)) {
+            throw new IllegalArgumentException("Node with value " + value + " already exist in a binary tree");
         }
         Node newNode = new Node(value);
         Node parentNode = findNodeByValue(parent);
@@ -120,7 +124,7 @@ public class BinaryTree<T> {
         if (current == null) {
             return null;
         }
-        if (current.getValue() == first || current.getValue() == second) {
+        if (current.getValue().equals(first) || current.getValue().equals(second)) {
             return current;
         }
         Node left = getLcaRecursive(current.getLeft(), first, second);
