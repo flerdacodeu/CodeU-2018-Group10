@@ -4,7 +4,8 @@ import java.util.Set;
 
 public class Dictionary
 {
-    private Set<String> prefixes, words;
+    private Set<String> prefixes;
+    private Set<String> words;
 
     public Dictionary(Set<String> prefixes, Set<String> words)
     {

@@ -50,41 +50,37 @@ public class WordSearcher
      * @param prefix - current prefix. The method will find words starting with this string.
      * @param foundWords - set of all the words that are already found in the grid.
      */
-    private void allWordsInGrid(Dictionary dictionary, char[][] charsGrid, int x, int y, String prefix, HashSet<String> foundWords)
-    {
-        if(     x < 0 || x >= charsGrid.length || y < 0 || y >= charsGrid[0].length  // if out of bound of the grid
-                || !dictionary.isPrefix(prefix)                                      // if this path not lead to a word
-                || charsGrid[x][y] == '0')                                           // if char in this location has been used in the current prefix
+    private void allWordsInGrid(Dictionary dictionary, char[][] charsGrid, int x, int y, String prefix, HashSet<String> foundWords) {
+
+
+        //  If out of bound of the grid, or if this path not lead to a word
+        // or if char in this location has been used in the current prefix
+        if ( x < 0 || x >= charsGrid.length || y < 0 || y >= charsGrid[x].length
+             || !dictionary.isPrefix(prefix) || charsGrid[x][y] == '0')
         {
             return;
         }
 
-
         // Update the set of found words
-        if (dictionary.isWord(prefix))
-        {
+        if (dictionary.isWord(prefix)) {
             foundWords.add(prefix);
         }
 
         // Create new prefix by adding current char
         String currentPrefix = prefix + charsGrid[x][y];
 
-        // Create updated grid which that indicate that the current char
-        // Had been used in the currentPrefix
+        // Create updated grid with mark in current char location
+        // indicated that it has been used in the currentPrefix
         char[][] currentCharGrid = cloneArray(charsGrid);
         currentCharGrid[x][y] = 0;
 
         // Search for word with the updated prefix and grid horizontally/vertically/diagonally
-        allWordsInGrid(dictionary,currentCharGrid ,x +1 ,y +1, currentPrefix, foundWords);
-        allWordsInGrid(dictionary,currentCharGrid ,x  ,y +1, currentPrefix, foundWords);
-        allWordsInGrid(dictionary,currentCharGrid ,x +1 ,y , currentPrefix, foundWords);
-        allWordsInGrid(dictionary,currentCharGrid ,x -1 ,y +1, currentPrefix, foundWords);
-        allWordsInGrid(dictionary,currentCharGrid ,x +1 ,y -1, currentPrefix, foundWords);
-        allWordsInGrid(dictionary,currentCharGrid ,x -1 ,y -1, currentPrefix, foundWords);
-        allWordsInGrid(dictionary,currentCharGrid ,x  ,y -1, currentPrefix, foundWords);
-        allWordsInGrid(dictionary,currentCharGrid ,x -1 ,y , currentPrefix, foundWords);
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                allWordsInGrid(dictionary, currentCharGrid, x + i, y + j, currentPrefix, foundWords);
+            }
+        }
     }
-
 
     /**
      * Clone 2-dim array of chars
@@ -93,9 +89,8 @@ public class WordSearcher
      * @return a clone of the given array
      */
     private char[][] cloneArray(char[][] src) {
-        int length = src.length;
-        char[][] target = new char[length][src[0].length];
-        for (int i = 0; i < length; i++)
+        char[][] target = new char[src.length][src[0].length];
+        for (int i = 0; i < src.length; i++)
         {
             System.arraycopy(src[i], 0, target[i], 0, src[i].length);
         }
