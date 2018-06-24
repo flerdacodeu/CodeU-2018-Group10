@@ -87,23 +87,22 @@ public class WordSearch {
       wordsFound.add(newLetters);
     }
 
-    int[][] neighbours = {{row - 1, column - 1}, {row - 1, column}, {row - 1, column + 1},
-      {row, column - 1}, {row, column}, {row, column + 1},
-      {row + 1, column - 1}, {row + 1, column}, {row + 1, column + 1},};
+    int[] possibleRows = {row - 1, row, row + 1};
+    int[] possibleColumns = {column - 1, column, column + 1};
 
-    for (int[] cell : neighbours) {
-      int newRow = cell[0];
-      int newColumn = cell[1];
-      if (inBounds(nrRows, nrColumns, newRow, newColumn)
-        && !newVisited.isVisited(newRow, newColumn)
-        && dict.isPrefix(newLetters + grid[newRow][newColumn])) {
+    for (int newRow : possibleRows) {
+      for (int newColumn : possibleColumns) {
+        if (inBounds(nrRows, nrColumns, newRow, newColumn)
+          && !newVisited.isVisited(newRow, newColumn)
+          && dict.isPrefix(newLetters + grid[newRow][newColumn])) {
 
-        String newestLetters = newLetters + grid[newRow][newColumn];
-        if (dict.isWord(newestLetters)) {
-          wordsFound.add(newestLetters);
+          String newestLetters = newLetters + grid[newRow][newColumn];
+          if (dict.isWord(newestLetters)) {
+            wordsFound.add(newestLetters);
+          }
+          findFurtherWords(grid, dict, newLetters, newVisited, newRow, newColumn, wordsFound);
+
         }
-        findFurtherWords(grid, dict, newLetters, newVisited, newRow, newColumn, wordsFound);
-
       }
     }
   }
@@ -114,10 +113,10 @@ public class WordSearch {
    *
    * <p>Determines if the position with row 'row' and column 'column' is a valid cell position.
    *
-   * @param nrRows total number of rows in the array
+   * @param nrRows    total number of rows in the array
    * @param nrColumns total number of columns in the array
-   * @param row possible cell row
-   * @param column possible cell column
+   * @param row       possible cell row
+   * @param column    possible cell column
    * @return true if the position with row 'row' and column 'column' is valid, else returns false
    */
   private boolean inBounds(int nrRows, int nrColumns, int row, int column) {
