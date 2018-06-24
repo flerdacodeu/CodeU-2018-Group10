@@ -2,7 +2,7 @@ import org.junit.Test;
 
 import java.util.*;
 
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class WordSearchTest {
   String[] words = {"CAR", "CARD", "CART", "CAT"};
@@ -13,7 +13,7 @@ public class WordSearchTest {
   @Test
   public void findsWordsInGrid() {
     Set<String> wordsFound = wordSearch.findWords(grid, dict);
-    assert(wordsFound.equals(new TreeSet<>(Arrays.asList("CAR", "CARD", "CAT"))));
+    assertTrue(wordsFound.equals(new TreeSet<>(Arrays.asList("CAR", "CARD", "CAT"))));
   }
 
   @Test
@@ -22,23 +22,30 @@ public class WordSearchTest {
     Dictionary dict = new Dictionary(words);
     char[][] grid = {{'I', 'N', 'E', 'A'}, {'L', 'O', 'G', 'M'}, {'L', 'D', 'R', 'L'}, {'S', 'C', 'F', 'O'}};
     Set<String> wordsFound = wordSearch.findWords(grid, dict);
-    assert(wordsFound.equals(new TreeSet<>(Arrays.asList("DOG", "LOG", "GONE", "LONE", "ILL"))));
+    assertTrue(wordsFound.equals(new TreeSet<>(Arrays.asList("DOG", "LOG", "GONE", "LONE", "ILL"))));
   }
 
   @Test
-  public void returnsMultipleInstancesOfWordIfSameWordMultipleTimesInGrid() {
+  public void returnsSingleInstanceOfWordIfSameWordMultipleTimesInGrid() {
     String[] words = {"A", "AA"};
     Dictionary dict = new Dictionary(words);
     char[][] grid = {{'A', 'A'}, {'A', 'A'}, {'A', 'A'}};
     Set<String> wordsFound = wordSearch.findWords(grid, dict);
-    assert(wordsFound.equals(new TreeSet<>(Arrays.asList("A", "AA"))));
+    assertTrue(wordsFound.equals(new TreeSet<>(Arrays.asList("A", "AA"))));
   }
 
   @Test
   public void returnsEmptyWordListWhenGridEmpty() {
     char[][] emptyGrid = {};
     Set<String> words = wordSearch.findWords(emptyGrid, dict);
-    assert(words.size() == 0);
+    assertTrue(words.size() == 0);
+  }
+
+  @Test
+  public void returnsEmptyWordListWhenGridContainsEmptyArray() {
+    char[][] emptyGrid = {{}};
+    Set<String> words = wordSearch.findWords(emptyGrid, dict);
+    assertTrue(words.size() == 0);
   }
 
   @Test
@@ -46,6 +53,6 @@ public class WordSearchTest {
     String[] noWordsInDict = {};
     Dictionary emptyDict = new Dictionary(noWordsInDict);
     Set<String> wordsFound = wordSearch.findWords(grid, emptyDict);
-    assert(wordsFound.size() == 0);
+    assertTrue(wordsFound.size() == 0);
   }
 }

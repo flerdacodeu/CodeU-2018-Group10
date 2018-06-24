@@ -25,6 +25,9 @@ public class WordSearch {
     if (grid.length == 0) {
       return wordsFound;
     }
+    if (grid[0].length == 0) {
+      return wordsFound;
+    }
     int nrRows = grid.length;
     int nrColumns = grid[0].length;
     for (int row = 0; row < nrRows; row++) {
