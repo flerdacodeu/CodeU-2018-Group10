@@ -1,14 +1,13 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class WordSearch {
 
   /**
-   * Given a grid of letters and a dictionary, find all the words
+   * Given a grid of letters and a dictionary, find the set of words
    * from the dictionary that can be formed in the grid.
    *
    * <p>If there are multiple instances of a word in the grid,
-   * then this word is returned multiple times in the result.
+   * then this word is returned only once in the result.
    *
    * <p>When forming a word, we assume:
    * <ul>
@@ -19,23 +18,23 @@ public class WordSearch {
    *
    * @param grid of letters in which to look for words from the dictionary
    * @param dict the dictionary of words to look for
-   * @return list of words from the dictionary that can be formed in the grid
+   * @return set of words from the dictionary that can be formed in the grid
    */
-  public List<String> findWords(char[][] grid, Dictionary dict) {
-    List<String> wordsFound = new ArrayList<>();
+  public Set<String> findWords(char[][] grid, Dictionary dict) {
+    Set<String> wordsFound = new TreeSet<>();
     if (grid.length == 0) {
       return wordsFound;
     }
-    int nr_rows = grid.length;
-    int nr_columns = grid[0].length;
-    for (int row = 0; row < nr_rows; row++) {
-      for (int column = 0; column < nr_columns; column++) {
+    int nrRows = grid.length;
+    int nrColumns = grid[0].length;
+    for (int row = 0; row < nrRows; row++) {
+      for (int column = 0; column < nrColumns; column++) {
         //Process for each letter in the grid
 
         //Default boolean value is false - i.e. unvisited letter
-        boolean[][] visited = new boolean[nr_rows][nr_columns];
+        VisitedMatrix visited = new VisitedMatrix(nrRows, nrColumns);
 
-        List<Character> currentWord = new ArrayList<>();
+        String currentWord = "";
 
         findFurtherWords(grid, dict, currentWord, visited, row, column, wordsFound);
       }
@@ -65,24 +64,24 @@ public class WordSearch {
    * @param grid       the grid of letters we recursively check in
    * @param dict       the dictionary of words we are looking for
    * @param letters    the letters we have visited on our current path through the grid
-   * @param visited    an array with the same dimensions as the grid.
+   * @param visited    an immutable array with the same dimensions as the grid.
    *                   The boolean entry at row i, column j corresponds to whether we have
    *                   already visited the letter at row i, column j in the grid, and hence
    *                   should not revisit it.
    * @param row        the row of the cell currently being considered as the start point of the possible words
    * @param column     the column of the cell currently being considered as the start point of the possible words
-   * @param wordsFound list of words we have already been able to form in the grid
+   * @param wordsFound set of words we have already been able to form in the grid
    */
-  private void findFurtherWords(char[][] grid, Dictionary dict, List<Character> letters,
-                                boolean[][] visited, int row, int column, List<String> wordsFound) {
-    int nr_rows = grid.length;
-    int nr_columns = grid[0].length;
-    visited[row][column] = true;
-    letters.add(grid[row][column]);
+  private void findFurtherWords(char[][] grid, Dictionary dict, String letters,
+                                final VisitedMatrix visited, int row, int column, Set<String> wordsFound) {
+    int nrRows = grid.length;
+    int nrColumns = grid[0].length;
+    VisitedMatrix newVisited = visited.visit(row, column);
+    String newLetters = letters + grid[row][column];
 
     //For the case of one letter words
-    if (dict.isWord(charListToString(letters))) {
-      wordsFound.add(charListToString(letters));
+    if (dict.isWord(newLetters)) {
+      wordsFound.add(newLetters);
     }
 
     int[][] neighbours = {{row - 1, column - 1}, {row - 1, column}, {row - 1, column + 1},
@@ -90,21 +89,20 @@ public class WordSearch {
       {row + 1, column - 1}, {row + 1, column}, {row + 1, column + 1},};
 
     for (int[] cell : neighbours) {
-      int new_row = cell[0];
-      int new_column = cell[1];
-      if (inBounds(nr_rows, nr_columns, new_row, new_column)
-        && !visited[new_row][new_column]
-        && dict.isPrefix(charListToString(letters) + grid[new_row][new_column])) {
+      int newRow = cell[0];
+      int newColumn = cell[1];
+      if (inBounds(nrRows, nrColumns, newRow, newColumn)
+        && !newVisited.isVisited(newRow, newColumn)
+        && dict.isPrefix(newLetters + grid[newRow][newColumn])) {
 
-        String newLetters = charListToString(letters) + grid[new_row][new_column];
-        if (dict.isWord(newLetters)) {
-          wordsFound.add(newLetters);
+        String newestLetters = newLetters + grid[newRow][newColumn];
+        if (dict.isWord(newestLetters)) {
+          wordsFound.add(newestLetters);
         }
-        findFurtherWords(grid, dict, letters, visited, new_row, new_column, wordsFound);
+        findFurtherWords(grid, dict, newLetters, newVisited, newRow, newColumn, wordsFound);
 
       }
     }
-    letters.remove(letters.size() - 1);
   }
 
 
@@ -113,33 +111,17 @@ public class WordSearch {
    *
    * <p>Determines if the position with row 'row' and column 'column' is a valid cell position.
    *
-   * @param nr_rows total number of rows in the array
-   * @param nr_columns total number of columns in the array
+   * @param nrRows total number of rows in the array
+   * @param nrColumns total number of columns in the array
    * @param row possible cell row
    * @param column possible cell column
    * @return true if the position with row 'row' and column 'column' is valid, else returns false
    */
-  private boolean inBounds(int nr_rows, int nr_columns, int row, int column) {
-    if ((0 <= row) && (row < nr_rows)
-      && (0 <= column) && (column < nr_columns)) {
+  private boolean inBounds(int nrRows, int nrColumns, int row, int column) {
+    if ((0 <= row) && (row < nrRows)
+      && (0 <= column) && (column < nrColumns)) {
       return true;
     }
     return false;
-  }
-
-  /**
-   * Helper for findFurtherWords.
-   *
-   * <p>Converts a list of characters into a string
-   *
-   * @param list the list of characters to convert into a string
-   * @return the list of characters concatenated into a string
-   */
-  private String charListToString(List<Character> list) {
-    StringBuilder sb = new StringBuilder(list.size());
-    for (Character elem : list) {
-      sb.append(elem);
-    }
-    return sb.toString();
   }
 }

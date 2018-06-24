@@ -1,7 +1,8 @@
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
+import static org.junit.Assert.assertThat;
 
 public class WordSearchTest {
   String[] words = {"CAR", "CARD", "CART", "CAT"};
@@ -11,10 +12,8 @@ public class WordSearchTest {
 
   @Test
   public void findsWordsInGrid() {
-    List<String> wordsFound = wordSearch.findWords(grid, dict);
-    assert(wordsFound.contains("CAR"));
-    assert(wordsFound.contains("CARD"));
-    assert(wordsFound.contains("CAT"));
+    Set<String> wordsFound = wordSearch.findWords(grid, dict);
+    assert(wordsFound.equals(new TreeSet<>(Arrays.asList("CAR", "CARD", "CAT"))));
   }
 
   @Test
@@ -22,15 +21,8 @@ public class WordSearchTest {
     String[] words = {"DOG", "LOG", "GONE", "LONE", "ILL", "APPLE", "NOTINGRID", "NOPE"};
     Dictionary dict = new Dictionary(words);
     char[][] grid = {{'I', 'N', 'E', 'A'}, {'L', 'O', 'G', 'M'}, {'L', 'D', 'R', 'L'}, {'S', 'C', 'F', 'O'}};
-    List<String> wordsFound = wordSearch.findWords(grid, dict);
-    assert(wordsFound.contains("DOG"));
-    assert(wordsFound.contains("LOG"));
-    assert(wordsFound.contains("GONE"));
-    assert(wordsFound.contains("LONE"));
-    assert(wordsFound.contains("ILL"));
-    assert(!wordsFound.contains("APPLE"));
-    assert(!wordsFound.contains("NOTINGRID"));
-    assert(!wordsFound.contains("NOPE"));
+    Set<String> wordsFound = wordSearch.findWords(grid, dict);
+    assert(wordsFound.equals(new TreeSet<>(Arrays.asList("DOG", "LOG", "GONE", "LONE", "ILL"))));
   }
 
   @Test
@@ -38,21 +30,14 @@ public class WordSearchTest {
     String[] words = {"A", "AA"};
     Dictionary dict = new Dictionary(words);
     char[][] grid = {{'A', 'A'}, {'A', 'A'}, {'A', 'A'}};
-    List<String> wordsFound = wordSearch.findWords(grid, dict);
-    List<String> expectedWords = new ArrayList<>();
-    for (int i = 0; i < 4; i++) {
-      expectedWords.add("A");
-    }
-    for (int i = 0; i < 12; i++) {
-      expectedWords.add("AA");
-    }
-    assert(wordsFound.containsAll(expectedWords));
+    Set<String> wordsFound = wordSearch.findWords(grid, dict);
+    assert(wordsFound.equals(new TreeSet<>(Arrays.asList("A", "AA"))));
   }
 
   @Test
   public void returnsEmptyWordListWhenGridEmpty() {
     char[][] emptyGrid = {};
-    List<String> words = wordSearch.findWords(emptyGrid, dict);
+    Set<String> words = wordSearch.findWords(emptyGrid, dict);
     assert(words.size() == 0);
   }
 
@@ -60,7 +45,7 @@ public class WordSearchTest {
   public void returnsEmptyWordListWhenDictionaryEmpty() {
     String[] noWordsInDict = {};
     Dictionary emptyDict = new Dictionary(noWordsInDict);
-    List<String> wordsFound = wordSearch.findWords(grid, emptyDict);
+    Set<String> wordsFound = wordSearch.findWords(grid, emptyDict);
     assert(wordsFound.size() == 0);
   }
 }
