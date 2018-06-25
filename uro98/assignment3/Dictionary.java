@@ -6,15 +6,11 @@ import java.util.Set;
  * Represents a collection of words.
  */
 public class Dictionary {
-  private Set<String> wordSet = new HashSet<String>();
-  private Set<String> prefixSet = new HashSet<String>();
+  private final Set<String> wordSet = new HashSet<String>();
+  private final Set<String> prefixSet = new HashSet<String>();
 
   public Set<String> getWordSet() {
     return wordSet;
-  }
-  
-  public Set<String> getPrefixSet() {
-    return prefixSet;
   }
   
   /**
