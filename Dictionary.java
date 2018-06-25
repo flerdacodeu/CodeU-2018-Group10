@@ -3,7 +3,7 @@ package assignment3;
 import java.util.Set;
 
 public class Dictionary {
-  private Set<String> words;
+  private final Set<String> words;
 
   // Every word in a dictionary appears only once
   public Dictionary(Set<String> words) {
