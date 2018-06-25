@@ -32,8 +32,7 @@ public class WordSearch {
     for (int r = 0; r < rows; r++) {
       for (int c = 0; c < columns; c++) {
         boolean[][] isVisited = new boolean[rows][columns];
-        String currentString = "";
-        findWords(grid, dictionary, currentString, isVisited, r, c, wordsFound);
+        findWords(grid, dictionary, "", isVisited, r, c, wordsFound);
       }
     }
     return wordsFound;
@@ -66,9 +65,9 @@ public class WordSearch {
     }
 
     if (dictionary.isPrefix(currentString)) {
-      for (int r = row - 1; r <= row + 1 && r < rows; r++) {
-        for (int c = col - 1; c <= col + 1 && c < columns; c++) {
-          if (r >= 0 && c >= 0 && !isVisited[r][c]) {
+      for (int r = row - 1; r <= row + 1; r++) {
+        for (int c = col - 1; c <= col + 1; c++) {
+          if (r >= 0 && r < rows && c >= 0 && c < columns && !isVisited[r][c]) {
             findWords(grid, dictionary, currentString, isVisited, r, c, wordsFound);
           }
         }
