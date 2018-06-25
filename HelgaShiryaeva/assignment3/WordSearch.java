@@ -76,14 +76,13 @@ public class WordSearch {
             words.add(prefix.toString());
         }
         isVisited[i][j] = true;
-        dfs(board, i, j - 1, prefix, words, isVisited);
-        dfs(board, i, j + 1, prefix, words, isVisited);
-        dfs(board, i - 1, j - 1, prefix, words, isVisited);
-        dfs(board, i - 1, j, prefix, words, isVisited);
-        dfs(board, i - 1, j + 1, prefix, words, isVisited);
-        dfs(board, i + 1, j - 1, prefix, words, isVisited);
-        dfs(board, i + 1, j, prefix, words, isVisited);
-        dfs(board, i + 1, j + 1, prefix, words, isVisited);
+        for (int k = i - 1; k < i + 2; k++) {
+            for(int l = j - 1; l < j + 2; l++) {
+                if(k != i || l != j) {
+                    dfs(board, k, l, prefix, words, isVisited);
+                }
+            }
+        }
         isVisited[i][j] = false;
         prefix.deleteCharAt(prefix.length() - 1);
     }
