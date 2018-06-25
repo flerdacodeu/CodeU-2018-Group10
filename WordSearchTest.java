@@ -1,5 +1,6 @@
 package assignment3;
 
+import static org.junit.Assert.*;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.Test;
@@ -18,11 +19,15 @@ public class WordSearchTest {
     Dictionary dictionary = new Dictionary(words);
 
     Set<String> wordsFound = WordSearch.findAllWords(grid, dictionary);
+    
+    Set<String> wordsExpected = new HashSet<>();
+    wordsExpected.add("CAR");
+    wordsExpected.add("CARD");
+    wordsExpected.add("CAT");
 
-    assert (wordsFound.contains("CAR"));
-    assert (wordsFound.contains("CAT"));
-    assert (wordsFound.contains("CARD"));
-    assert (!wordsFound.contains("CAP"));
+    assertTrue (wordsFound.contains("CAR"));
+    assertFalse (wordsFound.contains("CAP"));
+    assertEquals (wordsExpected, wordsFound);
   }
 
   @Test
@@ -37,7 +42,7 @@ public class WordSearchTest {
 
     Set<String> wordsFound = WordSearch.findAllWords(grid, dictionary);
 
-    assert (wordsFound.size() == 0);
+    assertTrue (wordsFound.isEmpty());
   }
 
   @Test
@@ -48,7 +53,7 @@ public class WordSearchTest {
 
     Set<String> wordsFound = WordSearch.findAllWords(grid, dictionary);
 
-    assert (wordsFound.size() == 0);
+    assertTrue (wordsFound.isEmpty());
   }
 
 }
