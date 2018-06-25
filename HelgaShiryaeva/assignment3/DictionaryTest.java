@@ -15,7 +15,6 @@ import static org.junit.Assert.assertTrue;
 
 public class DictionaryTest {
     private Dictionary dictionary;
-    private WordSearch wordSearch;
     private List<String> words;
     private List<String> prefixes;
 
@@ -24,7 +23,6 @@ public class DictionaryTest {
         words = Arrays.asList("car", "card", "cart", "cat");
         prefixes = Arrays.asList("c", "ca", "car", "card", "cart", "cat");
         dictionary = new Dictionary(words);
-        wordSearch = new WordSearch(dictionary);
     }
     @Test
     public void buildDictionaryTest() {
