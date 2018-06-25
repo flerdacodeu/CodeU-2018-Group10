@@ -48,14 +48,4 @@ public class DictionaryTest {
         assertTrue(dictionary.isPrefix("cat"));
         assertFalse(dictionary.isPrefix("fdkl"));
     }
-
-    @Test
-    public void wordSearchTest() {
-        char[][] grid = new char[2][3];
-        grid[0][0] = 'a'; grid[0][1] = 'a'; grid[0][2] = 'r';
-        grid[1][0] = 't'; grid[1][1] = 'c'; grid[1][2] = 'd';
-        Set<String> expectedWords =  new HashSet<>(Arrays.asList("car", "card", "cat"));
-        Set<String> actualWords = wordSearch.findWords(grid);
-        assertEquals(expectedWords, actualWords);
-    }
 }
