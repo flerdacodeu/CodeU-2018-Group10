@@ -2,9 +2,9 @@
  * Represents a grid of letters.
  */
 public class Grid {
-  private int height;
-  private int width;
-  private String[][] grid;
+  private final int height;
+  private final int width;
+  private char[][] grid;
 
   /**
    * Creates a grid where each row and column has the same dimension.
@@ -14,7 +14,7 @@ public class Grid {
   public Grid(int height, int width) {
     this.height = height;
     this.width = width;
-    this.grid = new String[height][width];
+    this.grid = new char[height][width];
   }
   
   public int getHeight() {
@@ -31,7 +31,7 @@ public class Grid {
    * @param y integer
    * @return String
    */
-  public String getLetter(int x, int y) {
+  public char getLetter(int x, int y) {
     return grid[x][y];
   }
   
@@ -40,10 +40,10 @@ public class Grid {
    * @param grid a 2D char array
    * @throws IllegalArgumentException
    */
-  public void populate(String[][] grid) throws IllegalArgumentException {
+  public void populate(char[][] grid) throws IllegalArgumentException {
     boolean rectangular = true;
     
-    for (String[] row : grid) {
+    for (char[] row : grid) {
       if (row.length != width) {
         rectangular = false;
       }
