@@ -1,0 +1,88 @@
+package assignment4;
+
+import java.util.LinkedList;
+import java.util.Queue;
+
+/**
+ * This class represents an object with the help of
+ * which all connected islands on the two-dimensional grid of
+ * booleans can be explored
+ */
+public class IslandsCounter {
+
+    /**
+     * This method is made to simplify counting connected components
+     * of a  two-dimensional grid. Breadth first search explores layer by layer the whole
+     * island of booleans with true value. The rule of exploring is that each cell is
+     * adjacent to its top, left, bottom and right neighbour.
+     * @param tiles is a grid of booleans which connected components (islands)
+     * will be counted
+     * @return is the amount of islands in the given tiles
+     */
+    public int countIslands(boolean[][] tiles) {
+        if (tiles.length == 0 || tiles[0].length == 0) {
+            throw new IllegalArgumentException("Unexpectable map of tiles");
+        }
+        int count = 0;
+        Queue<Cell> queue = new LinkedList<>();
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles[0].length; j++) {
+                if (tiles[i][j]) {
+                    queue.add(new Cell(i, j));
+                    tiles[i][j] = false;
+                } else {
+                    continue;
+                }
+                while (!queue.isEmpty()) {
+                    Cell top = queue.poll();
+                    int row = top.getRow();
+                    int column = top.getColumn();
+                    exploreAdjacentCell(queue, new Cell(row, column - 1), tiles);
+                    exploreAdjacentCell(queue, new Cell(row, column + 1), tiles);
+                    exploreAdjacentCell(queue, new Cell(row - 1, column), tiles);
+                    exploreAdjacentCell(queue, new Cell(row + 1, column), tiles);
+                }
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /**
+     * This is a private method for exploring the cell during breadth first search.
+     * It checks whether the given cell has already been explored and if it doesn't
+     * than it is marked as explored
+     * @param queue is a queue used during breadth first search
+     * @param cell is a cell which needs to be checked and explored
+     * @param tiles is a given grid of booleans which connected components are being explored
+     */
+    private void exploreAdjacentCell(Queue<Cell> queue, Cell cell, boolean[][] tiles) {
+        int row = cell.getRow();
+        int column = cell.getColumn();
+        if(!(row < 0 || column < 0 || row >= tiles.length || column >= tiles[0].length) && tiles[row][column]) {
+            queue.add(new Cell(row, column));
+            tiles[row][column] = false;
+        }
+    }
+
+    /**
+     * This class represents a cell of a two-dimensional grid
+     */
+    class Cell {
+        int row;
+        int column;
+
+        Cell(int row, int column) {
+            this.row = row;
+            this.column = column;
+        }
+
+        int getRow() {
+            return row;
+        }
+
+        int getColumn() {
+            return column;
+        }
+    }
+}
