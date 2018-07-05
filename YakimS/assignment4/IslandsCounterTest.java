@@ -15,8 +15,8 @@ public class IslandsCounterTest {
                 {
                         { false , true, false, true },
                         { true , true, false, false },
-                        { false , false, true, false},
-                        { false , false, true, false},
+                        { false , false, true, false },
+                        { false , false, true, false },
                 };
 
         assertEquals(3, islandsCounter.countIslands(boolGrid));
