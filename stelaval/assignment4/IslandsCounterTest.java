@@ -1,13 +1,14 @@
 package assignment4;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 public class IslandsCounterTest {
   
+  IslandsCounter counter = new IslandsCounter();
+  
   @Test
   public void countIslandsExample() {
-    IslandsCounter counter = new IslandsCounter();
     
     boolean[][] map = new boolean[][] {
       {false, true, false, true},
@@ -16,12 +17,11 @@ public class IslandsCounterTest {
       {false, false, true, false}
     };
     
-    assertEquals (counter.countIslands(map), 3);
+    assertEquals (3, counter.countIslands(map));
   }
   
   @Test
   public void onlyWaterTiles() {
-    IslandsCounter counter = new IslandsCounter();
     
     boolean[][] map = new boolean[][] {
       {false, false, false, false, false},
@@ -30,12 +30,11 @@ public class IslandsCounterTest {
       {false, false, false, false, false}
     };
     
-    assertEquals (counter.countIslands(map), 0);
+    assertEquals (0, counter.countIslands(map));
   }
   
   @Test
   public void onlyLandTiles() {
-    IslandsCounter counter = new IslandsCounter();
     
     boolean[][] map = new boolean[][] {
       {true, true, true},
@@ -45,12 +44,11 @@ public class IslandsCounterTest {
       {true, true, true}
     };
     
-    assertEquals (counter.countIslands(map), 1);
+    assertEquals (1, counter.countIslands(map));
   }
   
   @Test(expected = IllegalArgumentException.class)
   public void emptyMap() {
-    IslandsCounter counter = new IslandsCounter();
     
     boolean[][] map = new boolean[][] {
       {},
