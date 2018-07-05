@@ -3,23 +3,32 @@ package com.shaya.CodeUAss4Package;
 import java.util.Arrays;
 
 public class IslandsCounter {
+
     /**
-     *  Counts the number of islands in a 2-dimensional array,
-     *  which each tile of it is either land(=true) or water(=false).
+     *  Counts the number of islands in a map.
      *  Two tiles belong to the same island if they are both land and are
      *  adjacent horizontally or vertically, but not diagonally.
+     *
+     * @param map - 2-dimensional array,
+     *            which each tile of it is either land(=true) or water(=false).
+     * @return number of "islands" in the map.
      */
-    public int countIsland(boolean[][] boolMap) {
-        int[][] islandNumMap = new int[boolMap.length][boolMap[0].length];
+    public int countIslands(boolean[][] map) {
+        // make sure the given array is 2-dim
+        if(map.length==0){
+            return 0;
+        }
+
+        int[][] islandNumMap = new int[map.length][map[0].length];
         for (int i = 0; i < islandNumMap.length; i++) {
             // "-1" will be an indication that the corresponding cell in the boolean map have not been investigated
             Arrays.fill(islandNumMap[i], -1);
         }
         int islandCounter = 0;
-        for (int i = 0; i < boolMap.length; i++) {
-            for (int j = 0; j < boolMap[0].length; j++) {
-                if (boolMap[i][j] && islandNumMap[i][j] == -1) {
-                    investigateNearCellsOnMap(boolMap, islandNumMap, i, j, ++islandCounter);
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[0].length; j++) {
+                if (map[i][j] && islandNumMap[i][j] == -1) {
+                    investigateNearCellsOnMap(map, islandNumMap, i, j, ++islandCounter);
                 }
             }
         }
@@ -40,8 +49,7 @@ public class IslandsCounter {
 
         if( !boolMap[i][j]) {
             islandNumMap[i][j] = 0; // Indicates that this part of the map is water
-        }
-        else{
+        } else {
             // Indicates that this part of the map is part of the island with the number "islandNum"
             islandNumMap[i][j] = islandNum;
 
