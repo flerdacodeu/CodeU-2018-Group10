@@ -6,20 +6,20 @@ public class IslandFinder {
 
   /**
    * Returns the number of islands in the lands matrix.
-   *
+   * <p>
    * <p>Two tiles in the matrix are part of the same island if
    * they are both land and are adjacent horizontally or vertically.
    *
-   * @param nrRows    number of rows in the lands matrix
-   * @param nrColumns number of columns in the lands matrix
-   * @param lands     nested boolean array, with true representing land,
-   *                  false representing water
+   * @param lands nested boolean array, with true representing land,
+   *              false representing water
    * @return the number of islands in the lands matrix
    */
-  public int getIslands(int nrRows, int nrColumns, boolean[][] lands) {
+  public int getIslands(boolean[][] lands) {
     if (lands.length == 0 || lands[0].length == 0) {
       return 0;
     }
+    int nrRows = lands.length;
+    int nrColumns = lands[0].length;
     List<List<Integer>> islands = new ArrayList<>();
     for (int row = 0; row < nrRows; row++) {
       for (int column = 0; column < nrColumns; column++) {
@@ -71,7 +71,7 @@ public class IslandFinder {
   /**
    * Merges the inner arrays of islands, at the indices specified by the islandIndexes, into one
    * array that it keeps in the islands array.
-   *
+   * <p>
    * <p>Returns a new copy of islands after this merge.
    *
    * @param islands       a list of integer lists, where each inner integer list represents an island
@@ -83,9 +83,7 @@ public class IslandFinder {
     List<Integer> mergeInto = islands.get(islandIndexes.get(0));
     for (int mergeIslandIndex = 1; mergeIslandIndex < islandIndexes.size(); mergeIslandIndex++) {
       int islandNr = islandIndexes.get(mergeIslandIndex);
-      for (int tileNr : islands.get(islandNr)) {
-        mergeInto.add(tileNr);
-      }
+      mergeInto.addAll(islands.get(islandNr));
       islands.remove(islandNr);
       islands.add(islandNr, new ArrayList<>());
     }
@@ -115,7 +113,7 @@ public class IslandFinder {
    * Returns a unique integer identifier for each cell in a matrix,
    * which in this case is it's position as a function of its row
    * and column.
-   *
+   * <p>
    * <p>Starting from 0 for the top left cell and moving across the rows
    * then down the columns with each subsequent cell being the successor
    * integer of the previous one.
