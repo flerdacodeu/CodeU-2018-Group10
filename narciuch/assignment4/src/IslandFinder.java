@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class IslandFinder {
 
@@ -20,7 +18,7 @@ public class IslandFinder {
     }
     int nrRows = lands.length;
     int nrColumns = lands[0].length;
-    List<List<Integer>> islands = new ArrayList<>();
+    Map<Integer, Set<Integer>> islands = new HashMap<>();
     for (int row = 0; row < nrRows; row++) {
       for (int column = 0; column < nrColumns; column++) {
         if (!lands[row][column]) {
@@ -31,7 +29,7 @@ public class IslandFinder {
         //Check above tile
         if (row != 0) {
           if (lands[row - 1][column]) {
-            int islandIndex = getIslandIndex(islands, getUniquePos(row - 1, column, nrColumns));
+            int islandIndex = getIslandKey(islands, getUniquePos(row - 1, column, nrColumns));
             //Add above tile island nr to the list of islands the current tile is a part of
             currentTileIslandNrs.add(islandIndex);
           }
@@ -39,7 +37,7 @@ public class IslandFinder {
         //Check in left tile
         if (column != 0) {
           if (lands[row][column - 1]) {
-            int islandIndex = getIslandIndex(islands, getUniquePos(row, column - 1, nrColumns));
+            int islandIndex = getIslandKey(islands, getUniquePos(row, column - 1, nrColumns));
             //Add left tile island nr to the list of islands the current tile is a part of
             currentTileIslandNrs.add(islandIndex);
           }
@@ -49,9 +47,9 @@ public class IslandFinder {
         //Now we update the list of islands to include this tile
         int currentTile = getUniquePos(row, column, nrColumns);
         if (currentTileIslandNrs.size() == 0) {
-          List<Integer> newIsland = new ArrayList<>();
+          Set<Integer> newIsland = new HashSet<>();
           newIsland.add(currentTile);
-          islands.add(newIsland);
+          islands.put(islands.size(), newIsland);
         } else if (currentTileIslandNrs.size() == 1) {
           islands.get(currentTileIslandNrs.get(0)).add(currentTile);
         } else {//Tile is a member of 2 islands
@@ -69,41 +67,40 @@ public class IslandFinder {
   }
 
   /**
-   * Merges the inner arrays of islands, at the indices specified by the islandIndexes, into one
-   * array that it keeps in the islands array.
+   * Merges the values of islands, i.e the integer sets, that have keys specified by the islandKeys,
+   * into one set that it keeps in islands, i.e. merges multiple islands into one.
    * <p>
    * <p>Returns a new copy of islands after this merge.
    *
-   * @param islands       a list of integer lists, where each inner integer list represents an island
-   * @param islandIndexes the indices of those inner arrays in 'islands' that are to be merged
+   * @param islands    a mapping from a unique integer key to a set of integers,
+   *                   where each integer set represents an island
+   * @param islandKeys the keys of those sets in 'islands' that are to be merged
    * @return a new copy of islands which has merged the islands as specified and not changed the
-   * other islands within the 'islands' nested list
+   * other islands within 'islands'
    */
-  private List<List<Integer>> mergeIslands(List<List<Integer>> islands, List<Integer> islandIndexes) {
-    List<Integer> mergeInto = islands.get(islandIndexes.get(0));
-    for (int mergeIslandIndex = 1; mergeIslandIndex < islandIndexes.size(); mergeIslandIndex++) {
-      int islandNr = islandIndexes.get(mergeIslandIndex);
-      mergeInto.addAll(islands.get(islandNr));
-      islands.remove(islandNr);
-      islands.add(islandNr, new ArrayList<>());
+  private Map<Integer, Set<Integer>> mergeIslands(Map<Integer, Set<Integer>> islands, List<Integer> islandKeys) {
+    Set<Integer> mergeInto = islands.get(islandKeys.get(0));
+    for (int mergeIslandIndex = 1; mergeIslandIndex < islandKeys.size(); mergeIslandIndex++) {
+      int islandKey = islandKeys.get(mergeIslandIndex);
+      mergeInto.addAll(islands.get(islandKey));
+      islands.remove(islandKey);
     }
-    return islands.stream().filter(island -> island.size() != 0).collect(Collectors.toList());
+    return islands;
   }
 
 
   /**
-   * We assume each tilePosition is in the islands list at most once.
+   * We assume each tilePosition is in islands at most once.
    *
    * @param islands
    * @param tilePosition
-   * @return index of the island containing the tilePosition value if it exists in the list
-   * of islands. If the tilePosition is not in the list of islands this returns -1.
+   * @return key of the island containing the tilePosition value if it exists in 'islands'.
+   * If the tilePosition is not in 'islands' then -1 is returned.
    */
-  private int getIslandIndex(List<List<Integer>> islands, int tilePosition) {
-    int totalIslandNr = islands.size();
-    for (int islandNr = 0; islandNr < totalIslandNr; islandNr++) {
-      if (islands.get(islandNr).contains(tilePosition)) {
-        return islandNr;
+  private int getIslandKey(Map<Integer, Set<Integer>> islands, int tilePosition) {
+    for (int key : islands.keySet()) {
+      if (islands.get(key).contains(tilePosition)) {
+        return key;
       }
     }
     return -1;
