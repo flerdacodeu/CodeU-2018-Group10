@@ -1,4 +1,5 @@
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertArrayEquals;
 
 import org.junit.Test;
 
@@ -53,5 +54,38 @@ public class CountIslandsTest {
     int numberOfIslands = CountIslands.countIslands(4, 4, map);
     
     assertEquals(1, numberOfIslands);
+  }
+  
+  @Test(expected = IllegalArgumentException.class)
+  public void testNonMatchingDimensionsThrowsException() {
+    boolean[][] map = new boolean[][] {
+      {false, true, false, true},
+      {true, true, false, false},
+      {false, false, true, false},
+      {false, false, true, false}
+    };
+    
+    CountIslands.countIslands(2, 3, map);
+  }
+  
+  @Test
+  public void testDoesNotModifyMap() {
+    boolean[][] map = new boolean[][] {
+      {false, true, false, true},
+      {true, true, false, false},
+      {false, false, true, false},
+      {false, false, true, false}
+    };
+    
+    boolean[][] mapCopy = new boolean[][] {
+      {false, true, false, true},
+      {true, true, false, false},
+      {false, false, true, false},
+      {false, false, true, false}
+    };
+    
+    CountIslands.countIslands(4, 4, map);
+    
+    assertArrayEquals(mapCopy, map);
   }
 }
