@@ -7,8 +7,7 @@ import static org.junit.Assert.assertEquals;
 public class IslandsCounterTest {
 
     @Test
-    public void countIslandInExampleGrid()
-    {
+    public void countIslandInExampleGrid() {
         IslandsCounter islandsCounter = new IslandsCounter();
 
         boolean[][] boolGrid = new boolean[][]
@@ -23,8 +22,7 @@ public class IslandsCounterTest {
     }
 
     @Test
-    public void countIslandInAllWaterGrid()
-    {
+    public void countIslandInAllWaterGrid() {
         IslandsCounter islandsCounter = new IslandsCounter();
 
         boolean[][] boolGrid = new boolean[][]
@@ -39,8 +37,7 @@ public class IslandsCounterTest {
     }
 
     @Test
-    public void countIslandInEmptyGrid()
-    {
+    public void countIslandInEmptyGrid() {
         IslandsCounter islandsCounter = new IslandsCounter();
 
         boolean[][] boolGrid = new boolean[][]
@@ -55,8 +52,7 @@ public class IslandsCounterTest {
     }
 
     @Test
-    public void countIslandInAllLandGrid()
-    {
+    public void countIslandInAllLandGrid() {
         IslandsCounter islandsCounter = new IslandsCounter();
 
         boolean[][] boolGrid = new boolean[][]
@@ -71,8 +67,7 @@ public class IslandsCounterTest {
     }
 
     @Test
-    public void countDiagonalIslandsGrid()
-    {
+    public void countDiagonalIslandsGrid() {
         IslandsCounter islandsCounter = new IslandsCounter();
 
         boolean[][] boolGrid = new boolean[][]
@@ -87,8 +82,7 @@ public class IslandsCounterTest {
     }
 
     @Test
-    public void countIslandInOneDimArr()
-    {
+    public void countIslandInOneDimArr() {
         IslandsCounter islandsCounter = new IslandsCounter();
 
         boolean[][] boolGrid = new boolean[][]

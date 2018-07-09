@@ -15,7 +15,7 @@ public class IslandsCounter {
      */
     public int countIslands(boolean[][] map) {
         // make sure the given array is 2-dim
-        if(map.length==0){
+        if (map.length==0){
             return 0;
         }
 
