@@ -1,0 +1,106 @@
+package assignment4;
+
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+
+public class IslandsCounterTest {
+
+    private IslandsCounter islandsCounter;
+
+    @Before
+    public void init() {
+        islandsCounter = new IslandsCounter();
+    }
+
+    @Test
+    public void threeComponentsTest() {
+        boolean tiles[][] = {
+                {false, true, false, true},
+                {true, true, false, false},
+                {false, false, true, false},
+                {false, false, true, false}
+        };
+        assertEquals(3, islandsCounter.countIslands(tiles));
+    }
+
+    @Test
+    public void sixComponentsTest() {
+        boolean tiles[][] = {
+                {false, true, false, true},
+                {true, true, false, false},
+                {true, true, false, true},
+                {false, false, true, false},
+                {true, false, true, false},
+                {true, false, true, false},
+                {false, true, true, false},
+                {true, false, true, false}
+        };
+        assertEquals(6, islandsCounter.countIslands(tiles));
+    }
+
+    @Test
+    public void zeroComponentsTest() {
+        boolean tiles[][] = {
+                {false, false, false},
+                {false, false, false},
+                {false, false, false},
+                {false, false, false}
+        };
+        assertEquals(0, islandsCounter.countIslands(tiles));
+    }
+
+    @Test
+    public void oneComponentTest() {
+        boolean tiles[][] = {
+                {false, true, false},
+                {false, true, false},
+                {true, true, true},
+                {false, false, false}
+        };
+        assertEquals(1, islandsCounter.countIslands(tiles));
+    }
+
+    @Test
+    public void islandWithoutWaterTest() {
+        boolean tiles[][] = {
+                {true, true, true},
+                {true, true, true},
+                {true, true, true},
+                {true, true, true},
+                {true, true, true},
+                {true, true, true},
+                {true, true, true},
+                {true, true, true},
+                {true, true, true},
+                {true, true, true},
+                {true, true, true},
+                {true, true, true},
+                {true, true, true},
+                {true, true, true},
+                {true, true, true},
+                {true, true, true}
+        };
+        assertEquals(1, islandsCounter.countIslands(tiles));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void emptyTilesTest() {
+        boolean tiles[][] = {};
+        islandsCounter.countIslands(tiles);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void emptyTilesRowsTest() {
+        boolean tiles[][] = {
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {}
+        };
+        islandsCounter.countIslands(tiles);
+    }
+}
