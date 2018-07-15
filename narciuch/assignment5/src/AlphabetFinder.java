@@ -21,11 +21,11 @@ public class AlphabetFinder<T> {
     }
     graph.addVertices(new ArrayList(unorderedAlphabet));
     for(int word = 0; word < dictionary.size() - 1; word++) {
-      for (int letter = 0;
-           letter < dictionary.get(word).size() && letter < dictionary.get(word+1).size();
-           letter++) {
-        T letter1 = dictionary.get(word).get(letter);
-        T letter2 = dictionary.get(word + 1).get(letter);
+      List<T> word1 = dictionary.get(word);
+      List<T> word2 = dictionary.get(word + 1);
+      for (int letter = 0; letter < Math.min(word1.size(), word2.size()); letter++) {
+        T letter1 = word1.get(letter);
+        T letter2 = word2.get(letter);
         if (!letter1.equals(letter2)) {
           graph.addEdge(letter1, letter2);
         }
