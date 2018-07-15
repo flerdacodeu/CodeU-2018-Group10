@@ -9,7 +9,6 @@ public class DirectedGraph<T> {
     this.vertices = new HashMap<>();
   }
 
-
   public void addVertex(T value) {
     vertices.put(value, new ArrayList<>());
   }
