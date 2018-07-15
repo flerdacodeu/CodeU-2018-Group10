@@ -10,10 +10,10 @@ import java.util.HashMap;
  * This class helps you to construct a directed graph and operate on it
  * easily.
  */
-public class DirectedGraph {
+public class Graph {
     private Map<Character, Vertex> vertecies;
 
-    public DirectedGraph() {
+    public Graph() {
         vertecies = new HashMap<>();
     }
 
