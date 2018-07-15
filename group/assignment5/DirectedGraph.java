@@ -1,95 +1,60 @@
-package com.shaya.CodeUAss5Package;
+package assignment5;
 
-import java.util.*;
+import java.util.Map;
+import java.util.HashMap;
 
-public class DirectedGraph<T> {
-
-    private HashMap<T,Vertex<T>> vertices;
+/**
+ * This class represents a directed graph data structure.
+ * A graph can be described as a set of vertecies. In case graph
+ * is directed each vertex has its indegree and outdegree vertecies.
+ * This class helps you to construct a directed graph and operate on it
+ * easily.
+ */
+public class DirectedGraph {
+    private Map<Character, Vertex> vertecies;
 
     public DirectedGraph() {
-        vertices = new HashMap<>();
+        vertecies = new HashMap<>();
     }
-
-    public Vertex<T> addVertex(T value) {
-        if(!vertices.containsKey(value)) {
-            vertices.put(value,new Vertex<>(value));
-        }
-        return vertices.get(value);
-    }
-
-    public void addEdge(T from, T to) {
-        // a vertex cant have edge to itself
-        if(from.equals(to)) {
-            return;
-        }
-
-        Vertex<T> fromVertex = addVertex(from);
-        Vertex<T> toVertex = addVertex(to);
-
-        fromVertex.out.add(toVertex);
-        toVertex.in.add(fromVertex);
-    }
-
 
     /**
-     * Use a variation of DFS algorithm to find the topological order
-     * of the vertices the graph contains
-     * @return -  possible topological order of vertices value
+     * This method adds a new edge between two vertecies in a graph.
+     * If a vertex with a character-value passed as method parameter doesn't
+     * exist in a computed graph than it will be added automatically
+     * @param parent is a parent vertex value
+     * @param child is a child vertex value
      */
-    public ArrayList getTopologicalSortedKeys() {
-        Stack<T> stack = new Stack<>();
-
-        for (Vertex<T> current : vertices.values()) {
-            if(!current.visited) {
-                getTopologicalSortedKeysHelper(current,stack);
-            }
+    public void addEdge(char parent, char child) {
+        Vertex parentVertex;
+        Vertex childVertex;
+        if (vertecies.containsKey(parent)) {
+            parentVertex = vertecies.get(parent);
+        } else {
+            parentVertex = new Vertex(parent);
+            vertecies.put(parent, parentVertex);
         }
-
-        ArrayList<T> topologicallySortedKeys = new ArrayList<>();
-        while (!stack.empty()){
-            topologicallySortedKeys.add(stack.pop());
+        if (vertecies.containsKey(child)) {
+            childVertex = vertecies.get(child);
+        } else {
+            childVertex = new Vertex(child);
+            vertecies.put(child, childVertex);
         }
-        return topologicallySortedKeys;
-    }
-    private void getTopologicalSortedKeysHelper(Vertex<T> currentVertex, Stack<T> stack) {
-        currentVertex.visited = true;
-
-        for (Vertex<T> outVertex : currentVertex.out) {
-            if (!outVertex.visited) {
-                getTopologicalSortedKeysHelper(outVertex, stack);
-            }
-        }
-
-        stack.push(currentVertex.value);
+        parentVertex.addOutdegreeVertex(childVertex);
+        childVertex.addIndegreeVertex(parentVertex);
     }
 
-    private class Vertex<T>{
-        private HashSet<Vertex<T>> in;
-        private HashSet<Vertex<T>> out;
-        private T value;
-        private boolean visited;
-
-        public Vertex(T value) {
-            this.in = new HashSet<>();
-            this.out = new HashSet<>();
-            this.value = value;
+    /**
+     * This method adds a new vertex in a directed graph.
+     * @param value is a character-value of a new vertex
+     */
+    public void addVertex(char value) {
+        if(vertecies.containsKey(value)) {
+            throw new IllegalArgumentException("Vertex " + value + " is already in a graph");
         }
+        vertecies.put(value, new Vertex(value));
+    }
 
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-            Vertex<T> vertex = (Vertex<T>) o;
-            return Objects.equals(value, vertex.value);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(value);
-        }
+    public Map<Character, Vertex> getVertecies() {
+        return vertecies;
     }
 }
