@@ -28,6 +28,9 @@ public class Graph<T extends Comparable<T>> {
      * @param child is a child vertex value
      */
     public void addEdge(T parent, T child) {
+        if(parent.compareTo(child) == 0) {
+            return;
+        }
         Vertex parentVertex;
         Vertex childVertex;
         if (vertecies.containsKey(parent)) {
