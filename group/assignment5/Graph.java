@@ -1,10 +1,13 @@
 package assignment5;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.Collections;
+
 
 /**
  * This class represents a directed graph data structure.
@@ -49,6 +52,13 @@ public class Graph<T extends Comparable<T>> {
         childVertex.addIndegreeVertex(parentVertex);
     }
 
+    public void removeEdge(T parent, T child) {
+        Vertex childVertex = vertecies.get(child);
+        Vertex parentVertex = vertecies.get(parent);
+        parentVertex.outdegrees.remove(childVertex);
+        childVertex.indegrees.remove(parentVertex);
+    }
+
     /**
      * This method adds a new vertex in a directed graph.
      * @param value is a value of a new vertex
@@ -77,6 +87,7 @@ public class Graph<T extends Comparable<T>> {
         List<T> alphabet = new ArrayList<>();
         dfs(alphabet);
         Collections.reverse(alphabet);
+        vertecies.values().forEach(e -> e.setState(VertexState.UNVISITED));
         return alphabet;
     }
 
@@ -89,6 +100,7 @@ public class Graph<T extends Comparable<T>> {
         List<List<T>> alphabets = new ArrayList<>();
         List<T> alphabet = new ArrayList<>();
         dfsForAllTopologicalOrders(alphabet, alphabets);
+        vertecies.values().forEach(e -> e.setState(VertexState.UNVISITED));
         return alphabets;
     }
 
@@ -130,6 +142,31 @@ public class Graph<T extends Comparable<T>> {
                 vertex.setState(VertexState.UNVISITED);
                 alphabet.remove(alphabet.size() - 1);
                 vertex.getOutdegrees().forEach(child -> child.getIndegrees().add(vertex));
+            }
+        }
+    }
+
+    public Set<Constraint<T>> breakCircuitsAndReturnConstraints() {
+        Set<Constraint<T>> constraints = new HashSet<>();
+        for (Vertex vertex : vertecies.values()) {
+            if (vertex.state == VertexState.UNVISITED) {
+                vertex.state = VertexState.VISITING;
+                dfsWithCircuitBreakRecursive(vertex, null, constraints);
+                vertex.state = VertexState.VISITED;
+            }
+        }
+        vertecies.values().forEach(e -> e.setState(VertexState.UNVISITED));
+        return constraints;
+    }
+
+    private void  dfsWithCircuitBreakRecursive(Vertex current, Vertex parent, Set<Constraint<T>> constraints) {
+        for (Vertex childVertex : vertecies.get(current.getValue()).getOutdegrees()) {
+            if (childVertex.state == VertexState.VISITING) {
+                 constraints.add(new Constraint<>(parent.value, current.value));
+            } else if (childVertex.state == VertexState.UNVISITED) {
+                childVertex.state = VertexState.VISITING;
+                dfsWithCircuitBreakRecursive(childVertex, current, constraints);
+                childVertex.state = VertexState.VISITED;
             }
         }
     }

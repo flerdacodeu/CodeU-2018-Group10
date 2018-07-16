@@ -1,6 +1,8 @@
 package assignment5;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * This class is to operate easily on a dictionary of
@@ -75,4 +77,11 @@ public class AlphabetDiscoverer {
         buildGraphFromDictionary(dictionary);
         return graph.getAllTopologicalOrders();
     }
+
+    public Set<Constraint<Character>> getIllegalConstraints(List<String> dictionary) {
+        buildGraphFromDictionary(dictionary);
+        return graph.breakCircuitsAndReturnConstraints();
+    }
+
+
 }
