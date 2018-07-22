@@ -1,3 +1,4 @@
+
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class AlphabetFinderBrokenTest {
 
   @Test
   public void testFindExampleAlphabet() {
-    
+
     String[] dictionary = new String[]{
         "ART", "RAT", "CAT", "CAR"
     };
@@ -24,6 +25,7 @@ public class AlphabetFinderBrokenTest {
     validAlphabets.add(Arrays.asList('T', 'A', 'R', 'C'));
     
     List<Character> alphabet = AlphabetFinderBroken.findAlphabet(dictionary);
+    System.out.println(alphabet);
     
     assertTrue(validAlphabets.contains(alphabet));
   }
