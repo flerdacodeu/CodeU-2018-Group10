@@ -26,9 +26,7 @@ public class AlphabetDiscoverer {
         for (String currentWord : dictionary) {
             for (int i = 0 ; i < currentWord.length() ; i++) {
                 Character currentChar = currentWord.charAt(i);
-                if (!graph.containsVertex(currentChar)) {
-                    graph.addVertex(currentChar);
-                }
+                graph.addVertex(currentChar);
             }
         }
     }

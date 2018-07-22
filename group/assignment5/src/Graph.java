@@ -1,10 +1,4 @@
-import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Collections;
+import java.util.*;
 
 
 /**
@@ -50,17 +44,12 @@ public class Graph<T extends Comparable<T>> {
 
     /**
      * This method adds a new vertex in a directed graph.
+     *
+     * <p>Graph vertices are unique - only one vertex can be created for each T value
      * @param value is a value of a new vertex
      */
     public void addVertex(T value) {
-        if(vertexByValue.containsKey(value)) {
-            throw new IllegalArgumentException("Vertex " + value + " is already in a graph");
-        }
         vertexByValue.put(value, new Vertex(value));
-    }
-
-    public boolean containsVertex(T value) {
-        return vertexByValue.containsKey(value);
     }
 
     /**
@@ -160,21 +149,21 @@ public class Graph<T extends Comparable<T>> {
     /**
      * This class represents a vertex of a graph.
      * Each vertex can be described by its character-value,
-     * indegree vertices (list of vertices that can direct you to the current vertex)
-     * and outdegree vertices (list of vertices that can be achieved from the current one)
+     * indegree vertices (set of vertices that can direct you to the current vertex)
+     * and outdegree vertices (set of vertices that can be achieved from the current one).
      * Vertex state is a special state to track the state of vertex during depth first search
      * in a graph.
      */
     public class Vertex {
         private T value;
-        private List<Vertex> indegrees;
-        private List<Vertex> outdegrees;
+        private Set<Vertex> indegrees;
+        private Set<Vertex> outdegrees;
         private VertexState state;
 
         public Vertex(T value) {
             this.value = value;
-            this.indegrees = new ArrayList<>();
-            this.outdegrees = new ArrayList<>();
+            this.indegrees = new HashSet<>();
+            this.outdegrees = new HashSet<>();
             this.state = VertexState.UNVISITED;
         }
 
@@ -194,11 +183,11 @@ public class Graph<T extends Comparable<T>> {
             return value;
         }
 
-        public List<Vertex> getIndegrees() {
+        public Set<Vertex> getIndegrees() {
             return indegrees;
         }
 
-        public List<Vertex> getOutdegrees() {
+        public Set<Vertex> getOutdegrees() {
             return outdegrees;
         }
 
