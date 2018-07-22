@@ -9,20 +9,18 @@ import java.util.Collections;
 
 /**
  * This class represents a directed graph data structure.
- * A graph can be described as a set of vertecies. In case graph
- * is directed each vertex has its indegree and outdegree vertecies.
- * This class helps you to construct a directed graph and operate on it
- * easily.
+ * A graph can be described as a set of vertices. In case graph
+ * is directed each vertex has its indegree and outdegree vertices.
  */
 public class Graph<T extends Comparable<T>> {
-    private Map<T, Vertex> vertecies;
+    private Map<T, Vertex> vertexByValue;
 
     public Graph() {
-        vertecies = new HashMap<>();
+        vertexByValue = new HashMap<>();
     }
 
     /**
-     * This method adds a new edge between two vertecies in a graph.
+     * This method adds a new edge between two vertices in a graph.
      * If a vertex with a value passed as method parameter doesn't
      * exist in a computed graph than it will be added automatically
      * @param parent is a parent vertex value
@@ -34,17 +32,17 @@ public class Graph<T extends Comparable<T>> {
         }
         Vertex parentVertex;
         Vertex childVertex;
-        if (vertecies.containsKey(parent)) {
-            parentVertex = vertecies.get(parent);
+        if (vertexByValue.containsKey(parent)) {
+            parentVertex = vertexByValue.get(parent);
         } else {
             parentVertex = new Vertex(parent);
-            vertecies.put(parent, parentVertex);
+            vertexByValue.put(parent, parentVertex);
         }
-        if (vertecies.containsKey(child)) {
-            childVertex = vertecies.get(child);
+        if (vertexByValue.containsKey(child)) {
+            childVertex = vertexByValue.get(child);
         } else {
             childVertex = new Vertex(child);
-            vertecies.put(child, childVertex);
+            vertexByValue.put(child, childVertex);
         }
         parentVertex.addOutdegreeVertex(childVertex);
         childVertex.addIndegreeVertex(parentVertex);
@@ -55,52 +53,48 @@ public class Graph<T extends Comparable<T>> {
      * @param value is a value of a new vertex
      */
     public void addVertex(T value) {
-        if(vertecies.containsKey(value)) {
+        if(vertexByValue.containsKey(value)) {
             throw new IllegalArgumentException("Vertex " + value + " is already in a graph");
         }
-        vertecies.put(value, new Vertex(value));
-    }
-
-    public Map<T, Vertex> getVertecies() {
-        return vertecies;
+        vertexByValue.put(value, new Vertex(value));
     }
 
     public boolean containsVertex(T value) {
-        return vertecies.containsKey(value);
+        return vertexByValue.containsKey(value);
     }
 
     /**
      * This method is to find one of possible topological
-     * orders (if a graph has more than one) of a graph vertecies
-     * @return topological ordered list of vertecies of a graph
+     * orders (if a graph has more than one) of a graph vertices
+     * @return topological ordered list of vertices of a graph
      */
     public List<T> getTopologicalOrder() {
         List<T> alphabet = new ArrayList<>();
         dfs(alphabet);
         Collections.reverse(alphabet);
-        vertecies.values().forEach(e -> e.setState(VertexState.UNVISITED));
+        vertexByValue.values().forEach(e -> e.setState(VertexState.UNVISITED));
         return alphabet;
     }
 
     /**
      * This method is to find all possible orders of topological
-     * of vertecies of the graph
-     * @return all topological orders of vertecies of a graph
+     * of vertices of the graph
+     * @return all topological orders of vertices of a graph
      */
     public List<List<T>> getAllTopologicalOrders() {
         List<List<T>> alphabets = new ArrayList<>();
         List<T> alphabet = new ArrayList<>();
         dfsForAllTopologicalOrders(alphabet, alphabets);
-        vertecies.values().forEach(e -> e.setState(VertexState.UNVISITED));
+        vertexByValue.values().forEach(e -> e.setState(VertexState.UNVISITED));
         return alphabets;
     }
 
     private void dfs(List<T> alphabet) {
-        for (T value : vertecies.keySet()) {
-            Vertex vertex = vertecies.get(value);
+        for (T value : vertexByValue.keySet()) {
+            Vertex vertex = vertexByValue.get(value);
             if (vertex.getState() == VertexState.UNVISITED) {
                 vertex.setState(VertexState.VISITING);
-                dfsRecursive(vertecies.get(value), alphabet);
+                dfsRecursive(vertexByValue.get(value), alphabet);
                 alphabet.add(value);
                 vertex.setState(VertexState.VISITED);
             }
@@ -108,7 +102,7 @@ public class Graph<T extends Comparable<T>> {
     }
 
     private void dfsRecursive(Vertex currentVertex, List<T> alphabet) {
-        for (Vertex childVertex : vertecies.get(currentVertex.getValue()).getOutdegrees()) {
+        for (Vertex childVertex : vertexByValue.get(currentVertex.getValue()).getOutdegrees()) {
             if (childVertex.getState() == VertexState.VISITING) {
                 throw new IllegalArgumentException("Dictionary is inconsistent");
             } else if (childVertex.getState() == VertexState.UNVISITED) {
@@ -121,10 +115,10 @@ public class Graph<T extends Comparable<T>> {
     }
 
     private void dfsForAllTopologicalOrders(List<T> alphabet, List<List<T>> alphabets) {
-        if (alphabet.size() == vertecies.size()) {
+        if (alphabet.size() == vertexByValue.size()) {
             alphabets.add(new ArrayList<>(alphabet));
         }
-        for (Vertex vertex : vertecies.values()) {
+        for (Vertex vertex : vertexByValue.values()) {
             if (vertex.getState() == VertexState.UNVISITED && vertex.getIndegrees().size() == 0) {
                 vertex.getOutdegrees().forEach(child -> child.getIndegrees().remove(vertex));
                 alphabet.add(vertex.getValue());
@@ -139,19 +133,19 @@ public class Graph<T extends Comparable<T>> {
 
     public Set<Constraint<T>> findCircuits() {
         Set<Constraint<T>> constraints = new HashSet<>();
-        for (Vertex vertex : vertecies.values()) {
+        for (Vertex vertex : vertexByValue.values()) {
             if (vertex.state == VertexState.UNVISITED) {
                 vertex.state = VertexState.VISITING;
                 dfsWithCircuitCheckRecursive(vertex, null, constraints);
                 vertex.state = VertexState.VISITED;
             }
         }
-        vertecies.values().forEach(e -> e.setState(VertexState.UNVISITED));
+        vertexByValue.values().forEach(e -> e.setState(VertexState.UNVISITED));
         return constraints;
     }
 
     private void dfsWithCircuitCheckRecursive(Vertex current, Vertex parent, Set<Constraint<T>> constraints) {
-        for (Vertex childVertex : vertecies.get(current.getValue()).getOutdegrees()) {
+        for (Vertex childVertex : vertexByValue.get(current.getValue()).getOutdegrees()) {
             if (childVertex.state == VertexState.VISITING) {
                  constraints.add(new Constraint<>(parent.value, current.value));
                  childVertex.state = VertexState.VISITED;
@@ -166,8 +160,8 @@ public class Graph<T extends Comparable<T>> {
     /**
      * This class represents a vertex of a graph.
      * Each vertex can be described by its character-value,
-     * indegree vertecies (list of vertecies that can direct you to the current vertex)
-     * and outdegree vertecies (list of vertecies that can be achieved from the current one)
+     * indegree vertices (list of vertices that can direct you to the current vertex)
+     * and outdegree vertices (list of vertices that can be achieved from the current one)
      * Vertex state is a special state to track the state of vertex during depth first search
      * in a graph.
      */

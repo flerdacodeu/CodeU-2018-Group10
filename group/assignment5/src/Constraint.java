@@ -1,19 +1,19 @@
 /**
- * This class represents a constraint made up of two vertecies of a graph.
- * First is the vertex from which we can go to the second one.
+ * This class represents an order-relation constraint between two Comparable objects from the same type.
+ * 'from' is the vertex from which we can go to the second one, 'to'.
  * @param <T>
  */
 public class Constraint<T extends Comparable<T>> {
-    public T first;
-    public T second;
+    public T from;
+    public T to;
 
-    public Constraint(T first, T second) {
-        this.first = first;
-        this.second = second;
+    public Constraint(T from, T to) {
+        this.from = from;
+        this.to = to;
     }
 
     public String toString() {
-        return "Character " + second + " cannot be ordered before " + first;
+        return "Value " + to + " cannot be ordered before " + from;
     }
 
     @Override
@@ -23,14 +23,14 @@ public class Constraint<T extends Comparable<T>> {
 
         Constraint<?> that = (Constraint<?>) o;
 
-        if (first != null ? !first.equals(that.first) : that.first != null) return false;
-        return second != null ? second.equals(that.second) : that.second == null;
+        if (from != null ? !from.equals(that.from) : that.from != null) return false;
+        return to != null ? to.equals(that.to) : that.to == null;
     }
 
     @Override
     public int hashCode() {
-        int result = first != null ? first.hashCode() : 0;
-        result = 31 * result + (second != null ? second.hashCode() : 0);
+        int result = from != null ? from.hashCode() : 0;
+        result = 31 * result + (to != null ? to.hashCode() : 0);
         return result;
     }
 }
