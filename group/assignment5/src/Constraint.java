@@ -1,36 +1,41 @@
 /**
  * This class represents an order-relation constraint between two Comparable objects from the same type.
- * 'from' is the vertex from which we can go to the second one, 'to'.
- * @param <T>
+ * 'former' is the vertex from which we can go to the second one, 'latter'.
  */
-public class Constraint<T extends Comparable<T>> {
-    public T from;
-    public T to;
+public class Constraint<T> {
+    private T former;
+    private T latter;
 
-    public Constraint(T from, T to) {
-        this.from = from;
-        this.to = to;
+    public Constraint(T former, T latter) {
+        this.former = former;
+        this.latter = latter;
     }
 
     public String toString() {
-        return "Value " + to + " cannot be ordered before " + from;
+        return "Value " + latter + " cannot be ordered before " + former;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Constraint<?> that = (Constraint<?>) o;
 
-        if (from != null ? !from.equals(that.from) : that.from != null) return false;
-        return to != null ? to.equals(that.to) : that.to == null;
+        if (former != null ? !former.equals(that.former) : that.former != null) {
+            return false;
+        }
+        return latter != null ? latter.equals(that.latter) : that.latter == null;
     }
 
     @Override
     public int hashCode() {
-        int result = from != null ? from.hashCode() : 0;
-        result = 31 * result + (to != null ? to.hashCode() : 0);
+        int result = former != null ? former.hashCode() : 0;
+        result = 31 * result + (latter != null ? latter.hashCode() : 0);
         return result;
     }
 }

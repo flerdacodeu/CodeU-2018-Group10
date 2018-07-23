@@ -9,6 +9,7 @@ import java.util.Set;
  */
 public class AlphabetDiscoverer {
     private Graph<Character> graph;
+    private List<String> currentDictionary;
 
     public AlphabetDiscoverer() {
     }
@@ -17,9 +18,13 @@ public class AlphabetDiscoverer {
         if(dictionary.isEmpty()) {
             throw new IllegalArgumentException("Dictionary cannot be empty");
         }
-        graph = new Graph<>();
-        addAllCharsInDictionaryToGraph(dictionary);
-        addConstraints(dictionary);
+        if(!dictionary.equals(currentDictionary))
+        {
+            graph = new Graph<>();
+            addAllCharsInDictionaryToGraph(dictionary);
+            addConstraints(dictionary);
+            currentDictionary = dictionary;
+        }
     }
 
     private void addAllCharsInDictionaryToGraph(List<String> dictionary) {
@@ -67,11 +72,11 @@ public class AlphabetDiscoverer {
      * Given a dictionary of all words in a possibly fictional language,
      * this method finds an alphabet of that language.
      *
-     * <p>This language can contain any character (of the native char data type).
+     * This language can contain any character (of the native char data type).
      *
-     * <p>Upper/lower case characters are treated differently.
+     * Upper/lower case characters are treated differently.
      *
-     * <p>We assume standard lexicographical ordering (order by characters from left to right, if X is a prefix of Y
+     * We assume standard lexicographical ordering (order by characters from left to right, if X is a prefix of Y
      * then X is sorted before Y), but where the order of characters is unknown.
      *
      * @param dictionary a list of words in lexicographic order
