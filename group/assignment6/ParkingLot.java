@@ -25,8 +25,20 @@ public class ParkingLot {
         carSpaceBiMap.put(emptySpace, car1);
         carSpaceBiMap.put(car1Space, car2);
         carSpaceBiMap.put(car2Space, car1);
+        carSpaceBiMap.put(emptySpace, Car.noCar);
 
         System.out.println("move " + car1 +  " from " + car1Space + " to " + car2Space);
+    }
+
+    private void moveCarToEmptySpace(Car car)  //TODO: SPELLING
+    {
+        Space toBeFilledEmptySpace = getEmptySpace();
+        Space toBeEmptyFilledSpace = getSpaceByCar(car);
+
+        carSpaceBiMap.put(toBeFilledEmptySpace, car);
+        carSpaceBiMap.put(toBeEmptyFilledSpace, Car.noCar);
+
+        System.out.println("move " + car +  " from " + toBeEmptyFilledSpace + " to " + toBeFilledEmptySpace);
     }
 
     public void rearrangeParkingLot(ParkingLot another)
@@ -36,12 +48,29 @@ public class ParkingLot {
             //TODO: announce parking lot don't match in spaces
         }
 
+
+        // for each space, the loop put the car that should be there, according to the "another" parking lot
+        // In iteration i - there are i parking spaces that are in order according to "another" parking lot
+        // ,so in iteration n we know for sure that all spaces are in order according to "another" parking lot
+        // Because each iteration time efficiency is O(1), than n iterations are O(n)
         for(Space space : carSpaceBiMap.getKeysSet())
         {
             Car carToMove = another.getCarBySpace(space);
-            Car carToRemove =  getCarBySpace(space);
+            Car carToRemove = this.getCarBySpace(space);
 
-            swapCarsSpacesThroghEmptySpace(carToMove, carToRemove);
+            if(carToMove.equals(carToRemove)) {
+                continue;
+            }
+            else if(carToMove.equals(Car.noCar)) {
+                moveCarToEmptySpace(carToRemove);
+            }
+            else if (carToRemove.equals(Car.noCar))
+            {
+                moveCarToEmptySpace(carToMove);
+            }
+            else {
+                swapCarsSpacesThroghEmptySpace(carToMove, carToRemove);
+            }
         }
     }
 
