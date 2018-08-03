@@ -3,13 +3,9 @@
  */
 public class Move {
   private int carNum;
-  private int fromSpaceNum;
-  private int toSpaceNum;
   
-  public Move(int carNum, int fromSpaceNum, int toSpaceNum) {
+  public Move(int carNum) {
     this.carNum = carNum;
-    this.fromSpaceNum = fromSpaceNum;
-    this.toSpaceNum = toSpaceNum;
   }
 
   @Override
@@ -25,13 +21,11 @@ public class Move {
     
     Move move = (Move) arg0;
     
-    return (this.carNum == move.carNum
-            && this.fromSpaceNum == move.fromSpaceNum
-            && this.toSpaceNum == move.toSpaceNum);
+    return (this.carNum == move.carNum);
   }
 
   @Override
   public String toString() {
-    return "Car: " + this.carNum + ", from: " + this.fromSpaceNum + ", to: " + this.toSpaceNum;
+    return "Car " + this.carNum;
   }
 }

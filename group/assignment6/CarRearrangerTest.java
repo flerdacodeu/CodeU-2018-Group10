@@ -16,12 +16,13 @@ public class CarRearrangerTest {
         1, 0
     };
     
-    List<Move> moves = CarRearranger.rearrangeCars(initialState, goalState);
+    List<Move> moves = CarRearranger.getCarMoves(initialState, goalState);
     List<Move> expectedMoves = new ArrayList<Move>();
     
-    expectedMoves.add(new Move(1, 1, 0));
+//    expectedMoves.add(new Move(1, 1, 0));
+    expectedMoves.add(new Move(1));
     
-    assertTrue(expectedMoves, moves);
+    assertListEquals(expectedMoves, moves);
   }
   
   @Test
@@ -33,19 +34,60 @@ public class CarRearrangerTest {
         3, 1, 2, 0
     };
     
-    List<Move> moves = CarRearranger.rearrangeCars(initialState, goalState);
+    List<Move> moves = CarRearranger.getCarMoves(initialState, goalState);
     List<Move> expectedMoves = new ArrayList<Move>();
     
-    expectedMoves.add(new Move(2, 1, 2));
-    expectedMoves.add(new Move(1, 0, 1));
-    expectedMoves.add(new Move(3, 3, 0));
+//    expectedMoves.add(new Move(2, 1, 2));
+//    expectedMoves.add(new Move(1, 0, 1));
+//    expectedMoves.add(new Move(3, 3, 0));
+    expectedMoves.add(new Move(2));
+    expectedMoves.add(new Move(1));
+    expectedMoves.add(new Move(3));
     
-    assertTrue(expectedMoves, moves);
+    assertListEquals(expectedMoves, moves);
+  }
+  
+  @Test
+  public void testCanHandleCircularDependency() {
+    int[] initialState = new int[] {
+        3, 0, 1, 2
+    };
+    int[] goalState = new int[] {
+        3, 1, 2, 0
+    };
+    
+    List<Move> moves = CarRearranger.getCarMoves(initialState, goalState);
+    List<Move> expectedMoves = new ArrayList<Move>();
+    
+//    expectedMoves.add(new Move(1, 0, 3));
+//    expectedMoves.add(new Move(3, 2, 0));
+//    expectedMoves.add(new Move(2, 1, 2));
+//    expectedMoves.add(new Move(1, 3, 1));
+    expectedMoves.add(new Move(1));
+    expectedMoves.add(new Move(3));
+    expectedMoves.add(new Move(2));
+    expectedMoves.add(new Move(1));
+    
+    for (int i = 0; i < moves.size(); i++) {
+      System.out.println(moves.get(i));
+    }
+    
+    assertListEquals(expectedMoves, moves);
+  }
+  
+  @Test
+  public void testEmptyCarPark() {
+    int[] initialState = new int[0];
+    int[] goalState = new int[0];
+    
+    List<Move> moves = CarRearranger.getCarMoves(initialState, goalState);
+    List<Move> expectedMoves = new ArrayList<Move>();
+    
+    assertListEquals(expectedMoves, moves);
   }
 
-  private void assertTrue(List<Move> expectedMoves, List<Move> moves) {
+  private void assertListEquals(List<Move> expectedMoves, List<Move> moves) {
     assertEquals(expectedMoves.size(), moves.size());
-    
     for (int i = 0; i < expectedMoves.size(); i++) {
       assertEquals(expectedMoves.get(i), moves.get(i));
     }
