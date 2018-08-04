@@ -1,12 +1,12 @@
 package assignment6.test;
 
-import assignment6.ParkingLot.Car;
-import assignment6.ParkingLot.ParkingLotWithReserved;
-import assignment6.ParkingLot.ReservedSpace;
+import assignment6.ParkingLot.*;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 public class ParkingLotWithReservedTest {
 
@@ -40,8 +40,11 @@ public class ParkingLotWithReservedTest {
 
         ParkingLotWithReserved parkingLotStart = new ParkingLotWithReserved(startHashMap);
         ParkingLotWithReserved parkingLotEnd = new ParkingLotWithReserved(endHashMap);
-        System.out.println(parkingLotStart.rearrange(parkingLotEnd));
+
+        List<CarMove> rearengementCarMoves = parkingLotStart.rearrange(parkingLotEnd);
+        Assert.assertTrue(ParkingLotWithReserved.areMovesCreateEndResult(parkingLotStart,parkingLotEnd,rearengementCarMoves));
     }
+
     @Test
     public void createGraphForSmallExample() {
         //create cars
@@ -82,6 +85,10 @@ public class ParkingLotWithReservedTest {
 
         ParkingLotWithReserved parkingLotStart = new ParkingLotWithReserved(startHashMap);
         ParkingLotWithReserved parkingLotEnd = new ParkingLotWithReserved(endHashMap);
-        System.out.println(parkingLotStart.rearrange(parkingLotEnd));
+
+        List<CarMove> rearengementCarMoves = parkingLotStart.rearrange(parkingLotEnd);
+        Assert.assertTrue(ParkingLotWithReserved.areMovesCreateEndResult(parkingLotStart,parkingLotEnd,rearengementCarMoves));
     }
+
+
 }

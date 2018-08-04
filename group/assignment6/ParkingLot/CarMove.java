@@ -3,9 +3,9 @@ package assignment6.ParkingLot;
 import java.util.Objects;
 
 public class CarMove {
-    private Car car;
-    private Space from;
-    private Space to;
+    private final Car car;
+    private final Space from;
+    private final Space to;
 
 
     public CarMove(Car car, Space from, Space to) {
@@ -32,5 +32,9 @@ public class CarMove {
     @Override
     public int hashCode() {
         return Objects.hash(car, from, to);
+    }
+
+    public Car getCar() {
+        return car;
     }
 }
