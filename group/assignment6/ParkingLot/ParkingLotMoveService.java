@@ -1,6 +1,6 @@
-package assignment6Package.ParkingLot;
+package assignment6.ParkingLot;
 
-import assignment6Package.Graph.Graph;
+import assignment6.Graph.Graph;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -8,9 +8,9 @@ import java.util.Set;
 public class ParkingLotMoveService
 {
    private Graph<ParkingLot> parkingOrderPossible;
-   int counterRecur;
-    int counterEdges;
-    int counterLoop;
+   private int counterRecur;
+   private int counterEdges;
+   private int counterLoop;
 
     public ParkingLotMoveService() {
         parkingOrderPossible = new Graph<>();

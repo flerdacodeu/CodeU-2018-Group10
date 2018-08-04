@@ -1,4 +1,4 @@
-package assignment6Package.BiMap;
+package assignment6.BiMap;
 
 import java.util.HashMap;
 import java.util.Objects;

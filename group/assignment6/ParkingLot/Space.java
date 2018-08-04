@@ -1,4 +1,4 @@
-package assignment6Package.ParkingLot;
+package assignment6.ParkingLot;
 
 import java.util.Objects;
 import java.util.Set;
@@ -16,6 +16,9 @@ public class Space {
         this.reservedFor = reservedFor;
     }
 
+    public int getId() {
+        return id;
+    }
 
     @Override
     public String toString() {

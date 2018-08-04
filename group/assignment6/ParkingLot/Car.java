@@ -1,8 +1,7 @@
-package assignment6Package.ParkingLot;
+package assignment6.ParkingLot;
 
 import java.util.Objects;
 
-// No actual car can have id=0;
 public class Car {
     private final int id;
 
@@ -29,7 +28,7 @@ public class Car {
 
     @Override
     public String toString() {
-        return this==noCar ? "NoCar" : "Car" + id;
+        return this==noCar ? "NoCar" : "Car " + id;
     }
 
     public static Car noCar = new Car(0);
