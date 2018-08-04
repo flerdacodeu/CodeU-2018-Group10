@@ -23,10 +23,11 @@ public class Graph<T extends Comparable<T>> {
      * exist in a computed graph than it will be added automatically
      * @param parent is a parent vertex value
      * @param child is a child vertex value
+     * @return true if a new edge has been added
      */
-    public void addEdge(T parent, T child) {
+    public boolean addEdge(T parent, T child) {
         if(parent.compareTo(child) == 0) {
-            return;
+            return false;
         }
         Vertex parentVertex;
         Vertex childVertex;
@@ -42,8 +43,8 @@ public class Graph<T extends Comparable<T>> {
             childVertex = new Vertex(child);
             vertexByValue.put(child, childVertex);
         }
-        parentVertex.addDegreeVertex(childVertex);
-        childVertex.addDegreeVertex(parentVertex);
+        ;
+        return childVertex.addDegreeVertex(parentVertex) && parentVertex.addDegreeVertex(childVertex);
     }
 
     /**
@@ -79,8 +80,8 @@ public class Graph<T extends Comparable<T>> {
             this.DFSState = VertexDFSState.UNVISITED;
         }
 
-        public void addDegreeVertex(Vertex vertex) {
-            degrees.add(vertex);
+        public boolean addDegreeVertex(Vertex vertex) {
+            return degrees.add(vertex);
         }
 
         public void setDFSState(VertexDFSState DFSState) {

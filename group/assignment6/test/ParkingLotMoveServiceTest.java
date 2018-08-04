@@ -33,6 +33,7 @@ public class ParkingLotMoveServiceTest {
         startHashMap.put(space4,car3);
         startHashMap.put(space3, Car.noCar);
         ParkingLot parkingLotStart = new ParkingLot(startHashMap);
+/*
 
         HashMap<Space, Car> endHashMap = new HashMap<>();
         endHashMap.put(space2,car1);
@@ -41,6 +42,7 @@ public class ParkingLotMoveServiceTest {
         endHashMap.put(space4,Car.noCar);
         ParkingLot parkingLotEnd = new ParkingLot(endHashMap);
 
+*/
 
         try {
             parkingLotMoveService.updateParkingOrderPossible(parkingLotStart);
@@ -48,7 +50,7 @@ public class ParkingLotMoveServiceTest {
             e.printStackTrace();
         }
     }
-/*
+
     @Test
     public void createGraphForSmallExample() {
         ParkingLotMoveService parkingLotMoveService = new ParkingLotMoveService();
@@ -83,19 +85,19 @@ public class ParkingLotMoveServiceTest {
         startHashMap.put(space4, Car.noCar);
         ParkingLot parkingLotStart = new ParkingLot(startHashMap);
 
-        // create end Parking lot
+/*        // create end Parking lot
         HashMap<Space, Car> endHashMap = new HashMap();
         endHashMap.put(space1,Car.noCar);
         endHashMap.put(space2,car1);
         endHashMap.put(space3,car2);
         endHashMap.put(space4,car3);
-        ParkingLot parkingLotEnd = new ParkingLot(endHashMap);
+        ParkingLot parkingLotEnd = new ParkingLot(endHashMap);*/
 
 
         try {
-            parkingLotMoveService.updateParkingOrderPossible(parkingLotStart, parkingLotEnd);
+            parkingLotMoveService.updateParkingOrderPossible(parkingLotStart);
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }*/
+    }
 }

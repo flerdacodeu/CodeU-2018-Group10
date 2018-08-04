@@ -15,6 +15,10 @@ public class ParkingLot implements Comparable<ParkingLot> {
         carSpaceBiMap = new BiMap<>(spaceToCar);
     }
 
+    //* Solution 1 */////////////////////////////////////////////////////////
+    // Simple to understand, brute-force solution using swaps.  in O(n)
+    // Time efficiency is O(n),  Number of car swaps is O(n)
+
     public List<CarMove> rearrangeParkingLot(ParkingLot another) throws IllegalArgumentException {
         if (!isSameParkingLotDiffOrder(another)) {
             throw new IllegalArgumentException("Not same parking lot in different order");
@@ -42,7 +46,45 @@ public class ParkingLot implements Comparable<ParkingLot> {
         }
         return carMoveList;
     }
+    private void swapCarsSpacesThroughEmptySpace(Car car1, Car car2, List<CarMove> carMoveList) {
+        Space car1Space = getSpaceByCar(car1);
+        Space car2Space = getSpaceByCar(car2);
+        Space emptySpace = getEmptySpace();
 
+        carMoveList.add(makeMove(car1,car1Space,emptySpace));
+        carMoveList.add(makeMove(car2,car2Space,car1Space));
+        carMoveList.add(makeMove(car1,emptySpace,car2Space));
+        makeMove(Car.noCar,null, emptySpace);
+    }
+    // move with updating a List<CarMove> with the new car move
+    private void moveCarToEmptySpace(Car car, List<CarMove> carMoveList) {
+        Space toBeFilledEmptySpace = getEmptySpace();
+        Space toBeEmptyFilledSpace = getSpaceByCar(car);
+
+        CarMove carMove = makeMove(car,toBeEmptyFilledSpace,toBeFilledEmptySpace);
+        if(carMoveList != null)
+        {
+            carMoveList.add(carMove);
+        }
+        makeMove(Car.noCar,null, toBeEmptyFilledSpace);
+    }
+    // move without updating a List<CarMove> with the new car move
+    private boolean isSameParkingLotDiffOrder(ParkingLot another) {
+        return   another.carSpaceBiMap.getKeysSet().equals(carSpaceBiMap.getKeysSet()) &&
+                another.carSpaceBiMap.getValuesSet().equals(carSpaceBiMap.getValuesSet()) ;                                                                          //TODO: need to check equality also in cars
+    }
+    private CarMove makeMove(Car car, Space from, Space to) {
+        carSpaceBiMap.put(to, car);
+        if (!car.equals(Car.noCar)) {
+            return new CarMove(car,from,to);
+        }
+        return null;
+    }
+
+
+    //* Solution 2 */////////////////////////////////////////////////////////
+    // O(n) circuit-dependencies finder solution using DFS.
+    // O(n) car-moves, but less actual moves than solution 1 "rearrangeParkingLot"
     public List<CarMove> rearrangeInFewerSteps(ParkingLot another) {
         List<CarMove> carMoves = new ArrayList<>();
         Map<Car, RearrangeState> carStateMap = new HashMap<>();
@@ -51,7 +93,6 @@ public class ParkingLot implements Comparable<ParkingLot> {
         rearrangeInFewerStepsUtil(carMoves, another, carStateMap, spaceStateMap);
         return carMoves;
     }
-
     private void rearrangeInFewerStepsUtil(List<CarMove> carMoves, ParkingLot another,
                                            Map<Car, RearrangeState> carStateMap,
                                            Map<Space, SpaceState> spaceStateMap) {
@@ -61,7 +102,6 @@ public class ParkingLot implements Comparable<ParkingLot> {
             }
         }
     }
-
     private void rearrangeInFewerStepsUtilRecursive(List<CarMove> carMoves, Car car, ParkingLot another, Map<Car,
             RearrangeState> carStateMap, Map<Space, SpaceState> spaceStateMap) {
         RearrangeState currentState = carStateMap.get(car);
@@ -88,7 +128,6 @@ public class ParkingLot implements Comparable<ParkingLot> {
             moveCarToEmptySpace(car);
         }
     }
-
     private void updateCarSpaceStates(Car car, Space emptySpace, boolean isCarRearranged,
                                       Map<Car, RearrangeState> carStateMap, Map<Space, SpaceState> spaceStateMap) {
         spaceStateMap.put(emptySpace, SpaceState.NOT_EMPTY);
@@ -99,7 +138,6 @@ public class ParkingLot implements Comparable<ParkingLot> {
             carStateMap.put(car, RearrangeState.NOT_REARRANGED);
         }
     }
-
     private void initStateMaps(Map<Car, RearrangeState> carStateMap, Map<Space, SpaceState> spaceStateMap, ParkingLot another) {
         carSpaceBiMap.getKeysSet()
                 .forEach(e -> {
@@ -115,42 +153,15 @@ public class ParkingLot implements Comparable<ParkingLot> {
                 });
         spaceStateMap.put(getEmptySpace(), SpaceState.EMPTY);
     }
-
-    private void swapCarsSpacesThroughEmptySpace(Car car1, Car car2, List<CarMove> carMoveList) {
-        Space car1Space = getSpaceByCar(car1);
-        Space car2Space = getSpaceByCar(car2);
-        Space emptySpace = getEmptySpace();
-
-        carMoveList.add(makeMove(car1,car1Space,emptySpace));
-        carMoveList.add(makeMove(car2,car2Space,car1Space));
-        carMoveList.add(makeMove(car1,emptySpace,car2Space));
-        makeMove(Car.noCar,null, emptySpace);
-    }
-
-    private CarMove makeMove(Car car, Space from, Space to) {
-        carSpaceBiMap.put(to, car);
-        if (!car.equals(Car.noCar)) {
-            return new CarMove(car,from,to);
-        }
-        return null;
-    }
-
-    private void moveCarToEmptySpace(Car car, List<CarMove> carMoveList) {
-        Space toBeFilledEmptySpace = getEmptySpace();
-        Space toBeEmptyFilledSpace = getSpaceByCar(car);
-
-        carMoveList.add(makeMove(car,toBeEmptyFilledSpace,toBeFilledEmptySpace));
-        makeMove(Car.noCar,null, toBeEmptyFilledSpace);
-    }
-
     public void moveCarToEmptySpace(Car car) {
-        Space toBeFilledEmptySpace = getEmptySpace();
-        Space toBeEmptyFilledSpace = getSpaceByCar(car);
-
-        makeMove(car,toBeEmptyFilledSpace,toBeFilledEmptySpace);
-        makeMove(Car.noCar,null, toBeEmptyFilledSpace);
+        moveCarToEmptySpace(car,null);
     }
 
+
+
+
+
+    // getters and setters
     public Space getEmptySpace() {
         return getSpaceByCar(Car.noCar);
     }
@@ -163,11 +174,6 @@ public class ParkingLot implements Comparable<ParkingLot> {
         return carSpaceBiMap.getKey(car);
     }
 
-    private boolean isSameParkingLotDiffOrder(ParkingLot another) {
-        return   another.carSpaceBiMap.getKeysSet().equals(carSpaceBiMap.getKeysSet()) &&
-                 another.carSpaceBiMap.getValuesSet().equals(carSpaceBiMap.getValuesSet()) ;                                                                          //TODO: need to check equality also in cars
-    }
-
     public BiMap<Space, Car> getCarSpaceBiMap() {
         return carSpaceBiMap;
     }
@@ -176,6 +182,8 @@ public class ParkingLot implements Comparable<ParkingLot> {
         return carSpaceBiMap.getKeyToValueMap();
     }
 
+
+    // override methods
     @Override
     public String toString() {
         return carSpaceBiMap.toString();

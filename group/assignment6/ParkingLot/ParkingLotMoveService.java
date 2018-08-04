@@ -18,34 +18,30 @@ public class ParkingLotMoveService
 
 
     public void updateParkingOrderPossible(ParkingLot start) {
-        parkingOrderPossible.addVertex(start);
-        updateRecursiveUtil(start);
+        updateRecursiveUtil1(start);
        System.out.println("\n counterRecur:"+counterRecur);
         System.out.println("\n counterEdges"+counterEdges);
         System.out.println("\n counterLoop"+counterLoop);
    }
 
-   private void updateRecursiveUtil(ParkingLot start) {
+   private void updateRecursiveUtil1(ParkingLot startPL) {
        counterRecur++;
-       Set<Car> lastMoveOptions = start.getEmptySpace().getReservedFor();
-       for(Car car : lastMoveOptions)
+       Set<Car> firstMoveOptions = startPL.getEmptySpace().getReservedFor();
+       for(Car car : firstMoveOptions)
        {
            counterLoop++;
-           HashMap<Space,Car> endSpaceToCars = new HashMap<>(start.getSpaceByCarMap());
-           ParkingLot afterMoveParkingLot = new ParkingLot(endSpaceToCars);
-           afterMoveParkingLot.moveCarToEmptySpace(car);
+           ParkingLot afterMovePL = new ParkingLot(startPL.getSpaceByCarMap());
+           afterMovePL.moveCarToEmptySpace(car);
 
-           if(parkingOrderPossible.containsVertex(afterMoveParkingLot)) {
-               parkingOrderPossible.addEdge(start, afterMoveParkingLot);
-               System.out.println("\nfrom: " + start + " to " + afterMoveParkingLot);
+           boolean isGraphContainsConfiguration = parkingOrderPossible.containsVertex(afterMovePL);
+
+           if(parkingOrderPossible.addEdge(startPL, afterMovePL))
+           {
                counterEdges++;
-               continue;
            }
-           else {
-               parkingOrderPossible.addEdge(start, afterMoveParkingLot);
-               updateRecursiveUtil(afterMoveParkingLot);
-               System.out.println("\nfrom: " + start + " to " + afterMoveParkingLot);
-               counterEdges++;
+           if(!isGraphContainsConfiguration)
+           {
+               updateRecursiveUtil1(afterMovePL);
            }
        }
    }
