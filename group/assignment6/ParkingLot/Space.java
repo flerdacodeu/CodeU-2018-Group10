@@ -5,15 +5,10 @@ import java.util.Set;
 
 public class Space {
     private final int id;
-    private final Set<Car> reservedFor;
 
-    public Set<Car> getReservedFor() {
-        return reservedFor;
-    }
 
-    public Space(int id, Set<Car> reservedFor) {
+    public Space(int id) {
         this.id = id;
-        this.reservedFor = reservedFor;
     }
 
     public int getId() {
@@ -30,12 +25,11 @@ public class Space {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Space space = (Space) o;
-        return id == space.id &&
-                Objects.equals(reservedFor, space.reservedFor);
+        return id == space.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, reservedFor);
+        return Objects.hash(id);
     }
 }

@@ -7,7 +7,7 @@ import assignment6.ParkingLot.enums.SpaceState;
 import java.util.*;
 
 
-public class ParkingLot implements Comparable<ParkingLot> {
+public class ParkingLot {
 
     private BiMap<Space,Car> carSpaceBiMap;
 
@@ -18,8 +18,7 @@ public class ParkingLot implements Comparable<ParkingLot> {
     //* Solution 1 */////////////////////////////////////////////////////////
     // Simple to understand, brute-force solution using swaps.  in O(n)
     // Time efficiency is O(n),  Number of car swaps is O(n)
-
-    public List<CarMove> rearrangeParkingLot(ParkingLot another) throws IllegalArgumentException {
+    public List<CarMove> rearrange(ParkingLot another) throws IllegalArgumentException {
         if (!isSameParkingLotDiffOrder(another)) {
             throw new IllegalArgumentException("Not same parking lot in different order");
         }
@@ -84,7 +83,7 @@ public class ParkingLot implements Comparable<ParkingLot> {
 
     //* Solution 2 */////////////////////////////////////////////////////////
     // O(n) circuit-dependencies finder solution using DFS.
-    // O(n) car-moves, but less actual moves than solution 1 "rearrangeParkingLot"
+    // O(n) car-moves, but less actual moves than solution 1 "rearrange"
     public List<CarMove> rearrangeInFewerSteps(ParkingLot another) {
         List<CarMove> carMoves = new ArrayList<>();
         Map<Car, RearrangeState> carStateMap = new HashMap<>();
@@ -160,7 +159,6 @@ public class ParkingLot implements Comparable<ParkingLot> {
 
 
 
-
     // getters and setters
     public Space getEmptySpace() {
         return getSpaceByCar(Car.noCar);
@@ -178,25 +176,13 @@ public class ParkingLot implements Comparable<ParkingLot> {
         return carSpaceBiMap;
     }
 
-    public HashMap<Space,Car> getSpaceByCarMap() {
-        return carSpaceBiMap.getKeyToValueMap();
-    }
+
 
 
     // override methods
     @Override
     public String toString() {
         return carSpaceBiMap.toString();
-    }
-
-    // returns 0 is exactly same parking lot at the same order
-    @Override
-    public int compareTo(ParkingLot pl) {
-        if(pl.equals(this))
-        {
-            return 0;
-        }
-        return -1;
     }
 
     @Override

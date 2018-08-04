@@ -13,10 +13,10 @@ public class ParkingLotTest {
 
     @Test
     public void rearrangeParkingLotExampleTest() {
-        Space space1 = new Space(1, null);
-        Space space2 = new Space(2, null);
-        Space space3 = new Space(3, null);
-        Space space4 = new Space(4, null);
+        Space space1 = new Space(1);
+        Space space2 = new Space(2);
+        Space space3 = new Space(3);
+        Space space4 = new Space(4);
         Car car1 = new Car(1);
         Car car2 = new Car(2);
         Car car3 = new Car(3);
@@ -36,19 +36,19 @@ public class ParkingLotTest {
         ParkingLot parkingLotEnd = new ParkingLot(endHashMap);
 
         System.out.println(parkingLotStart);
-        System.out.println(parkingLotStart.rearrangeParkingLot(parkingLotEnd));
+        System.out.println(parkingLotStart.rearrange(parkingLotEnd));
         System.out.println(parkingLotStart);
         System.out.println(parkingLotEnd);
 
-        assertTrue(parkingLotStart.compareTo(parkingLotEnd) == 0);
+        assertTrue(parkingLotStart.equals(parkingLotEnd));
     }
 
     @Test
     public void rearrangeParkingLotExampleReversedTest() {
-        Space space1 = new Space(1, null);
-        Space space2 = new Space(2, null);
-        Space space3 = new Space(3, null);
-        Space space4 = new Space(4, null);
+        Space space1 = new Space(1);
+        Space space2 = new Space(2);
+        Space space3 = new Space(3);
+        Space space4 = new Space(4);
         Car car1 = new Car(1);
         Car car2 = new Car(2);
         Car car3 = new Car(3);
@@ -68,19 +68,19 @@ public class ParkingLotTest {
         ParkingLot parkingLotStart = new ParkingLot(startHashMap);
 
         System.out.println(parkingLotStart);
-        System.out.println(parkingLotStart.rearrangeParkingLot(parkingLotEnd));
+        System.out.println(parkingLotStart.rearrange(parkingLotEnd));
         System.out.println(parkingLotStart);
         System.out.println(parkingLotEnd);
 
-        assertTrue(parkingLotStart.compareTo(parkingLotEnd) == 0);
+        assertTrue(parkingLotStart.equals(parkingLotEnd));
     }
 
     @Test
     public void rearrangeInFewerStepsTest() {
-        Space space1 = new Space(1, null);
-        Space space2 = new Space(2, null);
-        Space space3 = new Space(3, null);
-        Space space4 = new Space(4, null);
+        Space space1 = new Space(1);
+        Space space2 = new Space(2);
+        Space space3 = new Space(3);
+        Space space4 = new Space(4);
         Car car1 = new Car(1);
         Car car2 = new Car(2);
         Car car3 = new Car(3);
@@ -104,16 +104,16 @@ public class ParkingLotTest {
         System.out.println(parkingLotStart);
         System.out.println(parkingLotEnd);
 
-        assertTrue(parkingLotStart.compareTo(parkingLotEnd) == 0);
+        assertTrue(parkingLotStart.equals(parkingLotEnd));
     }
 
     @Test
     public void rearrangeInFewerStepsTestWithCircuitTest() {
-        Space space1 = new Space(1, null);
-        Space space2 = new Space(2, null);
-        Space space3 = new Space(3, null);
-        Space space4 = new Space(4, null);
-        Space space5 = new Space(5, null);
+        Space space1 = new Space(1);
+        Space space2 = new Space(2);
+        Space space3 = new Space(3);
+        Space space4 = new Space(4);
+        Space space5 = new Space(5);
         Car car1 = new Car(1);
         Car car2 = new Car(2);
         Car car3 = new Car(3);
@@ -140,16 +140,16 @@ public class ParkingLotTest {
         System.out.println(parkingLotStart);
         System.out.println(parkingLotEnd);
 
-        assertTrue(parkingLotStart.compareTo(parkingLotEnd) == 0);
+        assertTrue(parkingLotStart.equals(parkingLotEnd));
     }
 
     @Test
     public void rearrangeInFewerStepsTestWithCircuitAnd2ConnectedComponentsTest() {
-        Space space1 = new Space(1, null);
-        Space space2 = new Space(2, null);
-        Space space3 = new Space(3, null);
-        Space space4 = new Space(4, null);
-        Space space5 = new Space(5, null);
+        Space space1 = new Space(1);
+        Space space2 = new Space(2);
+        Space space3 = new Space(3);
+        Space space4 = new Space(4);
+        Space space5 = new Space(5);
         Car car1 = new Car(1);
         Car car2 = new Car(2);
         Car car3 = new Car(3);
@@ -176,6 +176,6 @@ public class ParkingLotTest {
         System.out.println(parkingLotStart);
         System.out.println(parkingLotEnd);
 
-        assertTrue(parkingLotStart.compareTo(parkingLotEnd) == 0);
+        assertTrue(parkingLotStart.equals(parkingLotEnd));
     }
 }

@@ -1,16 +1,13 @@
 package assignment6.Graph;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This class represents a directed graph data structure.
  * A graph can be described as a set of vertices. In case graph
  * is directed each vertex has its indegree and outdegree vertices.
  */
-public class Graph<T extends Comparable<T>> {
+public class Graph<T> {
     private Map<T, Vertex> vertexByValue;
 
     public Graph() {
@@ -26,7 +23,7 @@ public class Graph<T extends Comparable<T>> {
      * @return true if a new edge has been added
      */
     public boolean addEdge(T parent, T child) {
-        if(parent.compareTo(child) == 0) {
+        if(parent.equals(child)) {
             return false;
         }
         Vertex parentVertex;
@@ -34,17 +31,17 @@ public class Graph<T extends Comparable<T>> {
         if (vertexByValue.containsKey(parent)) {
             parentVertex = vertexByValue.get(parent);
         } else {
-            parentVertex = new Vertex(parent);
-            vertexByValue.put(parent, parentVertex);
+            parentVertex = addVertex(parent);
         }
         if (vertexByValue.containsKey(child)) {
             childVertex = vertexByValue.get(child);
         } else {
-            childVertex = new Vertex(child);
-            vertexByValue.put(child, childVertex);
+            childVertex = addVertex(child);
         }
-        ;
-        return childVertex.addDegreeVertex(parentVertex) && parentVertex.addDegreeVertex(childVertex);
+
+        boolean isNewEdgeForChild = childVertex.addDegreeVertex(parentVertex);
+        boolean isNewEdgeForParent = childVertex.addDegreeVertex(parentVertex);
+        return  isNewEdgeForChild || isNewEdgeForParent;
     }
 
     /**
@@ -53,14 +50,19 @@ public class Graph<T extends Comparable<T>> {
      * Graph vertices are unique - only one vertex can be created for each T value
      * @param value is a value of a new vertex
      */
-    public void addVertex(T value) {
-        vertexByValue.put(value, new Vertex(value));
+    public Vertex addVertex(T value) {
+        Vertex vertex = new Vertex(value);
+        vertexByValue.put(value, vertex);
+        return vertex;
     }
+
 
     public boolean containsVertex(T vertexValue)
     {
         return vertexByValue.containsKey(vertexValue);
     }
+
+
     /**
      * This class represents a vertex of a graph.
      * Each vertex can be described by its character-value,
