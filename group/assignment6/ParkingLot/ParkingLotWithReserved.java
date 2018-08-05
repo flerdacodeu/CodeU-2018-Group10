@@ -5,7 +5,7 @@ import assignment6.Graph.Graph;
 
 import java.util.*;
 
-public class ParkingLotWithReserved{
+public class ParkingLotWithReserved {
 
     private final BiMap<ReservedSpace,Car> carSpaceBiMap;
     private Graph<ParkingLotWithReserved> parkingOrderPossible;

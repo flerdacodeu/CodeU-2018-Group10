@@ -14,6 +14,18 @@ public class CarMove {
         this.to = to;
     }
 
+    public Car getCar() {
+        return car;
+    }
+
+    public Space getFrom() {
+        return from;
+    }
+
+    public Space getTo() {
+        return to;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -32,9 +44,5 @@ public class CarMove {
     @Override
     public int hashCode() {
         return Objects.hash(car, from, to);
-    }
-
-    public Car getCar() {
-        return car;
     }
 }

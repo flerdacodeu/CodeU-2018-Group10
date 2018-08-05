@@ -1,6 +1,9 @@
 package assignment6.test;
 
-import assignment6.ParkingLot.*;
+import assignment6.ParkingLot.Car;
+import assignment6.ParkingLot.CarMove;
+import assignment6.ParkingLot.ParkingLotWithReserved;
+import assignment6.ParkingLot.ReservedSpace;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -41,8 +44,8 @@ public class ParkingLotWithReservedTest {
         ParkingLotWithReserved parkingLotStart = new ParkingLotWithReserved(startHashMap);
         ParkingLotWithReserved parkingLotEnd = new ParkingLotWithReserved(endHashMap);
 
-        List<CarMove> rearengementCarMoves = parkingLotStart.rearrange(parkingLotEnd);
-        Assert.assertTrue(ParkingLotWithReserved.areMovesCreateEndResult(parkingLotStart,parkingLotEnd,rearengementCarMoves));
+        List<CarMove> rearrangementCarMoves = parkingLotStart.rearrange(parkingLotEnd);
+        Assert.assertTrue(ParkingLotWithReserved.areMovesCreateEndResult(parkingLotStart,parkingLotEnd,rearrangementCarMoves));
     }
 
     @Test
@@ -70,14 +73,14 @@ public class ParkingLotWithReservedTest {
         ReservedSpace space4 = new ReservedSpace(4, reservedForSpace4);
 
         // create start Parking lot
-        HashMap<ReservedSpace, Car> startHashMap = new HashMap();
+        HashMap<ReservedSpace, Car> startHashMap = new HashMap<>();
         startHashMap.put(space1,car1);
         startHashMap.put(space2,car2);
         startHashMap.put(space3,car3);
         startHashMap.put(space4, Car.noCar);
 
         // create end Parking lot
-        HashMap<ReservedSpace, Car> endHashMap = new HashMap();
+        HashMap<ReservedSpace, Car> endHashMap = new HashMap<>();
         endHashMap.put(space1,Car.noCar);
         endHashMap.put(space2,car1);
         endHashMap.put(space3,car2);
@@ -86,8 +89,8 @@ public class ParkingLotWithReservedTest {
         ParkingLotWithReserved parkingLotStart = new ParkingLotWithReserved(startHashMap);
         ParkingLotWithReserved parkingLotEnd = new ParkingLotWithReserved(endHashMap);
 
-        List<CarMove> rearengementCarMoves = parkingLotStart.rearrange(parkingLotEnd);
-        Assert.assertTrue(ParkingLotWithReserved.areMovesCreateEndResult(parkingLotStart,parkingLotEnd,rearengementCarMoves));
+        List<CarMove> rearrangementCarMoves = parkingLotStart.rearrange(parkingLotEnd);
+        Assert.assertTrue(ParkingLotWithReserved.areMovesCreateEndResult(parkingLotStart,parkingLotEnd,rearrangementCarMoves));
     }
 
 
