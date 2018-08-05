@@ -2,47 +2,53 @@ package assignment6.ParkingLot;
 
 import java.util.Objects;
 
+/**
+ * Represents a move of a car which specifies which space it is moving from and which space it is moving to.
+ */
 public class CarMove {
-    private final Car car;
-    private final Space from;
-    private final Space to;
+  private final Car car;
+  private final Space fromSpace;
+  private final Space toSpace;
 
+  public CarMove(Car car, Space fromSpace, Space toSpace) {
+    this.car = car;
+    this.fromSpace = fromSpace;
+    this.toSpace = toSpace;
+  }
 
-    public CarMove(Car car, Space from, Space to) {
-        this.car = car;
-        this.from = from;
-        this.to = to;
+  public Car getCar() {
+    return car;
+  }
+
+  public Space getFrom() {
+    return fromSpace;
+  }
+
+  public Space getTo() {
+    return toSpace;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
-
-    public Car getCar() {
-        return car;
+    if (o == null || getClass() != o.getClass()) {
+      return false;
     }
+    CarMove carMove = (CarMove) o;
+    return Objects.equals(car, carMove.car)
+        && Objects.equals(fromSpace, carMove.fromSpace)
+        && Objects.equals(toSpace, carMove.toSpace);
+  }
 
-    public Space getFrom() {
-        return from;
-    }
+  @Override
+  public int hashCode() {
+    return Objects.hash(car, fromSpace, toSpace);
+  }
 
-    public Space getTo() {
-        return to;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CarMove carMove = (CarMove) o;
-        return Objects.equals(car, carMove.car) &&
-                Objects.equals(from, carMove.from) &&
-                Objects.equals(to, carMove.to);
-    }
-
-    @Override
-    public String toString() {
-        return "\nmove " + car +  " from " + from + " to " + to;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(car, from, to);
-    }
+  @Override
+  public String toString() {
+    return "\nMove " + car +  " from " + fromSpace + " to " + toSpace;
+  }
 }
