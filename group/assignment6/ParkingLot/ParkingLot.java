@@ -1,18 +1,21 @@
 package assignment6.ParkingLot;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
 import assignment6.BiMap.BiMap;
 import assignment6.ParkingLot.enums.RearrangeState;
 import assignment6.ParkingLot.enums.SpaceState;
-
-import java.util.*;
-
 
 public class ParkingLot {
 
     private BiMap<Space,Car> carSpaceBiMap;
 
     public ParkingLot(HashMap<Space,Car> spaceToCar) {
-        carSpaceBiMap = new BiMap<>(spaceToCar);
+        carSpaceBiMap = new BiMap<Space,Car>(spaceToCar);
     }
 
     public List<List<CarMove>> getAllPossibleRearrangements(ParkingLot another) {
@@ -37,7 +40,7 @@ public class ParkingLot {
          return;
      }
 
-     for (Car car : carSpaceBiMap.getValuesSet()) {
+     for (Car car : carSpaceBiMap.getValueSet()) {
          if (car.equals(Car.noCar) || car.equals(previous)) {
              continue;
          }
@@ -62,9 +65,10 @@ public class ParkingLot {
     //* Solution 1 */////////////////////////////////////////////////////////
     // Simple to understand, brute-force solution using swaps.  in O(n)
     // Time efficiency is O(n),  Number of car swaps is O(n)
-    public List<CarMove> rearrange(ParkingLot another) throws IllegalArgumentException {
-        if (!isSameParkingLotDiffOrder(another)) {
-            throw new IllegalArgumentException("Not same parking lot in different order");
+    public List<CarMove> rearrange(ParkingLot goalState) throws IllegalArgumentException {
+        if (!isRearrangementOfParkingLot(goalState)) {
+            throw new IllegalArgumentException(
+                "The goal parking lot state has to be a rearrangement of the initial parking lot state.");
         }
 
         List<CarMove> carMoveList = new ArrayList<>();
@@ -73,8 +77,8 @@ public class ParkingLot {
         // In iteration i - there are i parking spaces that are in order according to "another" parking lot
         // ,so in iteration n we know for sure that all spaces are in order according to "another" parking lot
         // Because each iteration time efficiency is O(1), than n iterations are O(n)
-        for (Space space : carSpaceBiMap.getKeysSet()) {
-            Car carToMove = another.getCarBySpace(space);
+        for (Space space : carSpaceBiMap.getKeySet()) {
+            Car carToMove = goalState.getCarBySpace(space);
             Car carToRemove = this.getCarBySpace(space);
 
             if (carToMove.equals(Car.noCar)) {
@@ -111,9 +115,9 @@ public class ParkingLot {
         makeMove(Car.noCar,null, toBeEmptyFilledSpace);
     }
     // move without updating a List<CarMove> with the new car move
-    private boolean isSameParkingLotDiffOrder(ParkingLot another) {
-        return   another.carSpaceBiMap.getKeysSet().equals(carSpaceBiMap.getKeysSet()) &&
-                another.carSpaceBiMap.getValuesSet().equals(carSpaceBiMap.getValuesSet()) ;                                                                          //TODO: need to check equality also in cars
+    private boolean isRearrangementOfParkingLot(ParkingLot another) {
+        return   another.carSpaceBiMap.getKeySet().equals(carSpaceBiMap.getKeySet()) &&
+                another.carSpaceBiMap.getValueSet().equals(carSpaceBiMap.getValueSet()) ;
     }
 
     private CarMove makeMove(Car car, Space from, Space to) {
@@ -139,7 +143,7 @@ public class ParkingLot {
     private void rearrangeInFewerStepsUtil(List<CarMove> carMoves, ParkingLot another,
                                            Map<Car, RearrangeState> carStateMap,
                                            Map<Space, SpaceState> spaceStateMap) {
-        for (Car car : carSpaceBiMap.getValuesSet()) {
+        for (Car car : carSpaceBiMap.getValueSet()) {
             if (!car.equals(Car.noCar) && carStateMap.get(car).equals(RearrangeState.NOT_REARRANGED)) {
                 rearrangeInFewerStepsUtilRecursive(carMoves, car, another, carStateMap, spaceStateMap);
             }
@@ -182,7 +186,7 @@ public class ParkingLot {
         }
     }
     private void initStateMaps(Map<Car, RearrangeState> carStateMap, Map<Space, SpaceState> spaceStateMap, ParkingLot another) {
-        carSpaceBiMap.getKeysSet()
+        carSpaceBiMap.getKeySet()
                 .forEach(e -> {
                     Car before = carSpaceBiMap.getValue(e);
                     Car after = another.getCarSpaceBiMap().getValue(e);
@@ -199,6 +203,71 @@ public class ParkingLot {
     public void moveCarToEmptySpace(Car car) {
         moveCarToEmptySpace(car,null);
     }
+    
+    
+    
+    
+    // Solution to challenge 1 and 2 ===============================================================
+
+    /**
+     * Finds a list of moves to rearrange cars from an initial state to a goal state.
+     * This method assumes there is exactly one empty space.
+     * @param initialState a ParkingLot with exactly one empty space
+     * @param goalState    a rearrangement of the initial ParkingLot
+     * @return a list of moves
+     */
+    public List<Move> getCarMoves(ParkingLot goalState) {
+      if (!isRearrangementOfParkingLot(goalState)) {
+        throw new IllegalArgumentException(
+            "The goal parking lot state has to be a rearrangement of the initial parking lot state.");
+      }
+
+      List<Move> moves = new ArrayList<Move>();
+      ParkingLot currentState = new ParkingLot(carSpaceBiMap.getKeyToValueMap());
+      moveCars(currentState, goalState, moves);
+      return moves;
+    }
+
+    private static void moveCars(ParkingLot currentState, ParkingLot goalState, List<Move> moves) {
+      for (int i = 0; i < currentState.getSize(); i++) {
+        Space emptySpace = currentState.getEmptySpace();
+
+        if (!spaceShouldBeEmpty(emptySpace, goalState)) {
+          Car car = getGoalCar(emptySpace, goalState);
+          moveCarToEmptySpace(car, currentState, moves);
+        } else {
+          for (Car car : currentState.getCarSpaceBiMap().getValueSet()) {
+            if (carIsInWrongSpace(car, currentState, goalState)) {
+              moveCarToEmptySpace(car, currentState, moves);
+              moveCars(currentState, goalState, moves);
+            }
+          }
+        }
+      }
+    }
+
+    private static boolean spaceShouldBeEmpty(Space emptySpace, ParkingLot goalState) {
+      return goalState.getCarBySpace(emptySpace) == Car.noCar;
+    }
+
+    private static Car getGoalCar(Space space, ParkingLot goalState) {
+      return goalState.getCarBySpace(space);
+    }
+
+    private static void moveCarToEmptySpace(Car car, ParkingLot currentState, List<Move> moves) {
+      Space space = currentState.getSpaceByCar(car);
+      Space emptySpace = currentState.getEmptySpace();
+      currentState.getCarSpaceBiMap().put(emptySpace, car);
+      currentState.getCarSpaceBiMap().put(space, Car.noCar);
+      moves.add(new Move(car));
+    }
+
+    private static boolean carIsInWrongSpace(Car car, ParkingLot currentState, ParkingLot goalState) {
+      Space currentSpace = currentState.getSpaceByCar(car);
+      return !goalState.getCarBySpace(currentSpace).equals(car);
+    }
+
+    //=========================================================================================
 
     // getters and setters
     public Space getEmptySpace() {
@@ -216,7 +285,10 @@ public class ParkingLot {
     public BiMap<Space, Car> getCarSpaceBiMap() {
         return carSpaceBiMap;
     }
-
+    public int getSize() {
+      return carSpaceBiMap.getKeyToValueMap().size();
+    }
+  
     // override methods
     @Override
     public String toString() {
@@ -227,8 +299,8 @@ public class ParkingLot {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ParkingLot that = (ParkingLot) o;
-        return Objects.equals(carSpaceBiMap, that.carSpaceBiMap);
+        ParkingLot parkingLot = (ParkingLot) o;
+        return this.carSpaceBiMap.equals(parkingLot.carSpaceBiMap);
     }
 
     @Override

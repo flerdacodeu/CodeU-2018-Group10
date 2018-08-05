@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Represents a graph data structure which is a set of vertices.
+ * Represents an undirected graph data structure.
  */
 public class Graph<T> {
   private Map<T, Vertex> vertexByValue;
@@ -42,7 +42,7 @@ public class Graph<T> {
     }
 
     boolean isNewEdgeForChild = childVertex.addAdjacentVertex(parentVertex);
-    boolean isNewEdgeForParent = childVertex.addAdjacentVertex(parentVertex);
+    boolean isNewEdgeForParent = parentVertex.addAdjacentVertex(childVertex);
     return  isNewEdgeForChild && isNewEdgeForParent;
   }
 
