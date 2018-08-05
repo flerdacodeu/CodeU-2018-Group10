@@ -1,181 +1,238 @@
 package assignment6.test;
 
 import assignment6.ParkingLot.Car;
+import assignment6.ParkingLot.Move;
 import assignment6.ParkingLot.ParkingLot;
 import assignment6.ParkingLot.Space;
+
+import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
 public class ParkingLotTest {
+  
+  private Space space1;
+  private Space space2;
+  private Space space3;
+  private Space space4;
+  private Space space5;
+  private Car car1;
+  private Car car2;
+  private Car car3;
+  private Car car4;
+  HashMap<Space, Car> initialMap;
+  HashMap<Space, Car> goalMap;
 
-    @Test
-    public void rearrangeParkingLotExampleTest() {
-        Space space1 = new Space(1);
-        Space space2 = new Space(2);
-        Space space3 = new Space(3);
-        Space space4 = new Space(4);
-        Car car1 = new Car(1);
-        Car car2 = new Car(2);
-        Car car3 = new Car(3);
+  @Before
+  public void setUp() {
+    space1 = new Space(1);
+    space2 = new Space(2);
+    space3 = new Space(3);
+    space4 = new Space(4);
+    space5 = new Space(5);
+    car1 = new Car(1);
+    car2 = new Car(2);
+    car3 = new Car(3);
+    car4 = new Car(4);
+    initialMap = new HashMap<>();
+    goalMap = new HashMap<>();
+  }
 
-        HashMap<Space, Car> startHashMap = new HashMap<>();
-        startHashMap.put(space1, car1);
-        startHashMap.put(space2, car2);
-        startHashMap.put(space4, car3);
-        startHashMap.put(space3, Car.noCar);
-        ParkingLot parkingLotStart = new ParkingLot(startHashMap);
+  @Test
+  public void testRearrangeParkingLotExample() {
+    initialMap.put(space1, car1);
+    initialMap.put(space2, car2);
+    initialMap.put(space4, car3);
+    initialMap.put(space3, Car.noCar);
+    ParkingLot initialState = new ParkingLot(initialMap);
 
-        HashMap<Space, Car> endHashMap = new HashMap<>();
-        endHashMap.put(space2, car1);
-        endHashMap.put(space3, car2);
-        endHashMap.put(space1, car3);
-        endHashMap.put(space4, Car.noCar);
-        ParkingLot parkingLotEnd = new ParkingLot(endHashMap);
+    goalMap.put(space2, car1);
+    goalMap.put(space3, car2);
+    goalMap.put(space1, car3);
+    goalMap.put(space4, Car.noCar);
+    ParkingLot goalState = new ParkingLot(goalMap);
 
-        System.out.println(parkingLotStart);
-        System.out.println(parkingLotStart.rearrange(parkingLotEnd));
-        System.out.println(parkingLotStart);
-        System.out.println(parkingLotEnd);
+    System.out.println(initialState);
+    System.out.println(initialState.rearrange(goalState));
+    System.out.println(initialState);
+    System.out.println(goalState);
 
-        assertTrue(parkingLotStart.equals(parkingLotEnd));
-    }
+    assertTrue(initialState.equals(goalState));
+  }
 
-    @Test
-    public void rearrangeParkingLotExampleReversedTest() {
-        Space space1 = new Space(1);
-        Space space2 = new Space(2);
-        Space space3 = new Space(3);
-        Space space4 = new Space(4);
-        Car car1 = new Car(1);
-        Car car2 = new Car(2);
-        Car car3 = new Car(3);
+  @Test
+  public void testRearrangeParkingLotExampleReversed() {
+    initialMap.put(space2, car1);
+    initialMap.put(space3, car2);
+    initialMap.put(space1, car3);
+    initialMap.put(space4, Car.noCar);
+    ParkingLot initialState = new ParkingLot(initialMap);
 
-        HashMap<Space, Car> endHashMap = new HashMap<>();
-        endHashMap.put(space1, car1);
-        endHashMap.put(space2, car2);
-        endHashMap.put(space4, car3);
-        endHashMap.put(space3, Car.noCar);
-        ParkingLot parkingLotEnd = new ParkingLot(endHashMap);
+    goalMap.put(space1, car1);
+    goalMap.put(space2, car2);
+    goalMap.put(space4, car3);
+    goalMap.put(space3, Car.noCar);
+    ParkingLot goalState = new ParkingLot(goalMap);
 
-        HashMap<Space, Car> startHashMap = new HashMap<>();
-        startHashMap.put(space2, car1);
-        startHashMap.put(space3, car2);
-        startHashMap.put(space1, car3);
-        startHashMap.put(space4, Car.noCar);
-        ParkingLot parkingLotStart = new ParkingLot(startHashMap);
+    System.out.println(initialState);
+    System.out.println(initialState.rearrange(goalState));
+    System.out.println(initialState);
+    System.out.println(goalState);
 
-        System.out.println(parkingLotStart);
-        System.out.println(parkingLotStart.rearrange(parkingLotEnd));
-        System.out.println(parkingLotStart);
-        System.out.println(parkingLotEnd);
+    assertTrue(initialState.equals(goalState));
+  }
 
-        assertTrue(parkingLotStart.equals(parkingLotEnd));
-    }
+  @Test
+  public void testRearrangeInFewerSteps() {
+    initialMap.put(space1, car1);
+    initialMap.put(space2, car2);
+    initialMap.put(space4, car3);
+    initialMap.put(space3, Car.noCar);
+    ParkingLot initialState = new ParkingLot(initialMap);
 
-    @Test
-    public void rearrangeInFewerStepsTest() {
-        Space space1 = new Space(1);
-        Space space2 = new Space(2);
-        Space space3 = new Space(3);
-        Space space4 = new Space(4);
-        Car car1 = new Car(1);
-        Car car2 = new Car(2);
-        Car car3 = new Car(3);
+    goalMap.put(space2, car1);
+    goalMap.put(space3, car2);
+    goalMap.put(space1, car3);
+    goalMap.put(space4, Car.noCar);
+    ParkingLot goalState = new ParkingLot(goalMap);
 
-        HashMap<Space, Car> startHashMap = new HashMap<>();
-        startHashMap.put(space1, car1);
-        startHashMap.put(space2, car2);
-        startHashMap.put(space4, car3);
-        startHashMap.put(space3, Car.noCar);
-        ParkingLot parkingLotStart = new ParkingLot(startHashMap);
+    System.out.println(initialState);
+    System.out.println(initialState.rearrangeInFewerSteps(goalState));
+    System.out.println(initialState);
+    System.out.println(goalState);
 
-        HashMap<Space, Car> endHashMap = new HashMap<>();
-        endHashMap.put(space2, car1);
-        endHashMap.put(space3, car2);
-        endHashMap.put(space1, car3);
-        endHashMap.put(space4, Car.noCar);
-        ParkingLot parkingLotEnd = new ParkingLot(endHashMap);
+    assertTrue(initialState.equals(goalState));
+  }
 
-        System.out.println(parkingLotStart);
-        System.out.println(parkingLotStart.rearrangeInFewerSteps(parkingLotEnd));
-        System.out.println(parkingLotStart);
-        System.out.println(parkingLotEnd);
+  @Test
+  public void testRearrangeInFewerStepsTestWithCircuit() {
+    initialMap.put(space1, Car.noCar);
+    initialMap.put(space2, car1);
+    initialMap.put(space3, car2);
+    initialMap.put(space4, car3);
+    initialMap.put(space5, car4);
+    ParkingLot initialState = new ParkingLot(initialMap);
 
-        assertTrue(parkingLotStart.equals(parkingLotEnd));
-    }
+    goalMap.put(space1, Car.noCar);
+    goalMap.put(space2, car2);
+    goalMap.put(space3, car3);
+    goalMap.put(space4, car4);
+    goalMap.put(space5, car1);
+    ParkingLot goalState = new ParkingLot(goalMap);
 
-    @Test
-    public void rearrangeInFewerStepsTestWithCircuitTest() {
-        Space space1 = new Space(1);
-        Space space2 = new Space(2);
-        Space space3 = new Space(3);
-        Space space4 = new Space(4);
-        Space space5 = new Space(5);
-        Car car1 = new Car(1);
-        Car car2 = new Car(2);
-        Car car3 = new Car(3);
-        Car car4 = new Car(4);
+    System.out.println(initialState);
+    System.out.println(initialState.rearrangeInFewerSteps(goalState));
+    System.out.println(initialState);
+    System.out.println(goalState);
 
-        HashMap<Space, Car> startHashMap = new HashMap<>();
-        startHashMap.put(space1, Car.noCar);
-        startHashMap.put(space2, car1);
-        startHashMap.put(space3, car2);
-        startHashMap.put(space4, car3);
-        startHashMap.put(space5, car4);
-        ParkingLot parkingLotStart = new ParkingLot(startHashMap);
+    assertTrue(initialState.equals(goalState));
+  }
 
-        HashMap<Space, Car> endHashMap = new HashMap<>();
-        endHashMap.put(space1, Car.noCar);
-        endHashMap.put(space2, car2);
-        endHashMap.put(space3, car3);
-        endHashMap.put(space4, car4);
-        endHashMap.put(space5, car1);
-        ParkingLot parkingLotEnd = new ParkingLot(endHashMap);
+  @Test
+  public void testRearrangeInFewerStepsTestWithCircuitAnd2ConnectedComponents() {
+    initialMap.put(space1, Car.noCar);
+    initialMap.put(space2, car1);
+    initialMap.put(space3, car2);
+    initialMap.put(space4, car3);
+    initialMap.put(space5, car4);
+    ParkingLot initialState = new ParkingLot(initialMap);
 
-        System.out.println(parkingLotStart);
-        System.out.println(parkingLotStart.rearrangeInFewerSteps(parkingLotEnd));
-        System.out.println(parkingLotStart);
-        System.out.println(parkingLotEnd);
+    goalMap.put(space1, Car.noCar);
+    goalMap.put(space2, car3);
+    goalMap.put(space3, car2);
+    goalMap.put(space4, car4);
+    goalMap.put(space5, car1);
+    ParkingLot goalState = new ParkingLot(goalMap);
 
-        assertTrue(parkingLotStart.equals(parkingLotEnd));
-    }
+    System.out.println(initialState);
+    System.out.println(initialState.rearrangeInFewerSteps(goalState));
+    System.out.println(initialState);
+    System.out.println(goalState);
 
-    @Test
-    public void rearrangeInFewerStepsTestWithCircuitAnd2ConnectedComponentsTest() {
-        Space space1 = new Space(1);
-        Space space2 = new Space(2);
-        Space space3 = new Space(3);
-        Space space4 = new Space(4);
-        Space space5 = new Space(5);
-        Car car1 = new Car(1);
-        Car car2 = new Car(2);
-        Car car3 = new Car(3);
-        Car car4 = new Car(4);
+    assertTrue(initialState.equals(goalState));
+  }
+  
+  @Test
+  public void testGetCarMovesWithExample() {
+    initialMap.put(space1, car1);
+    initialMap.put(space2, car2);
+    initialMap.put(space4, car3);
+    initialMap.put(space3, Car.noCar);
+    ParkingLot initialState = new ParkingLot(initialMap);
 
-        HashMap<Space, Car> startHashMap = new HashMap<>();
-        startHashMap.put(space1, Car.noCar);
-        startHashMap.put(space2, car1);
-        startHashMap.put(space3, car2);
-        startHashMap.put(space4, car3);
-        startHashMap.put(space5, car4);
-        ParkingLot parkingLotStart = new ParkingLot(startHashMap);
+    goalMap.put(space2, car1);
+    goalMap.put(space3, car2);
+    goalMap.put(space1, car3);
+    goalMap.put(space4, Car.noCar);
+    ParkingLot goalState = new ParkingLot(goalMap);
 
-        HashMap<Space, Car> endHashMap = new HashMap<>();
-        endHashMap.put(space1, Car.noCar);
-        endHashMap.put(space2, car3);
-        endHashMap.put(space3, car2);
-        endHashMap.put(space4, car4);
-        endHashMap.put(space5, car1);
-        ParkingLot parkingLotEnd = new ParkingLot(endHashMap);
+    List<Move> moves = initialState.getCarMoves(goalState);
+    List<Move> expectedMoves = new ArrayList<Move>();
+    expectedMoves.add(new Move(car2));
+    expectedMoves.add(new Move(car1));
+    expectedMoves.add(new Move(car3));
+    
+    assertTrue(expectedMoves.equals(moves));
+  }
+  
+  @Test
+  public void testCanHandleCircularDependency() {
+    initialMap.put(space1, car1);
+    initialMap.put(space2, car2);
+    initialMap.put(space3, car3);
+    initialMap.put(space4, Car.noCar);
+    ParkingLot initialState = new ParkingLot(initialMap);
 
-        System.out.println(parkingLotStart);
-        System.out.println(parkingLotStart.rearrangeInFewerSteps(parkingLotEnd));
-        System.out.println(parkingLotStart);
-        System.out.println(parkingLotEnd);
+    goalMap.put(space2, car1);
+    goalMap.put(space3, car2);
+    goalMap.put(space1, car3);
+    goalMap.put(space4, Car.noCar);
+    ParkingLot goalState = new ParkingLot(goalMap);
+    
+    List<Move> moves = initialState.getCarMoves(goalState);
+    List<List<Move>> validMoveSequences = new ArrayList<List<Move>>();
+    
+    addValidMoveSequences(validMoveSequences);
 
-        assertTrue(parkingLotStart.equals(parkingLotEnd));
-    }
+    assertTrue(validMoveSequences.contains(moves));
+  }
+
+  private void addValidMoveSequences(List<List<Move>> validMoveSequences) {
+    List<Move> validMove1 = new ArrayList<Move>();
+    validMove1.add(new Move(car1));
+    validMove1.add(new Move(car3));
+    validMove1.add(new Move(car2));
+    validMove1.add(new Move(car1));
+    validMoveSequences.add(validMove1);
+    
+    List<Move> validMove2 = new ArrayList<Move>();
+    validMove2.add(new Move(car2));
+    validMove2.add(new Move(car1));
+    validMove2.add(new Move(car3));
+    validMove2.add(new Move(car2));
+    validMoveSequences.add(validMove2);
+    
+    List<Move> validMove3 = new ArrayList<Move>();
+    validMove3.add(new Move(car3));
+    validMove3.add(new Move(car2));
+    validMove3.add(new Move(car1));
+    validMove3.add(new Move(car3));
+    validMoveSequences.add(validMove3);
+  }
+  
+  @Test
+  public void testEmptyCarPark() {
+    ParkingLot initialState = new ParkingLot(initialMap);
+    ParkingLot goalState = new ParkingLot(goalMap);
+    
+    List<Move> moves = initialState.getCarMoves(goalState);
+    List<Move> expectedMoves = new ArrayList<Move>();
+    
+    assertTrue(expectedMoves.equals(moves));
+  }
 }
