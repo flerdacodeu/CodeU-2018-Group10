@@ -44,120 +44,6 @@ public class ParkingLotTest {
     initialMap = new HashMap<>();
     goalMap = new HashMap<>();
   }
-
-  @Test
-  public void testRearrangeParkingLotExample() {
-    initialMap.put(space1, car1);
-    initialMap.put(space2, car2);
-    initialMap.put(space4, car3);
-    initialMap.put(space3, Car.noCar);
-    ParkingLot initialState = new ParkingLot(initialMap);
-
-    goalMap.put(space2, car1);
-    goalMap.put(space3, car2);
-    goalMap.put(space1, car3);
-    goalMap.put(space4, Car.noCar);
-    ParkingLot goalState = new ParkingLot(goalMap);
-
-    System.out.println(initialState);
-    System.out.println(initialState.rearrange(goalState));
-    System.out.println(initialState);
-    System.out.println(goalState);
-
-    assertTrue(initialState.equals(goalState));
-  }
-
-  @Test
-  public void testRearrangeParkingLotExampleReversed() {
-    initialMap.put(space2, car1);
-    initialMap.put(space3, car2);
-    initialMap.put(space1, car3);
-    initialMap.put(space4, Car.noCar);
-    ParkingLot initialState = new ParkingLot(initialMap);
-
-    goalMap.put(space1, car1);
-    goalMap.put(space2, car2);
-    goalMap.put(space4, car3);
-    goalMap.put(space3, Car.noCar);
-    ParkingLot goalState = new ParkingLot(goalMap);
-
-    System.out.println(initialState);
-    System.out.println(initialState.rearrange(goalState));
-    System.out.println(initialState);
-    System.out.println(goalState);
-
-    assertTrue(initialState.equals(goalState));
-  }
-
-  @Test
-  public void testRearrangeInFewerSteps() {
-    initialMap.put(space1, car1);
-    initialMap.put(space2, car2);
-    initialMap.put(space4, car3);
-    initialMap.put(space3, Car.noCar);
-    ParkingLot initialState = new ParkingLot(initialMap);
-
-    goalMap.put(space2, car1);
-    goalMap.put(space3, car2);
-    goalMap.put(space1, car3);
-    goalMap.put(space4, Car.noCar);
-    ParkingLot goalState = new ParkingLot(goalMap);
-
-    System.out.println(initialState);
-    System.out.println(initialState.rearrangeInFewerSteps(goalState));
-    System.out.println(initialState);
-    System.out.println(goalState);
-
-    assertTrue(initialState.equals(goalState));
-  }
-
-  @Test
-  public void testRearrangeInFewerStepsTestWithCircuit() {
-    initialMap.put(space1, Car.noCar);
-    initialMap.put(space2, car1);
-    initialMap.put(space3, car2);
-    initialMap.put(space4, car3);
-    initialMap.put(space5, car4);
-    ParkingLot initialState = new ParkingLot(initialMap);
-
-    goalMap.put(space1, Car.noCar);
-    goalMap.put(space2, car2);
-    goalMap.put(space3, car3);
-    goalMap.put(space4, car4);
-    goalMap.put(space5, car1);
-    ParkingLot goalState = new ParkingLot(goalMap);
-
-    System.out.println(initialState);
-    System.out.println(initialState.rearrangeInFewerSteps(goalState));
-    System.out.println(initialState);
-    System.out.println(goalState);
-
-    assertTrue(initialState.equals(goalState));
-  }
-
-  @Test
-  public void testRearrangeInFewerStepsTestWithCircuitAnd2ConnectedComponents() {
-    initialMap.put(space1, Car.noCar);
-    initialMap.put(space2, car1);
-    initialMap.put(space3, car2);
-    initialMap.put(space4, car3);
-    initialMap.put(space5, car4);
-    ParkingLot initialState = new ParkingLot(initialMap);
-
-    goalMap.put(space1, Car.noCar);
-    goalMap.put(space2, car3);
-    goalMap.put(space3, car2);
-    goalMap.put(space4, car4);
-    goalMap.put(space5, car1);
-    ParkingLot goalState = new ParkingLot(goalMap);
-
-    System.out.println(initialState);
-    System.out.println(initialState.rearrangeInFewerSteps(goalState));
-    System.out.println(initialState);
-    System.out.println(goalState);
-
-    assertTrue(initialState.equals(goalState));
-  }
   
   @Test
   public void testGetCarMovesWithExample() {
@@ -178,6 +64,29 @@ public class ParkingLotTest {
     expectedMoves.add(new Move(car2));
     expectedMoves.add(new Move(car1));
     expectedMoves.add(new Move(car3));
+    
+    assertTrue(expectedMoves.equals(moves));
+  }
+
+  @Test
+  public void testGetCarMovesWithReversedExample() {
+    initialMap.put(space2, car1);
+    initialMap.put(space3, car2);
+    initialMap.put(space1, car3);
+    initialMap.put(space4, Car.noCar);
+    ParkingLot initialState = new ParkingLot(initialMap);
+
+    goalMap.put(space1, car1);
+    goalMap.put(space2, car2);
+    goalMap.put(space4, car3);
+    goalMap.put(space3, Car.noCar);
+    ParkingLot goalState = new ParkingLot(goalMap);
+
+    List<Move> moves = initialState.getCarMoves(goalState);
+    List<Move> expectedMoves = new ArrayList<Move>();
+    expectedMoves.add(new Move(car3));
+    expectedMoves.add(new Move(car1));
+    expectedMoves.add(new Move(car2));
     
     assertTrue(expectedMoves.equals(moves));
   }
@@ -203,6 +112,49 @@ public class ParkingLotTest {
 
     assertTrue(validMoveSequences.contains(moves));
   }
+  
+//  @Test
+//  public void testCanHandleMultipleCircularDependencies() {
+//    initialMap.put(space1, car1);
+//    initialMap.put(space2, car2);
+//    initialMap.put(space3, car3);
+//    initialMap.put(space4, car4);
+//    initialMap.put(space5, Car.noCar);
+//    ParkingLot initialState = new ParkingLot(initialMap);
+//
+//    goalMap.put(space2, car1);
+//    goalMap.put(space1, car2);
+//    goalMap.put(space4, car3);
+//    goalMap.put(space3, car4);
+//    goalMap.put(space5, Car.noCar);
+//    ParkingLot goalState = new ParkingLot(goalMap);
+//    
+//    List<Move> moves = initialState.getCarMoves(goalState);
+//    List<List<Move>> validMoveSequences = new ArrayList<List<Move>>();
+//    
+//    List<Move> validMove1 = new ArrayList<Move>();
+//    validMove1.add(new Move(car1));
+//    validMove1.add(new Move(car3));
+//    validMove1.add(new Move(car2));
+//    validMove1.add(new Move(car1));
+//    validMoveSequences.add(validMove1);
+//    
+//    List<Move> validMove2 = new ArrayList<Move>();
+//    validMove2.add(new Move(car2));
+//    validMove2.add(new Move(car1));
+//    validMove2.add(new Move(car3));
+//    validMove2.add(new Move(car2));
+//    validMoveSequences.add(validMove2);
+//    
+//    List<Move> validMove3 = new ArrayList<Move>();
+//    validMove3.add(new Move(car3));
+//    validMove3.add(new Move(car2));
+//    validMove3.add(new Move(car1));
+//    validMove3.add(new Move(car3));
+//    validMoveSequences.add(validMove3);
+//
+//    assertTrue(validMoveSequences.contains(moves));
+//  }
 
   private void addValidMoveSequences(List<List<Move>> validMoveSequences) {
     List<Move> validMove1 = new ArrayList<Move>();
@@ -228,7 +180,7 @@ public class ParkingLotTest {
   }
   
   @Test
-  public void testEmptyCarPark() {
+  public void testEmptyParkingLot() {
     ParkingLot initialState = new ParkingLot(initialMap);
     ParkingLot goalState = new ParkingLot(goalMap);
     
