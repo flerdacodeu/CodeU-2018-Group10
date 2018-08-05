@@ -139,9 +139,11 @@ public class ParkingLot {
     return allMoves;
   }
 
-  private void allRearrangementsRecursive(List<List<CarMove>> allMoves, List<CarMove> currentMoves,
-                                          List<ParkingLot> previousConfigurations, ParkingLot desired) {
-    if (this.equals(desired)) {
+  private void allRearrangementsRecursive(List<List<CarMove>> allMoves,
+                                              List<CarMove> currentMoves,
+                                                  List<ParkingLot> previousConfigurations,
+                                                      ParkingLot goalState) {
+    if (this.equals(goalState)) {
       allMoves.add(new ArrayList<>(currentMoves));
       return;
     }
@@ -158,7 +160,7 @@ public class ParkingLot {
 
       previousConfigurations.add(currentConfiguration);
       moveCarToEmptySpace(car, currentMoves);
-      allRearrangementsRecursive(allMoves, currentMoves, previousConfigurations, desired);
+      allRearrangementsRecursive(allMoves, currentMoves, previousConfigurations, goalState);
       moveCarToEmptySpace(car);
       currentMoves.remove(currentMoves.size() - 1);
       previousConfigurations.remove(currentConfiguration);

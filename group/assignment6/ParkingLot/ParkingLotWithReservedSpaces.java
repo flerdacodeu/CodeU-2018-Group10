@@ -51,9 +51,10 @@ public class ParkingLotWithReservedSpaces {
         }
         return null;
     }
-    private List<CarMove> rearrangeUtil(ParkingLotWithReservedSpaces current, ParkingLotWithReservedSpaces end,
-                                        List<CarMove> previousMoves,
-                                        Set<ParkingLotWithReservedSpaces> previousPL) {
+    private List<CarMove> rearrangeUtil(ParkingLotWithReservedSpaces current,
+                                            ParkingLotWithReservedSpaces end,
+                                                List<CarMove> previousMoves,
+                                                    Set<ParkingLotWithReservedSpaces> previousPL) {
         Set<Car> moveOptions = current.getEmptySpace().getReservedFor();
         for(Car car : moveOptions)
         {
