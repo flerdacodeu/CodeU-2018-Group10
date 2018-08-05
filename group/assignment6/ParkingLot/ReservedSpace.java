@@ -2,7 +2,6 @@ package assignment6.ParkingLot;
 
 import java.util.Objects;
 import java.util.Set;
-
 /**
  * Represents a space with an ID that has a set of cars which it is reserved for.
  */

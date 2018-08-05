@@ -1,18 +1,22 @@
 package assignment6.ParkingLot;
 
+import assignment6.BiMap.BiMap;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-import assignment6.BiMap.BiMap;
-
+/**
+ * This class represents a Parking Lot. Provides
+ * efficient car rearrangement.
+ */
 public class ParkingLot {
 
   private BiMap<Space,Car> carSpaceBiMap;
 
   public ParkingLot(HashMap<Space,Car> spaceToCar) {
-    carSpaceBiMap = new BiMap<Space,Car>(spaceToCar);
+    carSpaceBiMap = new BiMap<>(spaceToCar);
   }
 
   public BiMap<Space, Car> getCarSpaceBiMap() {
@@ -62,7 +66,6 @@ public class ParkingLot {
   /**
    * Finds a list of moves to rearrange cars from an initial state to a goal state.
    * This method assumes there is exactly one empty space.
-   * @param initialState a ParkingLot with exactly one empty space
    * @param goalState    a rearrangement of the initial ParkingLot
    * @return a list of moves
    */
@@ -72,7 +75,7 @@ public class ParkingLot {
           "The goal parking lot state has to be a rearrangement of the initial parking lot state.");
     }
 
-    List<Move> moves = new ArrayList<Move>();
+    List<Move> moves = new ArrayList<>();
     ParkingLot currentState = new ParkingLot(carSpaceBiMap.getKeyToValueMap());
     moveCars(currentState, goalState, moves);
     return moves;
@@ -119,20 +122,28 @@ public class ParkingLot {
 
   // ================================== Solution to challenge 4 ==================================
 
-  public List<List<CarMove>> getAllPossibleRearrangements(ParkingLot another) {
+  /**
+   * Method for getting all possible unique sequences of moves of cars in
+   * a Parking Lot. Each sequence will not contain same Parking Lot configuration
+   * during rearrangement.
+   * @param goalState is a ParkingLot end configuration.
+   * @return
+   */
+  public List<List<CarMove>> getAllPossibleRearrangements(ParkingLot goalState) {
     List<List<CarMove>> allMoves = new ArrayList<>();
     List<CarMove> currentMoves = new ArrayList<>();
     List<ParkingLot> previousConfigurations = new ArrayList<>();
     HashMap<Space,Car> currentParkingLot = new HashMap<>(carSpaceBiMap.getKeyToValueMap());
-    allRearrangementsRecursive(allMoves, currentMoves, previousConfigurations, another, null);
+    allRearrangementsRecursive(allMoves, currentMoves, previousConfigurations, goalState);
     carSpaceBiMap = new BiMap<>(currentParkingLot);
     return allMoves;
   }
 
-  private void allRearrangementsRecursive(List<List<CarMove>> allMoves, List<CarMove> currentMoves,
-      List<ParkingLot> previousConfigurations, ParkingLot desired,
-      Car previous) {
-    if (this.equals(desired)) {
+  private void allRearrangementsRecursive(List<List<CarMove>> allMoves,
+                                              List<CarMove> currentMoves,
+                                                  List<ParkingLot> previousConfigurations,
+                                                      ParkingLot goalState) {
+    if (this.equals(goalState)) {
       allMoves.add(new ArrayList<>(currentMoves));
       return;
     }
@@ -142,14 +153,14 @@ public class ParkingLot {
     }
 
     for (Car car : carSpaceBiMap.getValueSet()) {
-      if (car.equals(Car.noCar) || car.equals(previous)) {
+      if (car.equals(Car.noCar)) {
         continue;
       }
       ParkingLot currentConfiguration = new ParkingLot(carSpaceBiMap.getKeyToValueMap());
 
       previousConfigurations.add(currentConfiguration);
       moveCarToEmptySpace(car, currentMoves);
-      allRearrangementsRecursive(allMoves, currentMoves, previousConfigurations, desired, car);
+      allRearrangementsRecursive(allMoves, currentMoves, previousConfigurations, goalState);
       moveCarToEmptySpace(car);
       currentMoves.remove(currentMoves.size() - 1);
       previousConfigurations.remove(currentConfiguration);
@@ -188,7 +199,7 @@ public class ParkingLot {
     return null;
   }
 
-  public void moveCarToEmptySpace(Car car) {
+  private void moveCarToEmptySpace(Car car) {
     moveCarToEmptySpace(car,null);
   }
 }
