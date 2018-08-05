@@ -10,9 +10,10 @@ public class ParkingLotWithReserved {
     private BiMap<ReservedSpace,Car> carSpaceBiMap;
 
     /**
-   * @param spaceToCar - need to have more than one space,
-   *                   one and only one the spaces should contain Car.noCar,
-   *                   all cars should be in spaces reserved for them
+   * @param spaceToCar - This Map have few requirements: 
+   *                       # Map size should be bigger that 1
+   *                       # One and only one space should map to Car.noCar
+   *                       # All cars should be in the reserved car list of the space they are in
    */
     public ParkingLotWithReserved(HashMap<ReservedSpace,Car> spaceToCar){
     if(isValidSpaceCarMap(spaceToCar)) {
