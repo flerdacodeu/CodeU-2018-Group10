@@ -3,7 +3,7 @@ package assignment6.ParkingLot;
 import java.util.Objects;
 
 /**
- * Represents a move of a car which specifies which space it is moving from and which space it is moving to.
+ * Represents a move from a space to another by a car.
  */
 public class CarMove {
   private final Car car;
