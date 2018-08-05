@@ -32,14 +32,12 @@ public class Graph<T> {
     Vertex childVertex;
     if (vertexByValue.containsKey(parent)) {
       parentVertex = vertexByValue.get(parent);
-    }
-    else {
+    } else {
       parentVertex = addVertex(parent);
     }
     if (vertexByValue.containsKey(child)) {
       childVertex = vertexByValue.get(child);
-    }
-    else {
+    } else {
       childVertex = addVertex(child);
     }
 
