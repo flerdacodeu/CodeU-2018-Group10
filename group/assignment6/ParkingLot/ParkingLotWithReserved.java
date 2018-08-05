@@ -5,11 +5,14 @@ import assignment6.BiMap.BiMap;
 import java.util.*;
 
 // ============================== Solution to challenge 3 ==============================
+/**
+*  This class represent a parking lot with n>1 unique spaces, and n-1 unique cars.
+*/
 public class ParkingLotWithReserved {
 
     private BiMap<ReservedSpace,Car> carSpaceBiMap;
 
-    /**
+   /**
    * @param spaceToCar - This Map have few requirements: 
    *                       # Map size should be bigger that 1
    *                       # One and only one space should map to Car.noCar
