@@ -15,7 +15,7 @@ public class ParkingLotWithReserved {
    *                   all cars should be in spaces reserved for them
    */
     public ParkingLotWithReserved(HashMap<ReservedSpace,Car> spaceToCar){
-    if(isPassedInitialParametersCheck(spaceToCar)) {
+    if(isValidSpaceCarMap(spaceToCar)) {
       carSpaceBiMap = new BiMap<>(spaceToCar);
     }
   }
@@ -23,7 +23,7 @@ public class ParkingLotWithReserved {
     /**
     * @return true if the parking lot given is valid according to the class specification above
     */
-    private boolean isPassedInitialParametersCheck(HashMap<ReservedSpace,Car> spaceToCar) {
+    private boolean isValidSpaceCarMap(HashMap<ReservedSpace,Car> spaceToCar) {
     if(spaceToCar == null || spaceToCar.size() < 2){
       throw new IllegalArgumentException("Invalid input - To little parking spaces. Need to have a least 2");
     }
@@ -140,7 +140,8 @@ public class ParkingLotWithReserved {
 
     private ReservedSpace getEmptySpace() {
       return getSpaceByCar(Car.noCar);
-    }private ReservedSpace getSpaceByCar(Car car) {
+    }
+    private ReservedSpace getSpaceByCar(Car car) {
       return carSpaceBiMap.getKey(car);
     }
 
