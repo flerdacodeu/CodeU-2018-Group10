@@ -6,124 +6,111 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * This class represents a directed graph data structure.
- * A graph can be described as a set of vertices. In case graph
- * is directed each vertex has its indegree and outdegree vertices.
+ * Represents a graph data structure which is a set of vertices.
  */
 public class Graph<T> {
-    private Map<T, Vertex> vertexByValue;
+  private Map<T, Vertex> vertexByValue;
 
-    public Graph() {
-        vertexByValue = new HashMap<>();
+  public Graph() {
+    vertexByValue = new HashMap<>();
+  }
+
+  /**
+   * Adds a new edge between two vertices in a graph.
+   * If a vertex with the value passed doesn't
+   * exist in the graph it will be added.
+   * @param parent parent vertex value
+   * @param child child vertex value
+   * @return true if a new edge has been added
+   */
+  public boolean addEdge(T parent, T child) {
+    if (parent.equals(child)) {
+      return false;
+    }
+    
+    Vertex parentVertex;
+    Vertex childVertex;
+    if (vertexByValue.containsKey(parent)) {
+      parentVertex = vertexByValue.get(parent);
+    } else {
+      parentVertex = addVertex(parent);
+    }
+    if (vertexByValue.containsKey(child)) {
+      childVertex = vertexByValue.get(child);
+    } else {
+      childVertex = addVertex(child);
     }
 
-    /**
-     * This method adds a new edge between two vertices in a graph.
-     * If a vertex with a value passed as method parameter doesn't
-     * exist in a computed graph than it will be added automatically
-     * @param parent is a parent vertex value
-     * @param child is a child vertex value
-     * @return true if a new edge has been added
-     */
-    public boolean addEdge(T parent, T child) {
-        if(parent.equals(child)) {
-            return false;
-        }
-        Vertex parentVertex;
-        Vertex childVertex;
-        if (vertexByValue.containsKey(parent)) {
-            parentVertex = vertexByValue.get(parent);
-        } else {
-            parentVertex = addVertex(parent);
-        }
-        if (vertexByValue.containsKey(child)) {
-            childVertex = vertexByValue.get(child);
-        } else {
-            childVertex = addVertex(child);
-        }
+    boolean isNewEdgeForChild = childVertex.addAdjacentVertex(parentVertex);
+    boolean isNewEdgeForParent = childVertex.addAdjacentVertex(parentVertex);
+    return  isNewEdgeForChild && isNewEdgeForParent;
+  }
 
-        boolean isNewEdgeForChild = childVertex.addDegreeVertex(parentVertex);
-        boolean isNewEdgeForParent = childVertex.addDegreeVertex(parentVertex);
-        return  isNewEdgeForChild || isNewEdgeForParent;
+  /**
+   * Adds a new vertex to a graph.
+   * Graph vertices are unique so only one vertex can be created for each T value.
+   * @param value value of the new vertex
+   */
+  public Vertex addVertex(T value) {
+    Vertex vertex = new Vertex(value);
+    vertexByValue.put(value, vertex);
+    return vertex;
+  }
+
+  /**
+   * Returns true if the graph contains the vertex with the given value.
+   * @param vertexValue value of the vertex
+   */
+  public boolean containsVertex(T vertexValue) {
+    return vertexByValue.containsKey(vertexValue);
+  }
+
+  /**
+   * Represents a vertex in a graph.
+   */
+  private class Vertex {
+    private T value;
+    // Adjacent vertices
+    private Set<Vertex> neighbours;
+    // The state of the vertex during depth first search in a graph.
+    private DFSState DFSState;
+
+    public Vertex(T value) {
+      this.value = value;
+      this.neighbours = new HashSet<>();
+      this.DFSState = DFSState.UNVISITED;
     }
 
-    /**
-     * This method adds a new vertex in a directed graph.
-     *
-     * Graph vertices are unique - only one vertex can be created for each T value
-     * @param value is a value of a new vertex
-     */
-    public Vertex addVertex(T value) {
-        Vertex vertex = new Vertex(value);
-        vertexByValue.put(value, vertex);
-        return vertex;
+    public boolean addAdjacentVertex(Vertex vertex) {
+      return neighbours.add(vertex);
     }
 
-
-    public boolean containsVertex(T vertexValue)
-    {
-        return vertexByValue.containsKey(vertexValue);
+    public void setDFSState(DFSState DFSState) {
+      this.DFSState = DFSState;
     }
 
-
-    /**
-     * This class represents a vertex of a graph.
-     * Each vertex can be described by its character-value,
-     * indegree vertices (set of vertices that can direct you to the current vertex)
-     * and outdegree vertices (set of vertices that can be achieved from the current one).
-     * DFSState tracks the DFS state of vertex during depth first search
-     * in a graph.
-     */
-    private class Vertex {
-        private T value;
-        private Set<Vertex> degrees;
-        private VertexDFSState DFSState;
-
-        public Vertex(T value) {
-            this.value = value;
-            this.degrees = new HashSet<>();
-            this.DFSState = VertexDFSState.UNVISITED;
-        }
-
-        public boolean addDegreeVertex(Vertex vertex) {
-            return degrees.add(vertex);
-        }
-
-        public void setDFSState(VertexDFSState DFSState) {
-            this.DFSState = DFSState;
-        }
-
-        public T getValue() {
-            return value;
-        }
-
-        public Set<Vertex> geDegrees() {
-            return degrees;
-        }
-
-
-        public VertexDFSState getDFSState() {
-            return DFSState;
-        }
-
-
-    }
-    /**
-     * This is an enum of variety of labels that
-     * graph vertices may have. It can save time and memory during
-     * depth first search on the graph.
-     * Unvisited state means that the vertex hasn't been explored yet.
-     * Visiting state means that the search from this vertex has already been started
-     * but hasn't been finished yet. This means that we have already visited this vertex
-     * but we are to backtrack to it.
-     * Visited state means that the search started in this vertex has already been finished.
-     *
-     * This enum can also be used to mark vertices simply as non-visited or
-     * visited if there is no need to track the time when the search from this
-     * vertex has been started and finished which can be done using Visiting state
-     */
-    private enum VertexDFSState {
-        UNVISITED, VISITING, VISITED
+    public T getValue() {
+      return value;
     }
 
+    public Set<Vertex> getNeighbours() {
+      return neighbours;
+    }
+
+    public DFSState getDFSState() {
+      return DFSState;
+    }
+  }
+  
+  /**
+   * Represents whether a vertex is unvisited, being visited or has been visited
+   * during depth first search.
+   * Unvisited means the vertex hasn't been explored yet.
+   * Visiting means search from this vertex has started but hasn't finished yet,
+   * so the search will backtrack to it.
+   * Visited means the search that started from this vertex has finished.
+   */
+  private enum DFSState {
+    UNVISITED, VISITING, VISITED
+  }
 }
