@@ -11,6 +11,10 @@ public class ParkingLot {
 
   private BiMap<Space,Car> carSpaceBiMap;
 
+  /**
+   *
+   * @param spaceToCar - space to car map, full only with unique cars and spaces.
+   */
   public ParkingLot(HashMap<Space,Car> spaceToCar) {
     carSpaceBiMap = new BiMap<Space,Car>(spaceToCar);
   }
@@ -62,7 +66,7 @@ public class ParkingLot {
   /**
    * Finds a list of moves to rearrange cars from an initial state to a goal state.
    * This method assumes there is exactly one empty space.
-   * @param initialState a ParkingLot with exactly one empty space
+   * @param initialState a ParkingLot with exactly one empty space                    // TODO: NO "initialState"
    * @param goalState    a rearrangement of the initial ParkingLot
    * @return a list of moves
    */

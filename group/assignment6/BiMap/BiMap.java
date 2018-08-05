@@ -12,12 +12,20 @@ public class BiMap<K, V> {
   private HashMap<K, V> keyToValue;
   private HashMap<V, K> valueToKey;
 
-  public BiMap(HashMap<K, V> keyToValue) {
+  /**
+   *
+   * @param keyToValue - all keys and values should be unique
+   */
+  public BiMap(HashMap<K, V> keyToValue)  {
     this.keyToValue = new HashMap<>(keyToValue);
     valueToKey = new HashMap<>();
 
     for (K key : keyToValue.keySet()) {
       valueToKey.put(keyToValue.get(key), key);
+    }
+
+    if(getValueSet().size() != getKeySet().size()) {
+      throw new IllegalArgumentException("Values are not unique");
     }
   }
 

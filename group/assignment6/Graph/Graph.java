@@ -32,18 +32,20 @@ public class Graph<T> {
     Vertex childVertex;
     if (vertexByValue.containsKey(parent)) {
       parentVertex = vertexByValue.get(parent);
-    } else {
+    }
+    else {
       parentVertex = addVertex(parent);
     }
     if (vertexByValue.containsKey(child)) {
       childVertex = vertexByValue.get(child);
-    } else {
+    }
+    else {
       childVertex = addVertex(child);
     }
 
     boolean isNewEdgeForChild = childVertex.addAdjacentVertex(parentVertex);
     boolean isNewEdgeForParent = parentVertex.addAdjacentVertex(childVertex);
-    return  isNewEdgeForChild && isNewEdgeForParent;
+    return  isNewEdgeForChild || isNewEdgeForParent;
   }
 
   /**
@@ -72,45 +74,14 @@ public class Graph<T> {
     private T value;
     // Adjacent vertices
     private Set<Vertex> neighbours;
-    // The state of the vertex during depth first search in a graph.
-    private DFSState DFSState;
 
     public Vertex(T value) {
       this.value = value;
       this.neighbours = new HashSet<>();
-      this.DFSState = DFSState.UNVISITED;
     }
 
     public boolean addAdjacentVertex(Vertex vertex) {
       return neighbours.add(vertex);
     }
-
-    public void setDFSState(DFSState DFSState) {
-      this.DFSState = DFSState;
-    }
-
-    public T getValue() {
-      return value;
-    }
-
-    public Set<Vertex> getNeighbours() {
-      return neighbours;
-    }
-
-    public DFSState getDFSState() {
-      return DFSState;
-    }
-  }
-  
-  /**
-   * Represents whether a vertex is unvisited, being visited or has been visited
-   * during depth first search.
-   * Unvisited means the vertex hasn't been explored yet.
-   * Visiting means search from this vertex has started but hasn't finished yet,
-   * so the search will backtrack to it.
-   * Visited means the search that started from this vertex has finished.
-   */
-  private enum DFSState {
-    UNVISITED, VISITING, VISITED
   }
 }

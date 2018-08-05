@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class ParkingLotTest {
-  
+
   private Space space1;
   private Space space2;
   private Space space3;
@@ -27,8 +27,8 @@ public class ParkingLotTest {
   private Car car2;
   private Car car3;
   private Car car4;
-  HashMap<Space, Car> initialMap;
-  HashMap<Space, Car> goalMap;
+  private HashMap<Space, Car> initialMap;
+  private HashMap<Space, Car> goalMap;
 
   @Before
   public void setUp() {
@@ -44,7 +44,7 @@ public class ParkingLotTest {
     initialMap = new HashMap<>();
     goalMap = new HashMap<>();
   }
-  
+
   @Test
   public void testGetCarMovesWithExample() {
     initialMap.put(space1, car1);
@@ -64,7 +64,7 @@ public class ParkingLotTest {
     expectedMoves.add(new Move(car2));
     expectedMoves.add(new Move(car1));
     expectedMoves.add(new Move(car3));
-    
+
     assertTrue(expectedMoves.equals(moves));
   }
 
@@ -87,10 +87,10 @@ public class ParkingLotTest {
     expectedMoves.add(new Move(car3));
     expectedMoves.add(new Move(car1));
     expectedMoves.add(new Move(car2));
-    
+
     assertTrue(expectedMoves.equals(moves));
   }
-  
+
   @Test
   public void testCanHandleCircularDependency() {
     initialMap.put(space1, car1);
@@ -104,119 +104,107 @@ public class ParkingLotTest {
     goalMap.put(space1, car3);
     goalMap.put(space4, Car.noCar);
     ParkingLot goalState = new ParkingLot(goalMap);
-    
+
     List<Move> moves = initialState.getCarMoves(goalState);
-    List<List<Move>> validMoveSequences = new ArrayList<List<Move>>();
-    
-    addValidMoveSequences(validMoveSequences);
+    /* Need to check moves against all valid move sequences
+     * because getKeySet() of HashMaps may not always be the
+     * same order of keys when iterating over them.
+     */
+    List<List<Move>> validMoveSequences = getMoveLists(new Move[][]{
+            {new Move(car1), new Move(car3), new Move(car2), new Move(car1)},
+            {new Move(car2), new Move(car1), new Move(car3), new Move(car2)},
+            {new Move(car3), new Move(car2), new Move(car1), new Move(car3)}
+    });
 
     assertTrue(validMoveSequences.contains(moves));
   }
-  
-//  @Test
-//  public void testCanHandleMultipleCircularDependencies() {
-//    initialMap.put(space1, car1);
-//    initialMap.put(space2, car2);
-//    initialMap.put(space3, car3);
-//    initialMap.put(space4, car4);
-//    initialMap.put(space5, Car.noCar);
-//    ParkingLot initialState = new ParkingLot(initialMap);
-//
-//    goalMap.put(space2, car1);
-//    goalMap.put(space1, car2);
-//    goalMap.put(space4, car3);
-//    goalMap.put(space3, car4);
-//    goalMap.put(space5, Car.noCar);
-//    ParkingLot goalState = new ParkingLot(goalMap);
-//    
-//    List<Move> moves = initialState.getCarMoves(goalState);
-//    List<List<Move>> validMoveSequences = new ArrayList<List<Move>>();
-//    
-//    List<Move> validMove1 = new ArrayList<Move>();
-//    validMove1.add(new Move(car1));
-//    validMove1.add(new Move(car3));
-//    validMove1.add(new Move(car2));
-//    validMove1.add(new Move(car1));
-//    validMoveSequences.add(validMove1);
-//    
-//    List<Move> validMove2 = new ArrayList<Move>();
-//    validMove2.add(new Move(car2));
-//    validMove2.add(new Move(car1));
-//    validMove2.add(new Move(car3));
-//    validMove2.add(new Move(car2));
-//    validMoveSequences.add(validMove2);
-//    
-//    List<Move> validMove3 = new ArrayList<Move>();
-//    validMove3.add(new Move(car3));
-//    validMove3.add(new Move(car2));
-//    validMove3.add(new Move(car1));
-//    validMove3.add(new Move(car3));
-//    validMoveSequences.add(validMove3);
-//
-//    assertTrue(validMoveSequences.contains(moves));
-//  }
 
-  private void addValidMoveSequences(List<List<Move>> validMoveSequences) {
-    List<Move> validMove1 = new ArrayList<Move>();
-    validMove1.add(new Move(car1));
-    validMove1.add(new Move(car3));
-    validMove1.add(new Move(car2));
-    validMove1.add(new Move(car1));
-    validMoveSequences.add(validMove1);
-    
-    List<Move> validMove2 = new ArrayList<Move>();
-    validMove2.add(new Move(car2));
-    validMove2.add(new Move(car1));
-    validMove2.add(new Move(car3));
-    validMove2.add(new Move(car2));
-    validMoveSequences.add(validMove2);
-    
-    List<Move> validMove3 = new ArrayList<Move>();
-    validMove3.add(new Move(car3));
-    validMove3.add(new Move(car2));
-    validMove3.add(new Move(car1));
-    validMove3.add(new Move(car3));
-    validMoveSequences.add(validMove3);
+  @Test
+  public void testCanHandleMultipleCircularDependencies() {
+    initialMap.put(space1, car1);
+    initialMap.put(space2, car2);
+    initialMap.put(space3, car3);
+    initialMap.put(space4, car4);
+    initialMap.put(space5, Car.noCar);
+    ParkingLot initialState = new ParkingLot(initialMap);
+
+    goalMap.put(space2, car1);
+    goalMap.put(space1, car2);
+    goalMap.put(space4, car3);
+    goalMap.put(space3, car4);
+    goalMap.put(space5, Car.noCar);
+    ParkingLot goalState = new ParkingLot(goalMap);
+
+    List<Move> moves = initialState.getCarMoves(goalState);
+    List<List<Move>> validMoveSequences = getMoveLists(new Move[][]{
+            {new Move(car1), new Move(car2), new Move(car1), new Move(car3), new Move(car4), new Move(car3)},
+            {new Move(car1), new Move(car2), new Move(car1), new Move(car4), new Move(car3), new Move(car4)},
+            {new Move(car2), new Move(car1), new Move(car2), new Move(car3), new Move(car4), new Move(car3)},
+            {new Move(car2), new Move(car1), new Move(car2), new Move(car4), new Move(car3), new Move(car4)},
+            {new Move(car3), new Move(car4), new Move(car3), new Move(car1), new Move(car2), new Move(car1)},
+            {new Move(car3), new Move(car4), new Move(car3), new Move(car2), new Move(car1), new Move(car2)},
+            {new Move(car4), new Move(car3), new Move(car4), new Move(car1), new Move(car2), new Move(car1)},
+            {new Move(car4), new Move(car3), new Move(car4), new Move(car2), new Move(car1), new Move(car2)}
+    });
+
+    assertTrue(validMoveSequences.contains(moves));
   }
-  
+
   @Test
   public void testEmptyParkingLot() {
     ParkingLot initialState = new ParkingLot(initialMap);
     ParkingLot goalState = new ParkingLot(goalMap);
-    
+
     List<Move> moves = initialState.getCarMoves(goalState);
     List<Move> expectedMoves = new ArrayList<Move>();
-    
+
     assertTrue(expectedMoves.equals(moves));
   }
-  
+
   @Test
-    public void allRearrangementsTest() {
-        initialMap.put(space1, car1);
-        initialMap.put(space2, car2);
-        initialMap.put(space4, car3);
-        initialMap.put(space3, Car.noCar);
-        ParkingLot initialState = new ParkingLot(initialMap);
+  public void allRearrangementsTest() {
+    initialMap.put(space1, car1);
+    initialMap.put(space2, car2);
+    initialMap.put(space4, car3);
+    initialMap.put(space3, Car.noCar);
+    ParkingLot initialState = new ParkingLot(initialMap);
 
-        goalMap.put(space2, car1);
-        goalMap.put(space3, car2);
-        goalMap.put(space1, car3);
-        goalMap.put(space4, Car.noCar);
-        ParkingLot goalState = new ParkingLot(goalMap);
+    goalMap.put(space2, car1);
+    goalMap.put(space3, car2);
+    goalMap.put(space1, car3);
+    goalMap.put(space4, Car.noCar);
+    ParkingLot goalState = new ParkingLot(goalMap);
 
-        List<List<CarMove>> allMoves = initialState.getAllPossibleRearrangements(goalState);
+    List<List<CarMove>> allMoves = initialState.getAllPossibleRearrangements(goalState);
 
-        System.out.println(allMoves.size());
-        for (List<CarMove> carMoves : allMoves) {
-            if(carMoves.size() == 3) {
-                System.out.println("YEEEAH, sequence of moves with the least amount if moves is also here !");
-            }
-        }
-        //GIRLS, IT WOOOOOOOOOOOOOOOOOOOOOOOOORKS !!
-        for (List<CarMove> carMoves : allMoves) {
-            initialState = new ParkingLot(initialMap);
-            initialState.makeMoves(carMoves);
-            assertEquals(goalState, initialState);
-        }
+    System.out.println(allMoves.size());
+    for (List<CarMove> carMoves : allMoves) {
+      if(carMoves.size() == 3) {
+        System.out.println("YEEEAH, sequence of moves with the least amount if moves is also here !");
+      }
     }
+    //GIRLS, IT WOOOOOOOOOOOOOOOOOOOOOOOOORKS !!
+    for (List<CarMove> carMoves : allMoves) {
+      initialState = new ParkingLot(initialMap);
+      initialState.makeMoves(carMoves);
+      assertEquals(goalState, initialState);
+    }
+  }
+
+  /**
+   * Transforms an array of Move arrays into a list of Move lists.
+   * @param moveArrays
+   * @return list of Move lists
+   */
+  private List<List<Move>> getMoveLists(Move[][] moveArrays) {
+    List<List<Move>> moveLists = new ArrayList<List<Move>>();
+    for (Move[] moveArray : moveArrays) {
+      List<Move> moveList = new ArrayList<Move>();
+      for (Move move : moveArray) {
+        moveList.add(move);
+      }
+      moveLists.add(moveList);
+    }
+    return moveLists;
+  }
 }
