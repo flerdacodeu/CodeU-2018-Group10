@@ -1,15 +1,11 @@
 package assignment6.test;
 
-import assignment6.ParkingLot.Car;
-import assignment6.ParkingLot.Move;
-import assignment6.ParkingLot.CarMove;
-import assignment6.ParkingLot.ParkingLot;
-import assignment6.ParkingLot.Space;
-
+import assignment6.ParkingLot.*;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -60,7 +56,7 @@ public class ParkingLotTest {
     ParkingLot goalState = new ParkingLot(goalMap);
 
     List<Move> moves = initialState.getCarMoves(goalState);
-    List<Move> expectedMoves = new ArrayList<Move>();
+    List<Move> expectedMoves = new ArrayList<>();
     expectedMoves.add(new Move(car2));
     expectedMoves.add(new Move(car1));
     expectedMoves.add(new Move(car3));
@@ -83,7 +79,7 @@ public class ParkingLotTest {
     ParkingLot goalState = new ParkingLot(goalMap);
 
     List<Move> moves = initialState.getCarMoves(goalState);
-    List<Move> expectedMoves = new ArrayList<Move>();
+    List<Move> expectedMoves = new ArrayList<>();
     expectedMoves.add(new Move(car3));
     expectedMoves.add(new Move(car1));
     expectedMoves.add(new Move(car2));
@@ -156,12 +152,10 @@ public class ParkingLotTest {
    * @return list of Move lists
    */
   private List<List<Move>> getMoveLists(Move[][] moveArrays) {
-    List<List<Move>> moveLists = new ArrayList<List<Move>>();
+    List<List<Move>> moveLists = new ArrayList<>();
     for (Move[] moveArray : moveArrays) {
-      List<Move> moveList = new ArrayList<Move>();
-      for (Move move : moveArray) {
-        moveList.add(move);
-      }
+      List<Move> moveList = new ArrayList<>();
+      Collections.addAll(moveList, moveArray);
       moveLists.add(moveList);
     }
     return moveLists;
@@ -173,9 +167,9 @@ public class ParkingLotTest {
     ParkingLot goalState = new ParkingLot(goalMap);
 
     List<Move> moves = initialState.getCarMoves(goalState);
-    List<Move> expectedMoves = new ArrayList<Move>();
+    List<Move> expectedMoves = new ArrayList<>();
 
-    assertTrue(expectedMoves.equals(moves));
+    assertEquals(expectedMoves, moves);
   }
 
   @Test
@@ -194,13 +188,6 @@ public class ParkingLotTest {
 
     List<List<CarMove>> allMoves = initialState.getAllPossibleRearrangements(goalState);
 
-    System.out.println(allMoves.size());
-    for (List<CarMove> carMoves : allMoves) {
-      if(carMoves.size() == 3) {
-        System.out.println("YEEEAH, sequence of moves with the least amount if moves is also here !");
-      }
-    }
-    //GIRLS, IT WOOOOOOOOOOOOOOOOOOOOOOOOORKS !!
     for (List<CarMove> carMoves : allMoves) {
       initialState = new ParkingLot(initialMap);
       initialState.makeMoves(carMoves);

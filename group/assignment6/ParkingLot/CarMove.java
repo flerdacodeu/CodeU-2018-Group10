@@ -2,6 +2,12 @@ package assignment6.ParkingLot;
 
 import java.util.Objects;
 
+/**
+ * This class represents a move of a car
+ * in a Parking Lot. Move is represented by
+ * a car itself, a space on which car is situated
+ * and a space to which a car will be moved.
+ */
 public class CarMove {
     private final Car car;
     private final Space from;
