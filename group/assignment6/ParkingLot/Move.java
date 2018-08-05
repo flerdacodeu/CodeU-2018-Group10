@@ -17,7 +17,7 @@ public class Move {
     if (o == this) {
       return true;
     }
-    if (o == null || !(o instanceof Move)) {
+    if (o == null || getClass() != o.getClass()) {
       return false;
     }
     Move move = (Move) o;
