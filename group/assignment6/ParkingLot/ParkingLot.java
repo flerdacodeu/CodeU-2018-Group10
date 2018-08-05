@@ -8,13 +8,15 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * This class represents a Parking Lot. Provides
- * efficient car rearrangement.
+ * Represents a parking lot that can have spaces in which cars can be parked.
  */
 public class ParkingLot {
 
   private BiMap<Space,Car> carSpaceBiMap;
-
+  
+  /**
+   * @param spaceToCar space to car map, full only with unique cars and spaces.
+   */
   public ParkingLot(HashMap<Space,Car> spaceToCar) {
     carSpaceBiMap = new BiMap<>(spaceToCar);
   }
@@ -66,7 +68,7 @@ public class ParkingLot {
   /**
    * Finds a list of moves to rearrange cars from an initial state to a goal state.
    * This method assumes there is exactly one empty space.
-   * @param goalState    a rearrangement of the initial ParkingLot
+   * @param goalState a rearrangement of the initial ParkingLot
    * @return a list of moves
    */
   public List<Move> getCarMoves(ParkingLot goalState) {
@@ -123,11 +125,9 @@ public class ParkingLot {
   // ================================== Solution to challenge 4 ==================================
 
   /**
-   * Method for getting all possible unique sequences of moves of cars in
-   * a Parking Lot. Each sequence will not contain same Parking Lot configuration
-   * during rearrangement.
-   * @param goalState is a ParkingLot end configuration.
-   * @return
+   * Gets all possible unique sequences of moves of cars in a parking lot.
+   * Each sequence will not contain the same parking lot configuration more than once.
+   * @param goalState a rearrangement of the initial ParkingLot
    */
   public List<List<DetailedMove>> getAllPossibleRearrangements(ParkingLot goalState) {
     List<List<DetailedMove>> allMoves = new ArrayList<>();
@@ -140,9 +140,9 @@ public class ParkingLot {
   }
 
   private void allRearrangementsRecursive(List<List<DetailedMove>> allMoves,
-                                              List<DetailedMove> currentMoves,
-                                                  List<ParkingLot> previousConfigurations,
-                                                      ParkingLot goalState) {
+      List<DetailedMove> currentMoves,
+      List<ParkingLot> previousConfigurations,
+      ParkingLot goalState) {
     if (this.equals(goalState)) {
       allMoves.add(new ArrayList<>(currentMoves));
       return;
@@ -187,8 +187,8 @@ public class ParkingLot {
   }
   // move without updating a List<CarMove> with the new car move
   private boolean isRearrangementOfParkingLot(ParkingLot another) {
-    return   another.carSpaceBiMap.getKeySet().equals(carSpaceBiMap.getKeySet()) &&
-        another.carSpaceBiMap.getValueSet().equals(carSpaceBiMap.getValueSet()) ;
+    return another.carSpaceBiMap.getKeySet().equals(carSpaceBiMap.getKeySet())
+        && another.carSpaceBiMap.getValueSet().equals(carSpaceBiMap.getValueSet()) ;
   }
 
   private DetailedMove makeMove(Car car, Space from, Space to) {

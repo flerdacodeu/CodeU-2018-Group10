@@ -27,8 +27,8 @@ public class ParkingLotTest {
   private Car car2;
   private Car car3;
   private Car car4;
-  HashMap<Space, Car> initialMap;
-  HashMap<Space, Car> goalMap;
+  private HashMap<Space, Car> initialMap;
+  private HashMap<Space, Car> goalMap;
 
   @Before
   public void setUp() {
@@ -111,9 +111,9 @@ public class ParkingLotTest {
      * same order of keys when iterating over them.
      */
     List<List<Move>> validMoveSequences = getMoveLists(new Move[][]{
-      {new Move(car1), new Move(car3), new Move(car2), new Move(car1)},
-      {new Move(car2), new Move(car1), new Move(car3), new Move(car2)},
-      {new Move(car3), new Move(car2), new Move(car1), new Move(car3)}
+        {new Move(car1), new Move(car3), new Move(car2), new Move(car1)},
+        {new Move(car2), new Move(car1), new Move(car3), new Move(car2)},
+        {new Move(car3), new Move(car2), new Move(car1), new Move(car3)}
     });
 
     assertTrue(validMoveSequences.contains(moves));
@@ -149,21 +149,6 @@ public class ParkingLotTest {
 
     assertTrue(validMoveSequences.contains(moves));
   }
-  
-  /**
-   * Transforms an array of Move arrays into a list of Move lists.
-   * @param moveArrays
-   * @return list of Move lists
-   */
-  private List<List<Move>> getMoveLists(Move[][] moveArrays) {
-    List<List<Move>> moveLists = new ArrayList<>();
-    for (Move[] moveArray : moveArrays) {
-      List<Move> moveList = new ArrayList<>();
-      Collections.addAll(moveList, moveArray);
-      moveLists.add(moveList);
-    }
-    return moveLists;
-  }
 
   @Test
   public void testEmptyParkingLot() {
@@ -197,5 +182,20 @@ public class ParkingLotTest {
       initialState.makeMoves(carMoves);
       assertEquals(goalState, initialState);
     }
+  }
+  
+  /**
+   * Transforms an array of Move arrays into a list of Move lists.
+   * @param moveArrays
+   * @return list of Move lists
+   */
+  private List<List<Move>> getMoveLists(Move[][] moveArrays) {
+    List<List<Move>> moveLists = new ArrayList<>();
+    for (Move[] moveArray : moveArrays) {
+      List<Move> moveList = new ArrayList<>();
+      Collections.addAll(moveList, moveArray);
+      moveLists.add(moveList);
+    }
+    return moveLists;
   }
 }
