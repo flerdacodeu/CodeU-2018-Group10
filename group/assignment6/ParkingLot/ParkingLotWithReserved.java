@@ -7,6 +7,7 @@ import java.util.*;
 // ============================== Solution to challenge 3 ==============================
 /**
 *  This class represent a parking lot with n>1 unique spaces, and n-1 unique cars.
+*  Spaces are reserved only for specified cars. 
 */
 public class ParkingLotWithReserved {
 
