@@ -1,6 +1,9 @@
 package assignment6.test;
 
-import assignment6.ParkingLot.*;
+import assignment6.ParkingLot.Car;
+import assignment6.ParkingLot.CarMove;
+import assignment6.ParkingLot.ParkingLotWithReserved;
+import assignment6.ParkingLot.ReservedSpace;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
