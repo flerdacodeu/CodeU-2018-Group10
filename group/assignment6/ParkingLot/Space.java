@@ -1,7 +1,6 @@
 package assignment6.ParkingLot;
 
 import java.util.Objects;
-import java.util.Set;
 
 public class Space {
     private final int id;

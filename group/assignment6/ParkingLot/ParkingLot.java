@@ -15,6 +15,50 @@ public class ParkingLot {
         carSpaceBiMap = new BiMap<>(spaceToCar);
     }
 
+    public List<List<CarMove>> getAllPossibleRearrangements(ParkingLot another) {
+        List<List<CarMove>> allMoves = new ArrayList<>();
+        List<CarMove> currentMoves = new ArrayList<>();
+        List<ParkingLot> previousConfigurations = new ArrayList<>();
+        HashMap<Space,Car> currentParkingLot = new HashMap<>(carSpaceBiMap.getKeyToValueMap());
+        allRearrangementsRecursive(allMoves, currentMoves, previousConfigurations, another, null);
+        carSpaceBiMap = new BiMap<>(currentParkingLot);
+        return allMoves;
+    }
+
+    private void allRearrangementsRecursive(List<List<CarMove>> allMoves, List<CarMove> currentMoves,
+                                            List<ParkingLot> previousConfigurations, ParkingLot desired,
+                                            Car previous) {
+     if (this.equals(desired)) {
+         allMoves.add(new ArrayList<>(currentMoves));
+         return;
+     }
+
+     if (previousConfigurations.contains(this)) {
+         return;
+     }
+
+     for (Car car : carSpaceBiMap.getValuesSet()) {
+         if (car.equals(Car.noCar) || car.equals(previous)) {
+             continue;
+         }
+         ParkingLot currentConfiguration = new ParkingLot(carSpaceBiMap.getKeyToValueMap());
+
+         previousConfigurations.add(currentConfiguration);
+         moveCarToEmptySpace(car, currentMoves);
+         allRearrangementsRecursive(allMoves, currentMoves, previousConfigurations, desired, car);
+         moveCarToEmptySpace(car);
+         currentMoves.remove(currentMoves.size() - 1);
+         previousConfigurations.remove(currentConfiguration);
+     }
+    }
+
+    public void makeMoves(List<CarMove> carMoves) {
+        for (CarMove carMove : carMoves) {
+            makeMove(carMove.getCar(), carMove.getFrom(), carMove.getTo());
+            makeMove(Car.noCar, null, carMove.getFrom());
+        }
+    }
+
     //* Solution 1 */////////////////////////////////////////////////////////
     // Simple to understand, brute-force solution using swaps.  in O(n)
     // Time efficiency is O(n),  Number of car swaps is O(n)
@@ -29,7 +73,7 @@ public class ParkingLot {
         // In iteration i - there are i parking spaces that are in order according to "another" parking lot
         // ,so in iteration n we know for sure that all spaces are in order according to "another" parking lot
         // Because each iteration time efficiency is O(1), than n iterations are O(n)
-        for (Space space : carSpaceBiMap.getKeySet()) {
+        for (Space space : carSpaceBiMap.getKeysSet()) {
             Car carToMove = another.getCarBySpace(space);
             Car carToRemove = this.getCarBySpace(space);
 
@@ -61,17 +105,17 @@ public class ParkingLot {
         Space toBeEmptyFilledSpace = getSpaceByCar(car);
 
         CarMove carMove = makeMove(car,toBeEmptyFilledSpace,toBeFilledEmptySpace);
-        if(carMoveList != null)
-        {
+        if(carMoveList != null) {
             carMoveList.add(carMove);
         }
         makeMove(Car.noCar,null, toBeEmptyFilledSpace);
     }
     // move without updating a List<CarMove> with the new car move
     private boolean isSameParkingLotDiffOrder(ParkingLot another) {
-        return   another.carSpaceBiMap.getKeySet().equals(carSpaceBiMap.getKeySet()) &&
-                another.carSpaceBiMap.getValueSet().equals(carSpaceBiMap.getValueSet()) ;                                                                          //TODO: need to check equality also in cars
+        return   another.carSpaceBiMap.getKeysSet().equals(carSpaceBiMap.getKeysSet()) &&
+                another.carSpaceBiMap.getValuesSet().equals(carSpaceBiMap.getValuesSet()) ;                                                                          //TODO: need to check equality also in cars
     }
+
     private CarMove makeMove(Car car, Space from, Space to) {
         carSpaceBiMap.put(to, car);
         if (!car.equals(Car.noCar)) {
@@ -95,7 +139,7 @@ public class ParkingLot {
     private void rearrangeInFewerStepsUtil(List<CarMove> carMoves, ParkingLot another,
                                            Map<Car, RearrangeState> carStateMap,
                                            Map<Space, SpaceState> spaceStateMap) {
-        for (Car car : carSpaceBiMap.getValueSet()) {
+        for (Car car : carSpaceBiMap.getValuesSet()) {
             if (!car.equals(Car.noCar) && carStateMap.get(car).equals(RearrangeState.NOT_REARRANGED)) {
                 rearrangeInFewerStepsUtilRecursive(carMoves, car, another, carStateMap, spaceStateMap);
             }
@@ -138,7 +182,7 @@ public class ParkingLot {
         }
     }
     private void initStateMaps(Map<Car, RearrangeState> carStateMap, Map<Space, SpaceState> spaceStateMap, ParkingLot another) {
-        carSpaceBiMap.getKeySet()
+        carSpaceBiMap.getKeysSet()
                 .forEach(e -> {
                     Car before = carSpaceBiMap.getValue(e);
                     Car after = another.getCarSpaceBiMap().getValue(e);
@@ -156,9 +200,6 @@ public class ParkingLot {
         moveCarToEmptySpace(car,null);
     }
 
-
-
-
     // getters and setters
     public Space getEmptySpace() {
         return getSpaceByCar(Car.noCar);
@@ -175,9 +216,6 @@ public class ParkingLot {
     public BiMap<Space, Car> getCarSpaceBiMap() {
         return carSpaceBiMap;
     }
-
-
-
 
     // override methods
     @Override
