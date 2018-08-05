@@ -3,7 +3,7 @@ package assignment6.test;
 import assignment6.ParkingLot.Space;
 import assignment6.ParkingLot.Move;
 import assignment6.ParkingLot.Car;
-import assignment6.ParkingLot.CarMove;
+import assignment6.ParkingLot.DetailedMove;
 import assignment6.ParkingLot.ParkingLot;
 import org.junit.Before;
 import org.junit.Test;
@@ -190,9 +190,9 @@ public class ParkingLotTest {
     goalMap.put(space4, Car.noCar);
     ParkingLot goalState = new ParkingLot(goalMap);
 
-    List<List<CarMove>> allMoves = initialState.getAllPossibleRearrangements(goalState);
+    List<List<DetailedMove>> allMoves = initialState.getAllPossibleRearrangements(goalState);
 
-    for (List<CarMove> carMoves : allMoves) {
+    for (List<DetailedMove> carMoves : allMoves) {
       initialState = new ParkingLot(initialMap);
       initialState.makeMoves(carMoves);
       assertEquals(goalState, initialState);
