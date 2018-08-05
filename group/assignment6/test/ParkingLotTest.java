@@ -1,6 +1,10 @@
 package assignment6.test;
 
-import assignment6.ParkingLot.*;
+import assignment6.ParkingLot.Space;
+import assignment6.ParkingLot.Move;
+import assignment6.ParkingLot.Car;
+import assignment6.ParkingLot.CarMove;
+import assignment6.ParkingLot.ParkingLot;
 import org.junit.Before;
 import org.junit.Test;
 

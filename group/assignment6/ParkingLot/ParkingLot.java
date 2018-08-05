@@ -126,15 +126,15 @@ public class ParkingLot {
    * Method for getting all possible unique sequences of moves of cars in
    * a Parking Lot. Each sequence will not contain same Parking Lot configuration
    * during rearrangement.
-   * @param another is a ParkingLot end configuration.
+   * @param goalState is a ParkingLot end configuration.
    * @return
    */
-  public List<List<CarMove>> getAllPossibleRearrangements(ParkingLot another) {
+  public List<List<CarMove>> getAllPossibleRearrangements(ParkingLot goalState) {
     List<List<CarMove>> allMoves = new ArrayList<>();
     List<CarMove> currentMoves = new ArrayList<>();
     List<ParkingLot> previousConfigurations = new ArrayList<>();
     HashMap<Space,Car> currentParkingLot = new HashMap<>(carSpaceBiMap.getKeyToValueMap());
-    allRearrangementsRecursive(allMoves, currentMoves, previousConfigurations, another);
+    allRearrangementsRecursive(allMoves, currentMoves, previousConfigurations, goalState);
     carSpaceBiMap = new BiMap<>(currentParkingLot);
     return allMoves;
   }
