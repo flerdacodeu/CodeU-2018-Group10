@@ -84,22 +84,6 @@ public class Graph<T> {
     public boolean addAdjacentVertex(Vertex vertex) {
       return neighbours.add(vertex);
     }
-
-    public void setDFSState(DFSState DFSState) {
-      this.DFSState = DFSState;
-    }
-
-    public T getValue() {
-      return value;
-    }
-
-    public Set<Vertex> getNeighbours() {
-      return neighbours;
-    }
-
-    public DFSState getDFSState() {
-      return DFSState;
-    }
   }
   
   /**
