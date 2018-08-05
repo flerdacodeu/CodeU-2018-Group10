@@ -22,7 +22,7 @@ public class ParkingLotWithReservedSpaces {
     public ParkingLotWithReservedSpaces(ParkingLotWithReservedSpaces other) {
         carSpaceBiMap = new BiMap<>(other.getSpaceByCarMap());
     }
-    public List<CarMove> rearrange(ParkingLotWithReservedSpaces end)
+    public List<DetailedMove> rearrange(ParkingLotWithReservedSpaces end)
     {
         if (this.equals(end)){
             return new ArrayList<>();
@@ -34,26 +34,26 @@ public class ParkingLotWithReservedSpaces {
 
         for(Car car : firstMoveOptions)
         {
-            ArrayList<CarMove> carMoves = new ArrayList<>();
+            ArrayList<DetailedMove> carMoves = new ArrayList<>();
             ParkingLotWithReservedSpaces afterMovePL = new ParkingLotWithReservedSpaces(this.getSpaceByCarMap());
             afterMovePL.moveCarToEmptySpace(car, null);
 
-            carMoves.add(new CarMove(car, getSpaceByCar(car),this.getEmptySpace()));
+            carMoves.add(new DetailedMove(car, getSpaceByCar(car),this.getEmptySpace()));
 
             if(afterMovePL.equals(end)) {
                 return carMoves;
             }
 
-            List<CarMove> moves = rearrangeUtil(afterMovePL, end, carMoves, beenThereParkingLots);
+            List<DetailedMove> moves = rearrangeUtil(afterMovePL, end, carMoves, beenThereParkingLots);
             if(moves != null) {
                 return moves;
             }
         }
         return null;
     }
-    private List<CarMove> rearrangeUtil(ParkingLotWithReservedSpaces current,
+    private List<DetailedMove> rearrangeUtil(ParkingLotWithReservedSpaces current,
                                             ParkingLotWithReservedSpaces end,
-                                                List<CarMove> previousMoves,
+                                                List<DetailedMove> previousMoves,
                                                     Set<ParkingLotWithReservedSpaces> previousPL) {
         Set<Car> moveOptions = current.getEmptySpace().getReservedFor();
         for(Car car : moveOptions)
@@ -61,12 +61,12 @@ public class ParkingLotWithReservedSpaces {
             ParkingLotWithReservedSpaces afterMovePL = new ParkingLotWithReservedSpaces(current.getSpaceByCarMap());
             afterMovePL.moveCarToEmptySpace(car, null);
 
-            ArrayList<CarMove> currentMoves = new ArrayList<>(previousMoves);
+            ArrayList<DetailedMove> currentMoves = new ArrayList<>(previousMoves);
             if( previousPL.contains(afterMovePL)) {     // so we wont get inside a circle
                 continue;
             }
             else {
-                currentMoves.add(new CarMove(car, current.getSpaceByCar(car),current.getEmptySpace()));
+                currentMoves.add(new DetailedMove(car, current.getSpaceByCar(car),current.getEmptySpace()));
             }
 
             if(afterMovePL.equals(end)) {
@@ -76,7 +76,7 @@ public class ParkingLotWithReservedSpaces {
             Set<ParkingLotWithReservedSpaces> currentPL = new HashSet<>(previousPL);
             currentPL.add(afterMovePL);
 
-            List<CarMove> moves = rearrangeUtil(afterMovePL, end, currentMoves, currentPL);
+            List<DetailedMove> moves = rearrangeUtil(afterMovePL, end, currentMoves, currentPL);
             if(moves != null) {
                 return moves;
             }
@@ -122,11 +122,11 @@ public class ParkingLotWithReservedSpaces {
     }
 
 
-    private void moveCarToEmptySpace(Car car, List<CarMove> carMoveList) {
+    private void moveCarToEmptySpace(Car car, List<DetailedMove> carMoveList) {
         ReservedSpace toBeFilledEmptySpace = getEmptySpace();
         ReservedSpace toBeEmptyFilledSpace = getSpaceByCar(car);
 
-        CarMove carMove = makeMove(car,toBeEmptyFilledSpace,toBeFilledEmptySpace);
+        DetailedMove carMove = makeMove(car,toBeEmptyFilledSpace,toBeFilledEmptySpace);
         if(carMoveList != null)
         {
             carMoveList.add(carMove);
@@ -134,10 +134,10 @@ public class ParkingLotWithReservedSpaces {
         makeMove(Car.noCar,null, toBeEmptyFilledSpace);
     }
 
-    private CarMove makeMove(Car car, ReservedSpace from, ReservedSpace to) {
+    private DetailedMove makeMove(Car car, ReservedSpace from, ReservedSpace to) {
         carSpaceBiMap.put(to, car);
         if (!car.equals(Car.noCar)) {
-            return new CarMove(car,from,to);
+            return new DetailedMove(car,from,to);
         }
         return null;
     }
@@ -145,10 +145,10 @@ public class ParkingLotWithReservedSpaces {
 
     public static boolean areMovesCreateEndResult(ParkingLotWithReservedSpaces start,
                                                   ParkingLotWithReservedSpaces end,
-                                                  List<CarMove> carMoves) {
+                                                  List<DetailedMove> carMoves) {
         ParkingLotWithReservedSpaces startCopy = new ParkingLotWithReservedSpaces(start);
         if (carMoves != null) {
-            for(CarMove carMove : carMoves) {
+            for(DetailedMove carMove : carMoves) {
                 Car car = carMove.getCar();
                 startCopy.moveCarToEmptySpace(car,null);
             }

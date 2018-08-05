@@ -12,6 +12,10 @@ public class Move {
     this.car = car;
   }
 
+  public Car getCar() {
+    return car;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (o == this) {

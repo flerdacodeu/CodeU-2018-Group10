@@ -1,7 +1,7 @@
 package assignment6.test;
 
 import assignment6.ParkingLot.Car;
-import assignment6.ParkingLot.CarMove;
+import assignment6.ParkingLot.DetailedMove;
 import assignment6.ParkingLot.ParkingLotWithReservedSpaces;
 import assignment6.ParkingLot.ReservedSpace;
 import org.junit.Assert;
@@ -44,7 +44,7 @@ public class ParkingLotWithReservedSpacesTest {
     ParkingLotWithReservedSpaces parkingLotStart = new ParkingLotWithReservedSpaces(startHashMap);
     ParkingLotWithReservedSpaces parkingLotEnd = new ParkingLotWithReservedSpaces(endHashMap);
 
-    List<CarMove> rearengementCarMoves = parkingLotStart.rearrange(parkingLotEnd);
+    List<DetailedMove> rearengementCarMoves = parkingLotStart.rearrange(parkingLotEnd);
     Assert.assertTrue(ParkingLotWithReservedSpaces.areMovesCreateEndResult(parkingLotStart, parkingLotEnd,
         rearengementCarMoves));
   }
@@ -90,7 +90,7 @@ public class ParkingLotWithReservedSpacesTest {
     ParkingLotWithReservedSpaces parkingLotStart = new ParkingLotWithReservedSpaces(startHashMap);
     ParkingLotWithReservedSpaces parkingLotEnd = new ParkingLotWithReservedSpaces(endHashMap);
 
-    List<CarMove> rearengementCarMoves = parkingLotStart.rearrange(parkingLotEnd);
+    List<DetailedMove> rearengementCarMoves = parkingLotStart.rearrange(parkingLotEnd);
     Assert.assertTrue(ParkingLotWithReservedSpaces.areMovesCreateEndResult(parkingLotStart, parkingLotEnd,
         rearengementCarMoves));
   }
@@ -142,7 +142,7 @@ public class ParkingLotWithReservedSpacesTest {
     ParkingLotWithReservedSpaces parkingLotStart = new ParkingLotWithReservedSpaces(startHashMap);
     ParkingLotWithReservedSpaces parkingLotEnd = new ParkingLotWithReservedSpaces(endHashMap);
 
-    List<CarMove> rearrangementCarMoves = parkingLotStart.rearrange(parkingLotEnd);
+    List<DetailedMove> rearrangementCarMoves = parkingLotStart.rearrange(parkingLotEnd);
     Assert.assertTrue(ParkingLotWithReservedSpaces.areMovesCreateEndResult(parkingLotStart, parkingLotEnd,
         rearrangementCarMoves));
   }
@@ -189,7 +189,7 @@ public class ParkingLotWithReservedSpacesTest {
     ParkingLotWithReservedSpaces parkingLotStart = new ParkingLotWithReservedSpaces(startHashMap);
     ParkingLotWithReservedSpaces parkingLotEnd = new ParkingLotWithReservedSpaces(endHashMap);
 
-    List<CarMove> rearrangementCarMoves = parkingLotStart.rearrange(parkingLotEnd);
+    List<DetailedMove> rearrangementCarMoves = parkingLotStart.rearrange(parkingLotEnd);
     Assert.assertFalse(ParkingLotWithReservedSpaces.areMovesCreateEndResult(parkingLotStart,
         parkingLotEnd, rearrangementCarMoves));
   }
@@ -221,7 +221,7 @@ public class ParkingLotWithReservedSpacesTest {
     ParkingLotWithReservedSpaces parkingLotStart = new ParkingLotWithReservedSpaces(startHashMap);
     ParkingLotWithReservedSpaces parkingLotEnd = new ParkingLotWithReservedSpaces(endHashMap);
 
-    List<CarMove> rearrangementCarMoves = parkingLotStart.rearrange(parkingLotEnd);
+    List<DetailedMove> rearrangementCarMoves = parkingLotStart.rearrange(parkingLotEnd);
     Assert.assertTrue(ParkingLotWithReservedSpaces.areMovesCreateEndResult(parkingLotStart, parkingLotEnd,
         rearrangementCarMoves));
   }

@@ -129,9 +129,9 @@ public class ParkingLot {
    * @param goalState is a ParkingLot end configuration.
    * @return
    */
-  public List<List<CarMove>> getAllPossibleRearrangements(ParkingLot goalState) {
-    List<List<CarMove>> allMoves = new ArrayList<>();
-    List<CarMove> currentMoves = new ArrayList<>();
+  public List<List<DetailedMove>> getAllPossibleRearrangements(ParkingLot goalState) {
+    List<List<DetailedMove>> allMoves = new ArrayList<>();
+    List<DetailedMove> currentMoves = new ArrayList<>();
     List<ParkingLot> previousConfigurations = new ArrayList<>();
     HashMap<Space,Car> currentParkingLot = new HashMap<>(carSpaceBiMap.getKeyToValueMap());
     allRearrangementsRecursive(allMoves, currentMoves, previousConfigurations, goalState);
@@ -139,8 +139,8 @@ public class ParkingLot {
     return allMoves;
   }
 
-  private void allRearrangementsRecursive(List<List<CarMove>> allMoves,
-                                              List<CarMove> currentMoves,
+  private void allRearrangementsRecursive(List<List<DetailedMove>> allMoves,
+                                              List<DetailedMove> currentMoves,
                                                   List<ParkingLot> previousConfigurations,
                                                       ParkingLot goalState) {
     if (this.equals(goalState)) {
@@ -167,19 +167,19 @@ public class ParkingLot {
     }
   }
 
-  public void makeMoves(List<CarMove> carMoves) {
-    for (CarMove carMove : carMoves) {
+  public void makeMoves(List<DetailedMove> carMoves) {
+    for (DetailedMove carMove : carMoves) {
       makeMove(carMove.getCar(), carMove.getFrom(), carMove.getTo());
       makeMove(Car.noCar, null, carMove.getFrom());
     }
   }
 
   // move with updating a List<CarMove> with the new car move
-  private void moveCarToEmptySpace(Car car, List<CarMove> carMoveList) {
+  private void moveCarToEmptySpace(Car car, List<DetailedMove> carMoveList) {
     Space toBeFilledEmptySpace = getEmptySpace();
     Space toBeEmptyFilledSpace = getSpaceByCar(car);
 
-    CarMove carMove = makeMove(car,toBeEmptyFilledSpace,toBeFilledEmptySpace);
+    DetailedMove carMove = makeMove(car,toBeEmptyFilledSpace,toBeFilledEmptySpace);
     if(carMoveList != null) {
       carMoveList.add(carMove);
     }
@@ -191,10 +191,10 @@ public class ParkingLot {
         another.carSpaceBiMap.getValueSet().equals(carSpaceBiMap.getValueSet()) ;
   }
 
-  private CarMove makeMove(Car car, Space from, Space to) {
+  private DetailedMove makeMove(Car car, Space from, Space to) {
     carSpaceBiMap.put(to, car);
     if (!car.equals(Car.noCar)) {
-      return new CarMove(car,from,to);
+      return new DetailedMove(car,from,to);
     }
     return null;
   }
