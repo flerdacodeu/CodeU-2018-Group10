@@ -111,9 +111,9 @@ public class ParkingLotTest {
      * same order of keys when iterating over them.
      */
     List<List<Move>> validMoveSequences = getMoveLists(new Move[][]{
-            {new Move(car1), new Move(car3), new Move(car2), new Move(car1)},
-            {new Move(car2), new Move(car1), new Move(car3), new Move(car2)},
-            {new Move(car3), new Move(car2), new Move(car1), new Move(car3)}
+      {new Move(car1), new Move(car3), new Move(car2), new Move(car1)},
+      {new Move(car2), new Move(car1), new Move(car3), new Move(car2)},
+      {new Move(car3), new Move(car2), new Move(car1), new Move(car3)}
     });
 
     assertTrue(validMoveSequences.contains(moves));
@@ -137,14 +137,14 @@ public class ParkingLotTest {
 
     List<Move> moves = initialState.getCarMoves(goalState);
     List<List<Move>> validMoveSequences = getMoveLists(new Move[][]{
-            {new Move(car1), new Move(car2), new Move(car1), new Move(car3), new Move(car4), new Move(car3)},
-            {new Move(car1), new Move(car2), new Move(car1), new Move(car4), new Move(car3), new Move(car4)},
-            {new Move(car2), new Move(car1), new Move(car2), new Move(car3), new Move(car4), new Move(car3)},
-            {new Move(car2), new Move(car1), new Move(car2), new Move(car4), new Move(car3), new Move(car4)},
-            {new Move(car3), new Move(car4), new Move(car3), new Move(car1), new Move(car2), new Move(car1)},
-            {new Move(car3), new Move(car4), new Move(car3), new Move(car2), new Move(car1), new Move(car2)},
-            {new Move(car4), new Move(car3), new Move(car4), new Move(car1), new Move(car2), new Move(car1)},
-            {new Move(car4), new Move(car3), new Move(car4), new Move(car2), new Move(car1), new Move(car2)}
+      {new Move(car1), new Move(car2), new Move(car1), new Move(car3), new Move(car4), new Move(car3)},
+      {new Move(car1), new Move(car2), new Move(car1), new Move(car4), new Move(car3), new Move(car4)},
+      {new Move(car2), new Move(car1), new Move(car2), new Move(car3), new Move(car4), new Move(car3)},
+      {new Move(car2), new Move(car1), new Move(car2), new Move(car4), new Move(car3), new Move(car4)},
+      {new Move(car3), new Move(car4), new Move(car3), new Move(car1), new Move(car2), new Move(car1)},
+      {new Move(car3), new Move(car4), new Move(car3), new Move(car2), new Move(car1), new Move(car2)},
+      {new Move(car4), new Move(car3), new Move(car4), new Move(car1), new Move(car2), new Move(car1)},
+      {new Move(car4), new Move(car3), new Move(car4), new Move(car2), new Move(car1), new Move(car2)}
     });
 
     assertTrue(validMoveSequences.contains(moves));
