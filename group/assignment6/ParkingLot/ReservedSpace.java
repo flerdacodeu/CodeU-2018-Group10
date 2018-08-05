@@ -3,11 +3,6 @@ package assignment6.ParkingLot;
 import java.util.Objects;
 import java.util.Set;
 
-/**
- * This class represents a space for a car in
- * a Parking Lot. The space can be reserved not for all
- * cars on a Parking Lot but for particular ones.
- */
 public class ReservedSpace extends Space {
 
     final private Set<Car> reservedFor;

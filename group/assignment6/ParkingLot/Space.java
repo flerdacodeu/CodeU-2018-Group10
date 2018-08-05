@@ -2,10 +2,6 @@ package assignment6.ParkingLot;
 
 import java.util.Objects;
 
-/**
- * This class represents a space for a car in a
- * Parking Lot.
- */
 public class Space {
     private final int id;
 
