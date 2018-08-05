@@ -2,6 +2,7 @@ package assignment6.test;
 
 import assignment6.ParkingLot.Car;
 import assignment6.ParkingLot.Move;
+import assignment6.ParkingLot.CarMove;
 import assignment6.ParkingLot.ParkingLot;
 import assignment6.ParkingLot.Space;
 
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class ParkingLotTest {
@@ -235,4 +237,34 @@ public class ParkingLotTest {
     
     assertTrue(expectedMoves.equals(moves));
   }
+  
+  @Test
+    public void allRearrangementsTest() {
+        initialMap.put(space1, car1);
+        initialMap.put(space2, car2);
+        initialMap.put(space4, car3);
+        initialMap.put(space3, Car.noCar);
+        ParkingLot initialState = new ParkingLot(initialMap);
+
+        goalMap.put(space2, car1);
+        goalMap.put(space3, car2);
+        goalMap.put(space1, car3);
+        goalMap.put(space4, Car.noCar);
+        ParkingLot goalState = new ParkingLot(goalMap);
+
+        List<List<CarMove>> allMoves = initialState.getAllPossibleRearrangements(goalState);
+
+        System.out.println(allMoves.size());
+        for (List<CarMove> carMoves : allMoves) {
+            if(carMoves.size() == 3) {
+                System.out.println("YEEEAH, sequence of moves with the least amount if moves is also here !");
+            }
+        }
+        //GIRLS, IT WOOOOOOOOOOOOOOOOOOOOOOOOORKS !!
+        for (List<CarMove> carMoves : allMoves) {
+            initialState = new ParkingLot(initialMap);
+            initialState.makeMoves(carMoves);
+            assertEquals(goalState, initialState);
+        }
+    }
 }
